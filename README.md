@@ -389,18 +389,22 @@ that are on this Mac today are in part 6.
 | Model | Size | Score | Licence | How to run it on the Mac |
 |---|---|---|---|---|
 | OvisOCR2 (Alibaba) | 0.9 billion parameters | 96.6, the best | Apache 2.0 | Not in Ollama. Reads a whole page by design and writes Markdown, with tables as HTML. Its makers name Transformers, vLLM, SGLang and llama.cpp as runners, not `mlx-vlm`; but `mlx-vlm` loads it (the `mlx-community` copies were made with `mlx-vlm` 0.6.8). Makers' settings: temperature 0, up to 16,384 tokens, picture between 448 and 2880 pixels. Checked on 2026-09-22. |
-| MinerU2.5-Pro | about 1 billion | 95.8 | Its own licence, built on Apache 2.0. Free, but a company with more than 20 million US dollars of revenue each month, or more than 100 million users each month, must buy a licence. | Not in Ollama. Not checked yet how it installs on the Mac. |
 | GLM-OCR | 0.9 billion, 2.2 GB | 95.2 | MIT | With `mlx-vlm`, the way its makers say for a Mac: `mlx-community/GLM-OCR-bf16`. It passes the checks of "A model must run cleanly" there. The copy in Ollama (`glm-ocr`) does not: it never ends an answer in the normal way. Its public score was reached with the makers' full toolkit, which first cuts a page into pieces; the bare model has no prompt for a whole page. |
-| DeepSeek-OCR | 3 billion, 6.7 GB | not in that test | MIT | In Ollama: `deepseek-ocr`. Its page says small changes in the question text can break the answer. |
-| DeepSeek-OCR-2 | 3 billion | not in that test | Apache 2.0 | Not in Ollama (only the first version is). In `mlx-vlm` from the `mlx-community` copies (8-bit only, 2026-09-22). Reads a whole page. |
-| LightOnOCR-2-1B | 1 billion | not in that test (83.2 on olmOCR-Bench) | Apache 2.0 | Not in Ollama. `mlx-vlm` lists it. Reads a whole page by design. Its makers want pages at 200 dots per inch. |
-| Granite-Docling (IBM) | 0.26 billion, 0.5 GB | not in that test | Apache 2.0 | In Ollama: `ibm/granite-docling`. It is the model inside Docling, IBM's free tool that turns documents into Markdown. It writes its own format, DocTags, that Docling turns into Markdown. |
-| dots.mocr | about 3 billion | tested in another test | MIT | Not in Ollama. Not checked yet how it installs. |
-| A general model that can see | 27 billion and up | lower than the small OCR models | see below | The models for Text -> Value that accept pictures can also read a page. Public tests say the small OCR models read documents better than these big ones. |
+| Granite-Docling (IBM) | 0.26 billion, 0.6 GB | not in that test | Apache 2.0 | In `mlx-vlm` from the makers' own Apple copy `ibm-granite/granite-docling-258M-mlx`. It is also in Ollama (`ibm/granite-docling`), and both runners gave the same text on S1 page 8. Reads a whole page with one question: `Convert this page to docling.` It does not write Markdown. It writes DocTags, its own tag format, which IBM's Docling tool turns into Markdown. Makers' settings, read on 2026-09-22: temperature 0, up to 8,192 tokens. |
 
-Taken off the list: Chandra OCR 2 and HunyuanOCR-1.5, because their licences limit the use in a product (rule 2).
-PaddleOCR-VL-1.6 (score 96.3), because its makers' way needs their own Python toolkit with a layout step around
-the model (rule 3, Iker's decision on 2026-09-22).
+Models that we looked at and do not use. The rules are the three rules above.
+
+| Model | Why we do not use it |
+|---|---|
+| PaddleOCR-VL-1.6 (score 96.3) | Rule 3. The makers' way needs their own Python toolkit. It first works out where the blocks of the page are, cuts the page, and only then reads each piece. |
+| MinerU2.5-Pro (score 95.7) | Rule 3, the same reason. Their package `mineru-vl-utils` asks the model two times for every page: first where the blocks are, then the text of each block, one question per block. There is no question for a whole page. Checked on 2026-09-22 in their own code. |
+| DeepSeek-OCR-2 | It runs in neither of our two runners. It is not in Ollama. In the `mlx-vlm` server 0.7.1 it stops with an error inside the server's own code for this model: "There is no Stream(gpu, 4) in current thread". Version 0.7.2 of `mlx-vlm` names no fix for it. Our rule "no patches" says we do not repair a runner, so the model is out. Tried on 2026-09-22 with the copy `mlx-community/DeepSeek-OCR-2-bf16`. |
+| Chandra OCR 2 | Rule 2. Its licence limits the use inside a product that is sold. |
+| HunyuanOCR-1.5 | Rule 2, the same reason. |
+| DeepSeek-OCR (the first version) | Iker's decision on 2026-09-22, to keep the list short. The second version is newer. |
+| LightOnOCR-2-1B | Iker's decision on 2026-09-22, to keep the list short. |
+| dots.mocr | Iker's decision on 2026-09-22, to keep the list short. |
+| A big general model that can see | Iker's decision on 2026-09-22, to keep the list short. Public tests say the small OCR models read documents better. |
 
 A parameter is one number inside an AI model. More parameters mean a bigger file, more memory and a slower answer.
 
@@ -814,6 +818,8 @@ downloaded.** Iker reads the row and says yes first. This is true for every prog
 | Model `mlx-community/GLM-OCR-bf16`, 2.1 GB, downloaded on 2026-09-21 | `models-hf/` in this folder. Ignored by git. | The same `glm-ocr` model, in the file format of `mlx-vlm`. Downloaded from huggingface.co. Licence: MIT. | delete `models-hf/` |
 | Model `gemma4:31b` (Google), 19.9 GB, downloaded on 2026-09-22 | `models/` in this folder. Ignored by git. | The second model for Text -> Value and `WorkedOut`, and the one with the best public scores of the candidates in part 4 (MMLU-Pro 85.2, GPQA Diamond 84.3, AIME 2026 89.2). Its makers' settings, read on 2026-09-22 from huggingface.co/google/gemma-4-31b-it: temperature 1.0, top_p 0.95, top_k 64, the same with and without thinking. Downloaded with `npm run ollama:pull gemma4:31b`. Both settings passed the four checks of `model:check` on 2026-09-22. Licence: Apache 2.0, with no extra clauses. | delete it from `models/` with `ollama rm gemma4:31b` while our Ollama runs, or delete the folder |
 | Model `ATH-MaaS/OvisOCR2`, the makers' own files, 1.6 GB, downloaded on 2026-09-22 | `models-hf/` in this folder. Ignored by git. | The OCR model with the best public score that reads a whole page by design (see the list in part 4). Published by Alibaba's ATH-MaaS team. Downloaded from huggingface.co. Licence: Apache 2.0. `mlx-vlm` 0.7.1 loads the makers' files directly; it passed the four checks of `model:check` on 2026-09-22. | delete `models-hf/` |
+| Model `ibm-granite/granite-docling-258M-mlx`, 0.6 GB, downloaded on 2026-09-22 | `models-hf/` in this folder. Ignored by git. | The third OCR model to try (see the list in part 4). Made by IBM. These are the makers' own files for Apple chips. It is very small, so it is the test of how small a model can be. Downloaded from huggingface.co. Licence: Apache 2.0. | delete `models-hf/` |
+| The Python packages `torchvision` 0.29.0 and `torch` 2.14.0, with four small packages they need (about 1.4 GB), installed on 2026-09-22 with `uv add torchvision` | `runners/mlx-vlm/.venv/` in this folder. Ignored by git. They are written in `runners/mlx-vlm/pyproject.toml` and `uv.lock`. | The `mlx-vlm` server cannot open the picture for Granite-Docling without them: it needs `torchvision` to make the picture ready for that model. They are only a reader for pictures here; the model itself still runs on MLX, Apple's own way. Licence: BSD. | `uv remove torchvision` in `runners/mlx-vlm` |
 
 The npm packages are not in this table. They are listed in `package.json`, with their versions, and they live only
 in `node_modules/` in this folder, which is ignored by git. To remove them, delete `node_modules/`. Node 24 (with npm)
