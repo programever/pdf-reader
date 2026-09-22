@@ -1,0 +1,34 @@
+{
+  "name": "pdf-reader",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "ollama:pull": "node scripts/ollamaPullModel.ts",
+    "ollama:start": "OLLAMA_MODELS=\"$PWD/models\" OLLAMA_HOST=127.0.0.1:11435 OLLAMA_FLASH_ATTENTION=1 ollama serve",
+    "ollama:stop": "pkill -f 'ollama serve' || echo 'Ollama was not running'",
+    "mlx:pull": "cd runners/mlx-vlm && HF_HOME=\"$PWD/../../models-hf\" uv run --frozen hf download",
+    "mlx:start": "cd runners/mlx-vlm && HF_HOME=\"$PWD/../../models-hf\" HF_HUB_OFFLINE=1 uv run --frozen python -m mlx_vlm.server --host 127.0.0.1 --port 11436",
+    "mlx:stop": "pkill -f 'mlx_vlm.server' || echo 'mlx-vlm was not running'",
+    "model:check": "node scripts/check.ts",
+    "generate:pages": "node scripts/pages.ts",
+    "generate:text": "node scripts/text.ts",
+    "generate:value": "node scripts/value.ts",
+    "tsc": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@hyzyla/pdfium": "^2.1.13",
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.2",
+    "@types/pngjs": "^6.0.5",
+    "eslint": "^10.11.0",
+    "typescript": "~6.0",
+    "typescript-eslint": "^8.70.0"
+  }
+}

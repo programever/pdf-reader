@@ -1,0 +1,5 @@
+[project]
+name = "mlx-vlm-runner"
+version = "0.0.0"
+requires-python = ">=3.12,<3.14"
+dependencies = ["mlx-vlm==0.7.1"]

@@ -1,0 +1,5 @@
+.DS_Store
+/models/
+node_modules/
+/models-hf/
+.venv/
