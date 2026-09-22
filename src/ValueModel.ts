@@ -7,6 +7,7 @@ export type ValueSetting = {
 }
 
 export type ValueCall = {
+  prompt: string
   startedAt: string
   seconds: number
   inputTokens: number

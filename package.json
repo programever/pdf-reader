@@ -16,6 +16,7 @@
     "generate:pages": "node scripts/pages.ts",
     "generate:text": "node scripts/text.ts",
     "generate:value": "node scripts/value.ts",
+    "generate:report": "node scripts/report.ts",
     "tsc": "tsc --noEmit",
     "lint": "eslint ."
   },

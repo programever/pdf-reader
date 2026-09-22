@@ -17,10 +17,10 @@ way to run a model against them.
 
 ## 2. The test data
 
-The test data is in `~/Workspace/lumimory/pdf-data/`, next to this folder. One folder is one test case:
+The test data is in `dataset/` in this folder. One folder is one test case:
 
 ```text
-pdf-data/
+dataset/
   S1/
     input.pdf        one illustration
     template.json    the values to read from this PDF: the instruction for each one, and the correct answer
@@ -29,11 +29,11 @@ pdf-data/
         1.png                    the number is the place of the page in the file, counted from 1
         2.png
     text-result/     the texts of the pages that an OCR model read (see part 4, 2.1)
-      mlx-glm-bf16-1.json                          <name of the OCR setting>-<run number>.json
+      mlx-ovisocr2-bf16-1.json                                <name of the OCR setting>-<run number>.json
     value-result/    the results of the runs (see part 4, "The result file of a run")
-      mlx-glm-bf16_ollama-qwen3.8-27b-1.json       <OCR setting>_<other setting>-<run number>.json
-      mlx-glm-bf16_ollama-qwen3.8-27b-2.json
-    S1.html          later: the report (see part 4, 3)
+      mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-1.json    <OCR setting>_<other setting>-<run number>.json
+      mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-2.json
+    S1.html          the report (see part 4, 3)
   S2/
   ...
 ```
@@ -50,10 +50,10 @@ Requirements for a test case:
   No test run ever changes `input.pdf` or `template.json`.
 - The file names in the tree above are examples only.
 
-The `lumimory` folder is not a git repo, so the test data cannot be committed by accident. It must never be copied
-into a git repo, and never sent to a cloud service.
+`dataset/` is ignored by git (`.gitignore`), so the test data is never committed. It must never be copied into a git
+repo in any other way, and never sent to a cloud service.
 
-Facts about the samples that are in `pdf-data` today are in `pdf-data/DATASET.md`, not here. This file must stay
+Facts about the samples that are in `dataset/` today are in `dataset/DATASET.md`, not here. This file must stay
 true when the samples change.
 
 ## 3. `template.json`
@@ -67,13 +67,20 @@ A list with one entry for each value to read. A value is called a figure.
     "pages": [5],
     "instruction": "Total Single Premium (Single Pay)",
     "kind": "ReadFromPdf",
-    "expected": "US$708,740.00"
+    "expected": { "type": "number", "value": "US$708,740.00" }
+  },
+  {
+    "name": "Premium Term",
+    "pages": [1],
+    "instruction": "Premium Payment Term",
+    "kind": "ReadFromPdf",
+    "expected": { "type": "string", "value": "Single Premium" }
   },
   {
     "name": "Total Premium",
-    "instruction": "Yearly Premium * Premium Term",
+    "instruction": "Yearly Premium * Premium Term. Premium Term \"Single Premium\" means 1, anything else means 0.",
     "kind": "WorkedOut",
-    "expected": "708,740.00"
+    "expected": { "type": "number", "value": "708,740.00" }
   },
   {
     "name": "Guaranteed Breakeven (End of Year)",
@@ -89,7 +96,7 @@ A list with one entry for each value to read. A value is called a figure.
 | `pages` | Only on `ReadFromPdf` figures. The pages of the PDF where the firm says the value is found. Almost always one page: `[5]`. A few instructions of the firm name two pages ("P.13 - P.14"): `[13, 14]`. A page number is the place of the page in the file, counted from 1. It is not the number printed on the paper. |
 | `instruction` | The firm's text for this figure and this product, without the page: what to find on that page, or how the figure is worked out. This is what the AI model gets. |
 | `kind` | What sort of figure it is. See the table below. |
-| `expected` | The correct answer, as text. Only on `ReadFromPdf` and `WorkedOut` figures. `null` when the value cannot be read from this PDF by following the instruction. |
+| `expected` | The correct answer. Only on `ReadFromPdf` and `WorkedOut` figures. `type` says what kind of answer the figure has: `"string"` for a text ("US Dollars", "Single Premium") or `"number"` for a number. `value` is the correct answer as text, the way the PDF writes it, also for a number ("US$708,740.00"). It is `null` when the value cannot be read from this PDF by following the instruction. |
 
 | `kind` | Meaning | Has `expected`? |
 |---|---|---|
@@ -120,7 +127,15 @@ A list with one entry for each value to read. A value is called a figure.
 - Only the place that the instruction names counts. If that place is missing or broken in the PDF, `expected` is
   `null`, also when the same number can be found somewhere else in the PDF.
 - The value is written the way the PDF writes it, with its currency sign, commas and decimals.
-- A `WorkedOut` value is worked out from the `expected` values of the figures in its formula.
+- A `WorkedOut` value is worked out from the `expected` values of the figures in its formula. When the formula
+  uses a text figure as a number (for example "Premium Term", whose value is the text "Single Premium"), the
+  instruction says what the text means as a number. The rule is a rule of the firm, so it stands in the firm's
+  text, never in the code.
+- **A number figure is compared as a number, not as text.** The program takes the one number out of the text, on
+  both sides: `expected` and the answer of the model. "US$708,740.00", "708,740.00" and "708740" all give the number
+  708740. Digits, commas, one dot and a minus sign are read; everything else, for example "US$" or "% p.a.", is
+  dropped. A text that holds no number, or more than one number ("15/46"), gives no number. So the model answers
+  only what the page writes, and never has to change the writing of a number.
 - Every `expected` value is read from the real text of the PDF, not from a picture, so that no digit is guessed.
 - The answer sheet is checked by a second, independent reading: a separate session gets `input.pdf` and the
   `template.json` without `expected`, builds its own answers, and every difference is looked at by a person.
@@ -149,14 +164,14 @@ A local AI model takes only text or pictures. It cannot open a PDF file. So this
      (Text -> Value). If the answer is null, the same is done for the page after and the page before.
    - 2.2 `WorkedOut`: a general model works out the value from the values that were found before.
    - 2.3 `NotApplicable` and `HeldByTheFirm`: no model is asked.
-3. **The report in HTML** shows the results and compares them with `expected`. To be decided later.
+3. **The report in HTML** shows the results of all runs next to each other and compares them with `expected`.
 
 One run of this flow uses two named settings: the setting of the OCR model, and the setting of the model that finds
 and works out the values. A setting is explained in part 5.
 
-### Two rules for every tool and every model
+### Three rules for every tool and every model
 
-A tool or a model is only on the lists below when it passes both rules. There is no rule about the server: the
+A tool or a model is only on the lists below when it passes all three rules. There is no rule about the server: the
 project has no requirement yet for the machine that will run the models. So we test the best models that run on
 Iker's Mac.
 
@@ -166,6 +181,9 @@ Iker's Mac.
 2. **It is free, also inside a product that is sold.** The licence (the legal rule for using it) must allow this with
    no payment. Licences that pass: Apache 2.0, MIT, BSD, and NVIDIA's OpenMDW. The GPL licence passes only for a
    tool that we call as a separate program and do not build into our code. The AGPL licence does not pass.
+3. **It runs in one of our two runners and nothing else** (Iker, 2026-09-22): the `mlx-vlm` server with a model
+   from Hugging Face, or Ollama. A model whose makers' way needs their own program around the model (for example a
+   toolkit that first cuts the page into pieces) is not used, even when it scores higher.
 
 ### A model must run cleanly before its results count
 
@@ -273,13 +291,15 @@ pages/pdfium-2.1.13-200dpi/8.png
   ```text
   Currency = US Dollars
   Premium Term = Single Premium
-  Cover = 10,000,000
-  Yearly Premium = US$708,740.00
-  Total Premium = 708,740.00
+  Cover = 10000000
+  Yearly Premium = 708740
+  Total Premium = 708740
   ```
 
-  All of them are given, not only the ones that the instruction names, so the program judges nothing. A value that
-  was not found stands there as `null`. An item where a call failed is left out.
+  All of them are given, not only the ones that the instruction names, so the program judges nothing. A number
+  figure stands there as the number that was taken out of the model's answer (see the rules for `expected` in
+  part 3), so a formula works on real numbers. A text figure stands there as its text. A value that was not found,
+  or whose text gave no number, stands there as `null`. An item where a call failed is left out.
 - One effect of this: a wrong early value can make a later value wrong. So the result file keeps, for every item,
   the exact lines that were given to the model (`valuesGiven`).
 
@@ -301,7 +321,7 @@ holds the text of every page that was read, and the facts of the reading.
 
 ```text
 text-result/<name of the setting>-<run number>.json
-text-result/mlx-glm-bf16-1.json
+text-result/mlx-glm-bf16-neutral-1.json
 ```
 
 The name of the setting already holds the model and its version (see "Named settings" in part 5). The run number
@@ -312,10 +332,11 @@ the same text again. A page text is made one time and then used by every run.
 {
   "run": 1,
   "setting": {
-    "name": "mlx-glm-bf16",
+    "name": "mlx-glm-bf16-neutral",
     "model": "mlx-community/GLM-OCR-bf16",
     "dpi": 200,
-    "options": { "temperature": 0, "seed": 1, "max_tokens": 8192 }
+    "prompts": ["Text Recognition:", "Table Recognition:"],
+    "options": { "temperature": 0, "top_p": 1, "top_k": 0, "repetition_penalty": 1, "seed": 1, "max_tokens": 16384 }
   },
   "runner": { "name": "mlx-vlm", "version": "0.7.1" },
   "pictures": "pdfium-2.1.13-200dpi",
@@ -361,24 +382,30 @@ nothing. Before pages are added to a file, it is checked that the file was made 
 same runner and the same pictures. If not, the command refuses. The command `generate:text` reads pages into this
 file by hand, without asking for any value: the pages that `template.json` names, or the pages of `--pages`.
 
-OCR models to try, checked online on 2026-09-21 against the two rules. The score is from OmniDocBench v1.6, a public
-test of how well a model turns document pages into text (100 is perfect).
+OCR models to try, checked online on 2026-09-21 and 2026-09-22 against the three rules. The score is from
+OmniDocBench v1.6, a public test of how well a model turns document pages into text (100 is perfect). The models
+that are on this Mac today are in part 6.
 
 | Model | Size | Score | Licence | How to run it on the Mac |
 |---|---|---|---|---|
-| PaddleOCR-VL-1.6 | 0.9 billion parameters | 96.3, the best | Apache 2.0 | Not in Ollama. Runs with MLX (Apple's tool to run AI models); Paddle has a guide for it. |
+| OvisOCR2 (Alibaba) | 0.9 billion parameters | 96.6, the best | Apache 2.0 | Not in Ollama. Reads a whole page by design and writes Markdown, with tables as HTML. Its makers name Transformers, vLLM, SGLang and llama.cpp as runners, not `mlx-vlm`; but `mlx-vlm` loads it (the `mlx-community` copies were made with `mlx-vlm` 0.6.8). Makers' settings: temperature 0, up to 16,384 tokens, picture between 448 and 2880 pixels. Checked on 2026-09-22. |
 | MinerU2.5-Pro | about 1 billion | 95.8 | Its own licence, built on Apache 2.0. Free, but a company with more than 20 million US dollars of revenue each month, or more than 100 million users each month, must buy a licence. | Not in Ollama. Not checked yet how it installs on the Mac. |
 | GLM-OCR | 0.9 billion, 2.2 GB | 95.2 | MIT | With `mlx-vlm`, the way its makers say for a Mac: `mlx-community/GLM-OCR-bf16`. It passes the checks of "A model must run cleanly" there. The copy in Ollama (`glm-ocr`) does not: it never ends an answer in the normal way. Its public score was reached with the makers' full toolkit, which first cuts a page into pieces; the bare model has no prompt for a whole page. |
 | DeepSeek-OCR | 3 billion, 6.7 GB | not in that test | MIT | In Ollama: `deepseek-ocr`. Its page says small changes in the question text can break the answer. |
+| DeepSeek-OCR-2 | 3 billion | not in that test | Apache 2.0 | Not in Ollama (only the first version is). In `mlx-vlm` from the `mlx-community` copies (8-bit only, 2026-09-22). Reads a whole page. |
+| LightOnOCR-2-1B | 1 billion | not in that test (83.2 on olmOCR-Bench) | Apache 2.0 | Not in Ollama. `mlx-vlm` lists it. Reads a whole page by design. Its makers want pages at 200 dots per inch. |
 | Granite-Docling (IBM) | 0.26 billion, 0.5 GB | not in that test | Apache 2.0 | In Ollama: `ibm/granite-docling`. It is the model inside Docling, IBM's free tool that turns documents into Markdown. It writes its own format, DocTags, that Docling turns into Markdown. |
 | dots.mocr | about 3 billion | tested in another test | MIT | Not in Ollama. Not checked yet how it installs. |
 | A general model that can see | 27 billion and up | lower than the small OCR models | see below | The models for Text -> Value that accept pictures can also read a page. Public tests say the small OCR models read documents better than these big ones. |
 
-Taken off the list: Chandra OCR 2. Its licence limits the use in a product, so it breaks rule 2.
+Taken off the list: Chandra OCR 2 and HunyuanOCR-1.5, because their licences limit the use in a product (rule 2).
+PaddleOCR-VL-1.6 (score 96.3), because its makers' way needs their own Python toolkit with a layout step around
+the model (rule 3, Iker's decision on 2026-09-22).
 
 A parameter is one number inside an AI model. More parameters mean a bigger file, more memory and a slower answer.
 
-**Text -> Value, the second model.** The model finds the value on the page. Our program does no thinking.
+**Text -> Value, the second model.** The model finds the value on the page. Our program judges nothing; it only
+puts the question together and reads the answer.
 
 One question for one item. The question holds four things:
 
@@ -408,8 +435,8 @@ when the insurer adds a page. So up to three questions are asked for an item, in
 - Why the named page always comes first: on a wrong page the model can meet a label or a table that looks the same
   and give a wrong value.
 
-Models to try, checked online on 2026-09-21 against the two rules. All are in Ollama and run on the Mac (64 GB of
-memory). The text of one page is short, so every one of them accepts it easily. The length a model accepts is called
+Models to try, checked online on 2026-09-21 against the three rules. All are in Ollama and run on the Mac (64 GB
+of memory). The models that are on this Mac today are in part 6. The text of one page is short, so every one of them accepts it easily. The length a model accepts is called
 its context window. It is counted in tokens; a token is a piece of a word. Ollama
 uses a much smaller window unless we set it, so every Test must set it.
 
@@ -417,7 +444,7 @@ uses a much smaller window unless we set it, so every Test must set it.
 |---|---|---|---|---|---|
 | `qwen3.8:27b` (Alibaba) | 18 GB | 256,000 tokens | Apache 2.0 | yes | Already in `models/`. |
 | `qwen3.6:35b` (Alibaba) | 23 GB | 256,000 | Apache 2.0, to be checked on the model's own page before the download | yes | |
-| `gemma4:31b` (Google) | 20 GB | 256,000 | Apache 2.0 | yes | |
+| `gemma4:31b` (Google) | 20 GB | 256,000 | Apache 2.0 | yes | Already in `models/`. The best public scores of this list (MMLU-Pro 85.2, GPQA Diamond 84.3). |
 | `gemma4:12b` (Google) | 7.6 GB | 256,000 | Apache 2.0 | yes | A small model, to see how small still works. |
 | `granite4.2:30b` (IBM) | 18 GB | 128,000 | Apache 2.0 | no | Built for business documents and JSON answers. |
 | `granite4.2:8b` (IBM) | 5.3 GB | 128,000 | Apache 2.0 | no | A small model. |
@@ -432,8 +459,8 @@ with a `cloud` tag. They are also far too big for one machine.
 
 The instruction of a `WorkedOut` item is a formula over other items, for example "Yearly Premium * Premium Term" or
 "Cover / Total Premium". A general model gets a fixed context text, the values that were found before, and the
-instruction, and answers with the result, or with null when a value that the formula needs is missing. No page text
-is given. Today the same model and the same setting are used as for Text -> Value; the setting holds one context
+instruction, and answers with the result, or with null when a value that the formula needs is missing. The values
+of number figures are given as numbers. No page text is given. Today the same model and the same setting are used as for Text -> Value; the setting holds one context
 text for each of the two jobs.
 
 ### 2.3 `NotApplicable` and `HeldByTheFirm`
@@ -456,26 +483,27 @@ Ollama version before the first run.
 
 | Setting | What it does | What we use |
 |---|---|---|
-| `temperature` | A model writes its answer piece by piece. For each piece it has a list of possible next pieces, each with a chance. `temperature` says how freely it picks from this list. At 0 it always takes the piece with the highest chance, so the same question gives the same answer every time. At a higher number, for example 0.8, it sometimes takes a less likely piece, so two runs can give two different answers. | 0 as the normal case. We read values, we do not want creativity, and we want runs that can be repeated. One exception is known: see "Thinking and temperature" below. |
+| `temperature` | A model writes its answer piece by piece. For each piece it has a list of possible next pieces, each with a chance. `temperature` says how freely it picks from this list. At 0 it always takes the piece with the highest chance, so the same question gives the same answer every time. At a higher number, for example 0.8, it sometimes takes a less likely piece, so two runs can give two different answers. | The maker's number for thinking mode, see "Thinking and temperature" below. 0 would be better for repeatable runs, but the makers say it breaks thinking. |
 | `seed` | The start number of the random picking. With the same `seed`, the same question and the same settings, the model picks the same way again. | A fixed number, 1. At `temperature` 0 it changes nothing. At a higher `temperature` it makes a run repeatable. |
-| `num_ctx` | The context window: how much text the model may take in at one time, counted in tokens. The context text, the text of the page, the instruction and the answer of the model (with its thinking, when thinking is on) must all fit in it. Ollama uses a small number by itself (about 4,000 tokens). **If the text is longer than `num_ctx`, Ollama cuts the text silently. There is no error. The model then never sees the end of the page and answers from what is left.** | Always set. High enough for the whole input plus the answer. The number of tokens of the input must be counted before the run, and the run must stop with an error when it does not fit. A bigger window needs more memory and makes the run slower. |
+| `num_ctx` | The context window: how much text the model may take in at one time, counted in tokens. The context text, the text of the page, the instruction and the answer of the model (with its thinking, when thinking is on) must all fit in it. Ollama uses a small number by itself (about 4,000 tokens). **If the text is longer than `num_ctx`, Ollama cuts the text silently. There is no error. The model then never sees the end of the page and answers from what is left.** | Always set. 32,768 for the thinking settings: far above the longest page text seen so far (about 5,000 tokens) plus the thinking. The tokens that went in and came out are in every result file and in the report, so a question that comes close to the window is seen. Counting the input before the run and stopping when it does not fit is not built yet (see "Not decided yet"). A bigger window needs more memory and makes the run slower. |
 | `num_predict` | The most tokens the model may write in its answer. | Always set, high enough for the full answer (and for the thinking, when thinking is on). Without a limit, a confused model can write without end and the run never finishes. |
-| `format` | Forces the shape of the answer. We give Ollama a description of the JSON that we want: a list of figures, each with `name` and `value`. The model then cannot write anything else: no sentence around the list, no half list. The values inside are still the model's own. | On. It removes answers that a program cannot read. It gives the model no hint about the values. |
-| `think` | Many new models can think first: the model writes its reasoning for itself, and only then the answer. This is turned on or off. Thinking is slower, sometimes by many minutes. It usually helps on tasks with several steps, for example "the first year where the value reaches the total premium". Ollama gives the thinking text back apart from the answer. | A real choice, so it is tested: one Test with thinking on, one with thinking off, for each model that has the switch. The thinking text is saved, because it shows why a value is wrong. |
+| `format` | Forces the shape of the answer: Ollama can make the model write JSON of a given shape and nothing else. | Not used. It is not free of effect: on a worked-out question the model answered null with a forced shape and the right number without it (S1, 2026-09-22). The program takes the trimmed text as the answer, and the text `null` as null. |
+| `top_k`, `top_p`, `min_p` | They make the list of possible next pieces shorter before the model picks. | The maker's numbers for thinking mode (see "Thinking and temperature" below). Nothing else. |
+| `think` | Many new models can think first: the model writes its reasoning for itself, and only then the answer. This is turned on or off. Thinking is slower, sometimes by many minutes. It usually helps on tasks with several steps, for example "the first year where the value reaches the total premium". Ollama gives the thinking text back apart from the answer. | Always on (Iker, 2026-09-22). Both were tested on S1: without thinking the models got the "which year" figures wrong, with thinking qwen got all of them right. So the settings without thinking and their results were removed. The thinking text is saved, because it shows why a value is wrong. |
 
-**Thinking and temperature.** Some makers say that their model must not run at `temperature` 0 when thinking is on.
-Alibaba says this for the Qwen models: at 0 the thinking can fall into a loop and repeat the same sentences without
-end. The maker then gives its own numbers (for Qwen about `temperature` 0.6 and `top_p` 0.95). So the rule is: 0 is
-the normal case. When the maker of a model says otherwise for thinking, we use the maker's numbers for that Test.
-The maker's numbers are read from the page of that exact model version before the run, never from memory. With a
-`temperature` above 0 one run proves little, because the next run can differ. Such a Test is run several times
-(this is what the run number in the file name is for), and we look if the values stay the same.
+**Thinking and temperature.** The makers say that their model must not run at `temperature` 0 when thinking is on:
+at 0 the thinking can fall into a loop and repeat the same sentences without end. Each maker gives its own numbers
+(Alibaba for Qwen3.8: `temperature` 1.0, `top_p` 0.95, `top_k` 20; Google for Gemma 4: `temperature` 1.0, `top_p`
+0.95, `top_k` 64). So the rule is: a setting with thinking uses the maker's numbers. They are read from the page of
+that exact model version before the run, never from memory, and the file of the model names the page. With a
+`temperature` above 0 one run proves little, because the next run can differ. So every setting is run at least two
+times (this is what the run number in the file name is for), and we look if the values stay the same. On S1 they
+did, for every setting.
 
 **Settings that we leave alone**
 
 | Setting | What it does | Why we do not touch it |
 |---|---|---|
-| `top_k`, `top_p`, `min_p` | They make the list of possible next pieces shorter before the model picks. | At `temperature` 0 they do nothing. They are only set when a maker asks for it (see above). |
 | `repeat_penalty` | Makes the model avoid words it has already written. | Our answer repeats words on purpose ("name", "value", and the same number can stand in two figures). The default of each model stays. |
 
 **Settings of the Ollama server.** These are set one time when Ollama starts, not for each question.
@@ -493,7 +521,7 @@ One run of the flow writes one JSON file into the `value-result` folder of the t
 
 ```text
 value-result/<name of the OCR setting>_<name of the other setting>-<run number>.json
-value-result/mlx-glm-bf16_ollama-qwen3.8-27b-1.json
+value-result/mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-1.json
 ```
 
 One run holds two settings, so the file name holds both names, with `_` between them. A setting name can never hold
@@ -503,40 +531,42 @@ A new run adds a new file. An old file is never changed.
 ```json
 {
   "run": 1,
-  "ocrSetting": { "name": "mlx-glm-bf16", "model": "mlx-community/GLM-OCR-bf16", "dpi": 200 },
+  "ocrSetting": { "name": "mlx-ovisocr2-bf16", "model": "ATH-MaaS/OvisOCR2", "dpi": 200, "prompt": "...", "options": { "temperature": 0, "max_tokens": 16384 } },
   "ocrRunner": { "name": "mlx-vlm", "version": "0.7.1" },
-  "text": "mlx-glm-bf16-1",
+  "text": "mlx-ovisocr2-bf16-1",
   "valueSetting": {
-    "name": "ollama-qwen3.8-27b",
+    "name": "ollama-qwen3.8-27b-thinking",
     "model": "qwen3.8:27b",
-    "think": false,
+    "think": true,
     "readContext": "Below is the text of one page of an insurance illustration, ...",
     "workOutContext": "Below is an instruction with a formula, ...",
-    "options": { "temperature": 0, "seed": 1, "num_ctx": 16384, "num_predict": 1000 }
+    "options": { "temperature": 1, "top_p": 0.95, "top_k": 20, "min_p": 0, "seed": 1, "num_ctx": 32768, "num_predict": 8192 }
   },
   "valueRunner": { "name": "ollama", "version": "0.34.2" },
-  "startedAt": "2026-09-21T14:05:00+07:00",
-  "seconds": 445,
+  "startedAt": "2026-09-22T05:05:03.000Z",
+  "seconds": 480,
   "results": [
     {
       "name": "Yearly Premium",
       "pages": [5],
       "instruction": "Total Single Premium (Single Pay)",
       "kind": "ReadFromPdf",
-      "expected": "US$708,740.00",
+      "expected": { "type": "number", "value": "US$708,740.00" },
       "value": "US$708,740.00",
+      "number": 708740,
       "foundOnPages": [5],
       "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10,000,000",
       "calls": [
         {
           "pages": [5],
-          "startedAt": "2026-09-21T14:05:40+07:00",
-          "seconds": 8,
+          "startedAt": "2026-09-22T05:06:10.000Z",
+          "seconds": 12,
           "inputTokens": 1317,
-          "outputTokens": 23,
-          "contextLimit": 16384,
-          "thinking": null,
-          "answer": "US$708,740.00"
+          "outputTokens": 74,
+          "contextLimit": 32768,
+          "thinking": "The instruction asks for the total single premium. On the page ...",
+          "answer": "US$708,740.00",
+          "prompt": "Below is the text of one page of an insurance illustration, ... Text of the page:\n..."
         }
       ]
     },
@@ -560,38 +590,79 @@ The values in this example are examples only. The settings are shown shorter tha
 | `startedAt`, `seconds` | When the run started and how long it took, with the reading of pages that were not read before. |
 | `results` | A copy of `template.json` as it was at the time of the run, in the same order. A `ReadFromPdf` or `WorkedOut` item gets the fields below. Another item is copied as it is. |
 | `value` | The answer of the model for this item, exactly as the model wrote it. `null` when the model found the value on none of the pages that were tried, or could not work it out. An item where something failed (see "A model must run cleanly") has no `value`. It has `failed`, with the reason. |
+| `number` | Only on a number figure (`expected.type` is `"number"`): the number taken out of `value`, the way part 3 describes. `null` when `value` is `null`, or when the text gave no number; then `notANumber` says why ("the text holds no number", "the text holds 2 numbers: 15, 46"). This number is what later items get in their values found before. |
 | `foundOnPages` | The page or pages whose text gave the value. `null` when `value` is `null`, and for a `WorkedOut` item. It differs from `pages` when the page was pushed forward or backward. |
 | `valuesGiven` | The exact lines of the values that were found before, as they were given to the model for this item. |
-| `calls` | The facts of every question that was asked for this item, in the order they were asked: one for the named page, and one more for each other page that was tried. `pages` is the page or pages whose text was sent (empty for a `WorkedOut` item). Then: when the question started, how long it took, the tokens that went in and came out, and the context window that was set. `thinking` is the thinking text of the model when thinking was on, else `null`. `answer` is what the model answered to this question. |
+| `calls` | The facts of every question that was asked for this item, in the order they were asked: one for the named page, and one more for each other page that was tried. `pages` is the page or pages whose text was sent (empty for a `WorkedOut` item). Then: when the question started, how long it took, the tokens that went in and came out, and the context window that was set. `thinking` is the thinking text of the model when thinking was on, else `null`. `answer` is what the model answered to this question. `prompt` is the exact question text that was sent, word for word, with the page text inside it (since 2026-09-22; older runs do not have it). |
 
 The file does not hold a score and does not say if a value is right or wrong. The report works that out when it is
 built, so the way of comparing can change later without running the models again.
 
 ### 3. The report in HTML
 
-To be decided later. What is known: it shows the results of the runs of one test case next to each other and
-compares every `value` with `expected`, and it must show the text of a page next to the picture of that page. One
-thing to solve: a browser does not let an HTML file read JSON files from the disk by itself, so either a command
-builds the HTML with the data inside, or a small local server shows it.
+The command `generate:report` (part 5) writes one file, `<test case>/<name>.html`, for example `dataset/S1/S1.html`.
+Everything the page needs is written into the file: the template, every run in `value-result/`, and the page texts
+in `text-result/`. The pictures are not copied; the file points at them in `pages/`. So the file opens with a
+double click, no server is needed, and it can be built again after every run. A browser cannot read JSON files
+from the disk by itself; that is why the data is written into the file.
+
+The page has seven parts:
+
+1. **The comparison table.** One row per figure, in the order of the template. On the left: the name, the kind,
+   the page the firm names, and `expected`. Then **one column per run file**, with the OCR setting, the value
+   setting and the run number in the header. So two models, two settings of one model, or two runs of one setting
+   always stand next to each other, and one row is read across to compare them. A cell shows the value the model
+   gave, the number taken out of it when that differs, the page where it was found when that is not the named
+   page, and a colour: green is right, red is wrong, grey is null (the model found nothing), yellow is a failed
+   call, no colour is a figure that is not asked. The last row is the score of each run: how many right, wrong,
+   null and failed of the answered figures, and the time of the run.
+2. **The details of a cell.** A click on a cell, or on a row of a run's own table, opens the details next to that
+   run's table: the instruction, the "values found before" lines, every question that was asked (page, seconds,
+   tokens, the full input sent to the model folded up, and the response from the model: its thinking and its
+   answer), and the number taken out of the answer.
+3. **Time and score per run.** One row per run with two bars: the score (green right, red wrong, grey null,
+   yellow failed) and the time of the run. This is accuracy against speed in one picture.
+4. **Time per figure.** The grid of the comparison table again, but every cell is a bar of the seconds that all
+   questions of that figure took in that run, with the number of questions and the tokens that came out. It shows
+   which questions are expensive.
+5. **Stability.** For every pair of settings that ran more than one time: how many figures got the same answer in
+   every run, and which ones differ. Every setting runs at a temperature above 0, so this must be checked.
+6. **The runs.** One block per run, reached from the column header: the score and the time; the OCR model and the
+   value model, each with its runner and version and every value of its setting (the prompts, the context texts
+   and the options in full, so nothing about a run is hidden); and that run's own table of figures with the
+   expected value, the value, the verdict, the pages asked, the time and the tokens of every question.
+7. **The pages.** Every page that any run used: the picture on the left, the text on the right, one block per
+   page-text file. The page numbers in the table link to them.
+
+**When is a value right?** The report decides this, never the run, so the rule can change without running the
+models again.
+
+- A number figure: the model's number is rounded to the decimals that `expected` has, and then both must be equal.
+  14.1095 against "14.11" is right; 708740 against "708,740.00" is right.
+- A text figure: the same text after the spaces at the ends are removed and big and small letters are ignored.
+  "US Dollars" against "us dollars" is right; anything else is wrong.
+- `expected` null: the model must answer null.
+- A failed call is neither right nor wrong. It is counted apart.
 
 Not decided yet:
 
 - Which other OCR models are tried.
 - Which other models for Text -> Value and `WorkedOut` are downloaded, and in which order they are tried. Each one is
   about 20 GB on the disk. And if `WorkedOut` should get a model of its own.
-- The final words of the two context texts.
-- The report in HTML.
-- How to compare an answer with `expected` when only the writing differs ("US$708,740.00" against "708740").
+- The final words of the two context texts. One thing seen on S1: "write it exactly the way the page writes it"
+  made Gemma answer the whole cell "26/57" (year and age) where the year 26 was asked. A "which year" instruction
+  and a "which value" instruction may need different words.
+- Counting the tokens of the input before a run, and stopping with an error when they do not fit in `num_ctx`.
+- An overview page across all test cases, when more than one has results.
 - How a test case with pictures is made (see "Pictures inside a PDF").
 
 ## 5. The scripts
 
-All scripts of the flow are written, except the report in HTML. To use them, run `npm install` one time in this
-folder. The terminal must use Node 24 (`nvm use` reads `.nvmrc`). This project uses plain npm. It shares nothing with
+All scripts of the flow are written. To use them, run `npm install` one time in this folder. The terminal must use Node 24 (`nvm use` reads `.nvmrc`). This project uses plain npm. It shares nothing with
 the Lumimory client repo.
 
 With npm, everything that a command gets must stand after ` -- ` when it holds an option with dashes:
-`npm run generate:value -- ../pdf-data/S1 --ocr mlx-glm-bf16 --value ollama-qwen3.8-27b`.
+`npm run generate:value -- dataset/S1 --ocr mlx-ovisocr2-bf16 --value ollama-qwen3.8-27b-thinking`.
 
 **The tmux session.** `mux start pdf-reader` opens a tmux session named `pdf-reader` in this folder, with Node 24
 and four windows: `nvim` (the editor), `cli` (for the commands), `ollama` and `mlx`. The two server windows do not
@@ -630,7 +701,7 @@ The commands. Each one is a line in `package.json`, and each one can be run agai
 | `npm run generate:pages -- <test case>` | Flow step 1. Draws all pages of `input.pdf` as pictures into `pages/` of the test case. It is run one time for a test case. A page that is already drawn is skipped. `--dpi 300` draws at other dots per inch, into its own folder; the normal value is 200. It uses no model and no server. |
 | `npm run generate:value -- <test case> --ocr <setting> --value <setting>` | Flow step 2, the whole run. It walks through the items of `template.json` one by one, reads a page with the OCR model when its text is not saved yet, asks for every value, and writes one new result file into `value-result/`. It needs both servers and the pictures of `generate:pages`; if something is missing, it stops and says what to do. It prints one line for each item. |
 | `npm run generate:text -- <test case> --setting <ocr setting>` | Only Image -> Text, without asking for any value. It reads the pages that `template.json` names into the file of the page texts; with `--pages 9` or `--pages 1-10` it reads the given pages. It is for trying an OCR model alone, and for reading pages in advance. `generate:value` does not need it. A page that is already read is skipped; `--retry-failed` reads the failed pages again; `--new-run` starts a new file with the next run number. It needs the `mlx-vlm` server. |
-| Not written yet: the report | Builds the HTML report of a test case from the files in `value-result/`. |
+| `npm run generate:report -- <test case>` | Flow step 3. Builds `<test case>/<name>.html` from `template.json`, every file in `value-result/` and the page texts in `text-result/` (see part 4, 3). It uses no model and no server. It is run again after every run; the old file is replaced. |
 
 **The checks.**
 
@@ -641,7 +712,7 @@ The commands. Each one is a line in `package.json`, and each one can be run agai
 | `npm run tsc` | Checks the TypeScript code for type mistakes. It runs nothing. |
 | `npm run lint` | Checks the code with ESLint, with the recommended rules for JavaScript and for TypeScript (`eslint.config.js`). It changes no file. |
 
-`<test case>` is the path of a folder, for example `../pdf-data/S1`.
+`<test case>` is the path of a folder, for example `dataset/S1`.
 
 **One file for each model, and one contract.** A model is not only a name and some numbers. Each model has its own
 behaviour: which words it wants with a picture, how many times a page must be sent, how its answers end, how its
@@ -653,6 +724,7 @@ scripts/               the commands. One file is one command of package.json. Th
   pages.ts             generate:pages
   value.ts             generate:value, the whole run
   text.ts              generate:text
+  report.ts            generate:report
   check.ts             model:check
   ollamaPullModel.ts   ollama:pull
 src/                   the parts that the commands use
@@ -666,10 +738,17 @@ src/                   the parts that the commands use
   Settings.ts          reads every file in models/, and checks the names of all settings
   models/
     GlmOcr.ts          everything about the OCR model glm-ocr: its runner, its named settings, how it reads one page
+    OvisOcr2.ts        the same for the OCR model OvisOCR2
     Qwen38.ts          everything about the model qwen3.8: its runner, its named settings, its two context texts, how
                        it is asked and how its answer is read
+    Gemma4.ts          the same for the model gemma4
   TextResult.ts        the file of the page texts: open it, read a page into it, save it
-  TestCase.ts          the paths inside the folder of one test case, and the pages that template.json names
+  ValueResult.ts       the shape of the result file of a run, and how all runs of a test case are read
+  Compare.ts           the rules that say if a value is right (part 4, 3)
+  Report.ts            builds the HTML of the report
+  Template.ts          the format of template.json: reads it, refuses a wrong shape, and takes the one number out of
+                       a text
+  TestCase.ts          the paths inside the folder of one test case
   Pages.ts             draws the pages of a PDF as PNG pictures with PDFium
 runners/
   mlx-vlm/             the Python project of the mlx-vlm server: pyproject.toml and uv.lock fix its version and the
@@ -701,7 +780,7 @@ models-hf/             the model files of mlx-vlm, downloaded from Hugging Face 
 **Named settings.** No setting is typed on the command line. A run only picks the name of a setting. The model is
 not named on the command line, because the name of the setting already says it.
 
-- **The format of a name:** short, for example `mlx-glm-bf16`, `ollama-qwen3.8-27b-thinking`.
+- **The format of a name:** short, for example `mlx-ovisocr2-bf16`, `ollama-qwen3.8-27b-thinking`.
   A good name says the runner, the model and its version, and then, if needed, a short label for what is special
   about this setting. Only small letters, digits, dots and dashes are allowed, and a name must not end with a dash
   and a number, because the file name is `<name>-<run number>.json`. No two settings in the whole project have the
@@ -718,9 +797,8 @@ not named on the command line, because the name of the setting already says it.
 **No test cases.** This project holds no test files (Iker, 2026-09-21). When Beta must check a piece of code, it
 writes a throw-away check, runs it, and deletes it.
 
-Not possible in TypeScript alone: the OCR models that are not in Ollama (PaddleOCR-VL, MinerU) are Python programs.
-They can run as a small local server, and the same scripts can then talk to them. This is only needed when the OCR
-models in Ollama are not good enough.
+An OCR model whose makers' way needs their own Python toolkit around the model (PaddleOCR-VL, MinerU) is not used,
+by rule 3 in part 4. So no third runner is written.
 
 ## 6. What is on this Mac for this project
 
@@ -734,6 +812,8 @@ downloaded.** Iker reads the row and says yes first. This is true for every prog
 | Model files | `models/` in this folder | The AI models that Ollama runs. Start Ollama with `OLLAMA_MODELS` set to this folder. Each model in it has its own row below. `qwen3.8:27b` (17 GB), a model for step 2, was downloaded on 2026-09-19. | delete the folder |
 | `mlx-vlm` 0.7.1, a Python program, with the Python packages it needs (575 MB), installed on 2026-09-21. It runs on Python 3.13, which was already on this Mac. | `runners/mlx-vlm/.venv/` in this folder, installed by `uv sync`. Ignored by git. | A runner for vision models on Apple chips. The makers of `glm-ocr` name it as the way to run their model on a Mac, because Ollama's copy of `glm-ocr` does not end its answers correctly. Licence: MIT. It runs as a local server; our TypeScript code talks to it. | delete `runners/mlx-vlm/.venv/` |
 | Model `mlx-community/GLM-OCR-bf16`, 2.1 GB, downloaded on 2026-09-21 | `models-hf/` in this folder. Ignored by git. | The same `glm-ocr` model, in the file format of `mlx-vlm`. Downloaded from huggingface.co. Licence: MIT. | delete `models-hf/` |
+| Model `gemma4:31b` (Google), 19.9 GB, downloaded on 2026-09-22 | `models/` in this folder. Ignored by git. | The second model for Text -> Value and `WorkedOut`, and the one with the best public scores of the candidates in part 4 (MMLU-Pro 85.2, GPQA Diamond 84.3, AIME 2026 89.2). Its makers' settings, read on 2026-09-22 from huggingface.co/google/gemma-4-31b-it: temperature 1.0, top_p 0.95, top_k 64, the same with and without thinking. Downloaded with `npm run ollama:pull gemma4:31b`. Both settings passed the four checks of `model:check` on 2026-09-22. Licence: Apache 2.0, with no extra clauses. | delete it from `models/` with `ollama rm gemma4:31b` while our Ollama runs, or delete the folder |
+| Model `ATH-MaaS/OvisOCR2`, the makers' own files, 1.6 GB, downloaded on 2026-09-22 | `models-hf/` in this folder. Ignored by git. | The OCR model with the best public score that reads a whole page by design (see the list in part 4). Published by Alibaba's ATH-MaaS team. Downloaded from huggingface.co. Licence: Apache 2.0. `mlx-vlm` 0.7.1 loads the makers' files directly; it passed the four checks of `model:check` on 2026-09-22. | delete `models-hf/` |
 
 The npm packages are not in this table. They are listed in `package.json`, with their versions, and they live only
 in `node_modules/` in this folder, which is ignored by git. To remove them, delete `node_modules/`. Node 24 (with npm)
@@ -743,5 +823,5 @@ rules for TypeScript do not support TypeScript 7 yet.
 ## 7. Rules for this folder
 
 - It is a git repo on this Mac only. Nothing is pushed. Commits are made only when Iker asks.
-- Model files, page pictures and results are never committed. `models/` is ignored by git.
+- Model files, the test data, page pictures and results are never committed. `models/`, `models-hf/` and `dataset/` are ignored by git.
 - No page, picture or text is sent to any cloud service.

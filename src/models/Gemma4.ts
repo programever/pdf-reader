@@ -20,16 +20,18 @@ const workOutContext = [
   "If a value that the formula needs is missing or null, answer null. Do not guess.",
 ].join("\n")
 
+// The makers' numbers, the same with and without thinking, read on 2026-09-22: https://huggingface.co/google/gemma-4-31b-it
+const makers = { temperature: 1, top_p: 0.95, top_k: 64, seed: 1 }
+
 export const valueModel: ValueModel<Setting> = {
   settings: [
     {
-      // The makers' numbers for thinking mode, read on 2026-09-22: https://huggingface.co/Qwen/Qwen3.8-27B
-      name: "ollama-qwen3.8-27b-thinking",
-      model: "qwen3.8:27b",
+      name: "ollama-gemma4-31b-thinking",
+      model: "gemma4:31b",
       think: true,
       readContext,
       workOutContext,
-      options: { temperature: 1, top_p: 0.95, top_k: 20, min_p: 0, seed: 1, num_ctx: 32768, num_predict: 8192 },
+      options: { ...makers, num_ctx: 32768, num_predict: 8192 },
     },
   ],
 

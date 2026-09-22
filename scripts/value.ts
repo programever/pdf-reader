@@ -1,36 +1,13 @@
 import { existsSync } from "node:fs"
-import { mkdir, readFile, writeFile } from "node:fs/promises"
+import { mkdir, writeFile } from "node:fs/promises"
 import { parseArgs } from "node:util"
 import { pageCount } from "../src/Pages.ts"
-import type { RunnerVersion } from "../src/Runner.ts"
+import { numberIn, readTemplate, type Figure } from "../src/Template.ts"
 import { newestRun, resultFile, testCaseAt } from "../src/TestCase.ts"
-import { chooseTextModel, type TextSetting } from "../src/TextModel.ts"
+import { chooseTextModel } from "../src/TextModel.ts"
 import { openTextResult, type OpenTextResult } from "../src/TextResult.ts"
-import { chooseValueModel, type ChosenValueModel, type ValueCall, type ValueSetting } from "../src/ValueModel.ts"
-
-type Figure = {
-  name: string
-  pages?: number[]
-  instruction: string
-  kind: "ReadFromPdf" | "WorkedOut" | "NotApplicable" | "HeldByTheFirm"
-  expected?: string | null
-}
-
-type Try = { pages: number[] } & ValueCall
-
-type Outcome = { value: string | null; foundOnPages: number[] | null; valuesGiven: string; calls: Try[] } | { failed: string; valuesGiven: string; calls: Try[] }
-
-type ValueResult = {
-  run: number
-  ocrSetting: TextSetting
-  ocrRunner: RunnerVersion
-  text: string
-  valueSetting: ValueSetting
-  valueRunner: RunnerVersion
-  startedAt: string
-  seconds: number
-  results: (Figure | (Figure & Outcome))[]
-}
+import { chooseValueModel, type ChosenValueModel } from "../src/ValueModel.ts"
+import type { Outcome, Try, ValueResult } from "../src/ValueResult.ts"
 
 const usage = "npm run generate:value -- <test case folder> --ocr <setting> --value <setting>"
 
@@ -41,7 +18,7 @@ async function main(): Promise<void> {
 
   const testCase = testCaseAt(folder)
   if (!existsSync(testCase.inputPdf)) throw new Error(`There is no input.pdf in ${folder}.`)
-  const figures: Figure[] = JSON.parse(await readFile(testCase.template, "utf8"))
+  const figures = await readTemplate(testCase.template)
   const ocrModel = await chooseTextModel(values.ocr)
   const valueModel = await chooseValueModel(values.value)
   await ocrModel.requireReady()
@@ -63,12 +40,13 @@ async function main(): Promise<void> {
       continue
     }
     const valuesGiven = valuesSoFar(results)
-    const outcome =
+    const asked =
       figure.kind === "ReadFromPdf"
         ? await readFromPdf(figure, valuesGiven, count, text, valueModel)
         : await workedOut(figure, valuesGiven, valueModel)
+    const outcome = figure.expected?.type === "number" ? withNumber(asked) : asked
     results.push({ ...figure, ...outcome })
-    console.log(`${figure.name}: ${line(outcome)}  (expected ${JSON.stringify(figure.expected ?? null)})`)
+    console.log(`${figure.name}: ${line(outcome)}  (expected ${JSON.stringify(figure.expected?.value ?? null)})`)
   }
 
   const result: ValueResult = {
@@ -115,15 +93,26 @@ async function workedOut(figure: Figure, valuesGiven: string, model: ChosenValue
   return { value: answer.value, foundOnPages: null, valuesGiven, calls: [{ pages: [], ...answer.call }] }
 }
 
+function withNumber(outcome: Outcome): Outcome {
+  if ("failed" in outcome) return outcome
+  const { value, ...rest } = outcome
+  if (value === null) return { value, number: null, ...rest }
+  const number = numberIn(value)
+  return typeof number === "number" ? { value, number, ...rest } : { value, number: null, ...number, ...rest }
+}
+
 function valuesSoFar(results: ValueResult["results"]): string {
-  return results.flatMap((result) => ("value" in result ? [`${result.name} = ${result.value}`] : [])).join("\n")
+  return results
+    .flatMap((result) => ("value" in result ? [`${result.name} = ${"number" in result ? (result.number ?? null) : result.value}`] : []))
+    .join("\n")
 }
 
 function line(outcome: Outcome): string {
   if ("failed" in outcome) return `FAILED, ${outcome.failed}`
   const seconds = outcome.calls.reduce((sum, call) => sum + call.seconds, 0)
+  const number = outcome.number === undefined ? "" : outcome.notANumber === undefined ? ` = ${outcome.number}` : ` = NOT A NUMBER, ${outcome.notANumber}`
   const where = outcome.foundOnPages === null ? "" : ` on page ${outcome.foundOnPages.join(", ")}`
-  return `${JSON.stringify(outcome.value)}${where}, ${outcome.calls.length} question${outcome.calls.length === 1 ? "" : "s"}, ${seconds} s`
+  return `${JSON.stringify(outcome.value)}${number}${where}, ${outcome.calls.length} question${outcome.calls.length === 1 ? "" : "s"}, ${seconds} s`
 }
 
 main().catch((error: unknown) => {

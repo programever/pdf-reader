@@ -14,12 +14,13 @@ type Setting = TextSetting & {
 
 const model = "mlx-community/GLM-OCR-bf16"
 
-// The makers' values: https://github.com/zai-org/GLM-OCR/blob/main/glmocr/config.yaml
-const options: Options = { temperature: 0, top_p: 0.00001, top_k: 1, repetition_penalty: 1.1, seed: 1, max_tokens: 8192 }
+// The makers' values (github.com/zai-org/GLM-OCR, glmocr/config.yaml) are top_p 0.00001, top_k 1, repetition_penalty 1.1.
+// Iker chose the neutral values instead (2026-09-22), the same as the OvisOCR2 setting, so both OCR models pick the same way.
+const neutral: Options = { temperature: 0, top_p: 1, top_k: 0, repetition_penalty: 1, seed: 1, max_tokens: 16384 }
 
 export const textModel: TextModel<Setting> = {
   settings: [
-    { name: "mlx-glm-bf16", model, dpi: 200, prompts: ["Text Recognition:", "Table Recognition:"], options },
+    { name: "mlx-glm-bf16-neutral", model, dpi: 200, prompts: ["Text Recognition:", "Table Recognition:"], options: neutral },
   ],
 
   requireReady: async (setting) => {

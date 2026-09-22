@@ -4,6 +4,9 @@ export const ollamaUrl = "http://127.0.0.1:11435"
 
 export type Options = {
   temperature: number
+  top_p?: number
+  top_k?: number
+  min_p?: number
   seed: number
   num_ctx: number
   num_predict: number
@@ -15,7 +18,6 @@ export type Question = {
   images: Buffer[]
   options: Options
   think?: boolean
-  format?: object
 }
 
 export async function ask(question: Question): Promise<Asked> {
@@ -31,7 +33,6 @@ export async function ask(question: Question): Promise<Asked> {
       images: question.images.map((image) => image.toString("base64")),
       options: question.options,
       think: question.think,
-      format: question.format,
       // Node's fetch gives up when no byte arrives for 5 minutes. A streamed answer sends bytes all the time.
       stream: true,
     }),

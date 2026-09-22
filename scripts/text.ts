@@ -1,7 +1,8 @@
 import { existsSync } from "node:fs"
 import { parseArgs } from "node:util"
 import { pageCount } from "../src/Pages.ts"
-import { pagesOfTemplate, testCaseAt } from "../src/TestCase.ts"
+import { pagesOfTemplate } from "../src/Template.ts"
+import { testCaseAt } from "../src/TestCase.ts"
 import { chooseTextModel } from "../src/TextModel.ts"
 import { openTextResult } from "../src/TextResult.ts"
 
