@@ -34,6 +34,15 @@ export const valueModel: ValueModel<Setting> = {
       workOutContext,
       options: { ...makers, num_ctx: 32768, num_predict: 8192 },
     },
+    {
+      // Three times the room: with 8192 the model was cut off while still thinking on two questions of S1 (2026-09-23).
+      name: "ollama-nemotron3.5-lightning-30b-thinking-long",
+      model: "nemotron-3.5-lightning:30b",
+      think: true,
+      readContext,
+      workOutContext,
+      options: { ...makers, num_ctx: 65536, num_predict: 24576 },
+    },
   ],
 
   requireReady: (setting) => requireModel(setting.model),
