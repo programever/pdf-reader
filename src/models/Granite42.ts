@@ -34,6 +34,15 @@ export const valueModel: ValueModel<Setting> = {
       workOutContext,
       options: { ...makers, num_ctx: 32768, num_predict: 8192 },
     },
+    {
+      // Three times the makers' thinking limit: with 8192 the model was cut off while still thinking on S1 (2026-09-23).
+      name: "ollama-granite4.2-8b-thinking-long",
+      model: "granite4.2:8b",
+      think: true,
+      readContext,
+      workOutContext,
+      options: { ...makers, num_ctx: 65536, num_predict: 24576 },
+    },
   ],
 
   requireReady: (setting) => requireModel(setting.model),
