@@ -23,14 +23,15 @@ export type Question = {
 export async function ask(question: Question): Promise<Asked> {
   const startedAt = new Date()
   const stop = new AbortController()
-  const response = await fetch(`${ollamaUrl}/api/generate`, {
+  // The chat door, not the generate door: only the chat door takes the thinking out of the answer for every model
+  // that thinks (Ollama 0.34.2 left granite4.2's thinking inside the answer text on the generate door).
+  const response = await fetch(`${ollamaUrl}/api/chat`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     signal: stop.signal,
     body: JSON.stringify({
       model: question.model,
-      prompt: question.prompt,
-      images: question.images.map((image) => image.toString("base64")),
+      messages: [{ role: "user", content: question.prompt, images: question.images.map((image) => image.toString("base64")) }],
       options: question.options,
       think: question.think,
       // Node's fetch gives up when no byte arrives for 5 minutes. A streamed answer sends bytes all the time.
@@ -47,8 +48,9 @@ export async function ask(question: Question): Promise<Asked> {
     const value: unknown = JSON.parse(line)
     if (!isRecord(value)) throw new Error(`Ollama sent a line that is not an object: ${line}`)
     last = value
-    if (typeof value.response === "string") text += value.response
-    if (typeof value.thinking === "string") thinking += value.thinking
+    const message = isRecord(value.message) ? value.message : {}
+    if (typeof message.content === "string") text += message.content
+    if (typeof message.thinking === "string") thinking += message.thinking
     pieces += 1
     if (pieces % checkForRepeatEvery === 0 && (repeatsItself(text) || repeatsItself(thinking))) {
       stop.abort()
