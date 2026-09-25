@@ -3,6 +3,7 @@ import type { ValueAnswer, ValueModel, ValueSetting } from "../ValueModel.ts"
 
 type Setting = ValueSetting & {
   think: boolean
+  pageFirst: boolean
   readContext: string
   workOutContext: string
   options: Options
@@ -27,6 +28,19 @@ export const valueModel: ValueModel<Setting> = {
       name: "ollama-qwen3.8-27b-thinking",
       model: "qwen3.8:27b",
       think: true,
+      pageFirst: false,
+      readContext,
+      workOutContext,
+      options: { temperature: 1, top_p: 0.95, top_k: 20, min_p: 0, seed: 1, num_ctx: 32768, num_predict: 8192 },
+    },
+    {
+      // The same, with the page text before the values and the instruction. Ollama keeps its notes on an input it has
+      // read, and reuses them when the next input starts the same way (measured on 2026-09-25: a second question on
+      // the same page is read in 6 s instead of 18 s). The page is the long part, so it goes first.
+      name: "ollama-qwen3.8-27b-thinking-pagefirst",
+      model: "qwen3.8:27b",
+      think: true,
+      pageFirst: true,
       readContext,
       workOutContext,
       options: { temperature: 1, top_p: 0.95, top_k: 20, min_p: 0, seed: 1, num_ctx: 32768, num_predict: 8192 },
@@ -37,8 +51,11 @@ export const valueModel: ValueModel<Setting> = {
 
   runner: ollamaVersion,
 
-  readValue: (setting, question) =>
-    answer(setting, `${setting.readContext}\n\nValues found before:\n${question.valuesSoFar}\n\nInstruction:\n${question.instruction}\n\nText of the page:\n${question.pageText}`),
+  readValue: (setting, question) => {
+    const page = `Text of the page:\n${question.pageText}`
+    const rest = `Values found before:\n${question.valuesSoFar}\n\nInstruction:\n${question.instruction}`
+    return answer(setting, `${setting.readContext}\n\n${setting.pageFirst ? `${page}\n\n${rest}` : `${rest}\n\n${page}`}`)
+  },
 
   workOut: (setting, question) =>
     answer(setting, `${setting.workOutContext}\n\nValues found before:\n${question.valuesSoFar}\n\nInstruction:\n${question.instruction}`),
