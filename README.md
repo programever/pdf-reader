@@ -33,7 +33,7 @@ dataset/
     value-result/    the results of the runs (see part 4, "The result file of a run")
       mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-1.json    <OCR setting>_<other setting>-<run number>.json
       mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-2.json
-    S1.html          the report (see part 4, 3)
+    result.html      the report (see part 4, 3)
   S2/
   ...
 ```
@@ -605,7 +605,7 @@ built, so the way of comparing can change later without running the models again
 
 ### 3. The report in HTML
 
-The command `generate:report` (part 5) writes one file, `<test case>/<name>.html`, for example `dataset/S1/S1.html`.
+The command `generate:report` (part 5) writes one file, `<test case>/result.html`, for example `dataset/S1/result.html`.
 Everything the page needs is written into the file: the template, every run in `value-result/`, and the page texts
 in `text-result/`. The pictures are not copied; the file points at them in `pages/`. So the file opens with a
 double click, no server is needed, and it can be built again after every run. A browser cannot read JSON files
@@ -706,7 +706,7 @@ The commands. Each one is a line in `package.json`, and each one can be run agai
 | `npm run generate:pages -- <test case>` | Flow step 1. Draws all pages of `input.pdf` as pictures into `pages/` of the test case. It is run one time for a test case. A page that is already drawn is skipped. `--dpi 300` draws at other dots per inch, into its own folder; the normal value is 200. It uses no model and no server. |
 | `npm run generate:value -- <test case> --ocr <setting> --value <setting>` | Flow step 2, the whole run. It walks through the items of `template.json` one by one, reads a page with the OCR model when its text is not saved yet, asks for every value, and writes one new result file into `value-result/`. It needs both servers and the pictures of `generate:pages`; if something is missing, it stops and says what to do. It prints one line for each item. |
 | `npm run generate:text -- <test case> --setting <ocr setting>` | Only Image -> Text, without asking for any value. It reads the pages that `template.json` names into the file of the page texts; with `--pages 9` or `--pages 1-10` it reads the given pages. It is for trying an OCR model alone, and for reading pages in advance. `generate:value` does not need it. A page that is already read is skipped; `--retry-failed` reads the failed pages again; `--new-run` starts a new file with the next run number. It needs the `mlx-vlm` server. |
-| `npm run generate:report -- <test case>` | Flow step 3. Builds `<test case>/<name>.html` from `template.json`, every file in `value-result/` and the page texts in `text-result/` (see part 4, 3). It uses no model and no server. It is run again after every run; the old file is replaced. |
+| `npm run generate:report -- <test case>` | Flow step 3. Builds `<test case>/result.html` from `template.json`, every file in `value-result/` and the page texts in `text-result/` (see part 4, 3). It uses no model and no server. It is run again after every run; the old file is replaced. |
 
 **The checks.**
 

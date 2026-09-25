@@ -22,7 +22,7 @@ async function main(): Promise<void> {
     texts.set(file.slice(0, -".json".length), JSON.parse(await readFile(join(testCase.textResultFolder, file), "utf8")))
   }
 
-  const reportFile = join(resolve(folder), `${title}.html`)
+  const reportFile = join(resolve(folder), "result.html")
   const html = reportHtml({
     title,
     figures,
