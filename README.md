@@ -31,8 +31,8 @@ dataset/
     text-result/     the texts of the pages that an OCR model read (see part 4, 2.1)
       mlx-ovisocr2-bf16-1.json                                <name of the OCR setting>-<run number>.json
     value-result/    the results of the runs (see part 4, "The result file of a run")
-      mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-1.json    <OCR setting>_<other setting>-<run number>.json
-      mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-2.json
+      mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-1.json    <OCR setting>_<other setting>-<run number>.json
+      mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-2.json
     result.html      the report (see part 4, 3)
   S2/
   ...
@@ -321,7 +321,7 @@ holds the text of every page that was read, and the facts of the reading.
 
 ```text
 text-result/<name of the setting>-<run number>.json
-text-result/mlx-glm-bf16-neutral-1.json
+text-result/mlx-ovisocr2-bf16-1.json
 ```
 
 The name of the setting already holds the model and its version (see "Named settings" in part 5). The run number
@@ -332,10 +332,10 @@ the same text again. A page text is made one time and then used by every run.
 {
   "run": 1,
   "setting": {
-    "name": "mlx-glm-bf16-neutral",
-    "model": "mlx-community/GLM-OCR-bf16",
+    "name": "mlx-ovisocr2-bf16",
+    "model": "ATH-MaaS/OvisOCR2",
     "dpi": 200,
-    "prompts": ["Text Recognition:", "Table Recognition:"],
+    "prompt": "Extract all readable content from the image ...",
     "options": { "temperature": 0, "top_p": 1, "top_k": 0, "repetition_penalty": 1, "seed": 1, "max_tokens": 16384 }
   },
   "runner": { "name": "mlx-vlm", "version": "0.7.1" },
@@ -382,31 +382,23 @@ nothing. Before pages are added to a file, it is checked that the file was made 
 same runner and the same pictures. If not, the command refuses. The command `generate:text` reads pages into this
 file by hand, without asking for any value: the pages that `template.json` names, or the pages of `--pages`.
 
-OCR models to try, checked online on 2026-09-21 and 2026-09-22 against the three rules. The score is from
-OmniDocBench v1.6, a public test of how well a model turns document pages into text (100 is perfect). The models
-that are on this Mac today are in part 6.
+**The OCR model is OvisOCR2** (Alibaba, 0.9 billion parameters, Apache 2.0, in `mlx-vlm` with the makers' own files).
+It reads a whole page by design and writes Markdown, with tables as HTML. It has the best public score of the models
+that read a whole page: 96.6 on OmniDocBench v1.6, a public test of how well a model turns document pages into text
+(100 is perfect). Its makers' settings: temperature 0, up to 16,384 tokens, picture between 448 and 2880 pixels. A
+parameter is one number inside an AI model; more parameters mean a bigger file, more memory and a slower answer.
 
-| Model | Size | Score | Licence | How to run it on the Mac |
-|---|---|---|---|---|
-| OvisOCR2 (Alibaba) | 0.9 billion parameters | 96.6, the best | Apache 2.0 | Not in Ollama. Reads a whole page by design and writes Markdown, with tables as HTML. Its makers name Transformers, vLLM, SGLang and llama.cpp as runners, not `mlx-vlm`; but `mlx-vlm` loads it (the `mlx-community` copies were made with `mlx-vlm` 0.6.8). Makers' settings: temperature 0, up to 16,384 tokens, picture between 448 and 2880 pixels. Checked on 2026-09-22. |
-| GLM-OCR | 0.9 billion, 2.2 GB | 95.2 | MIT | Tested on S1 and deleted on 2026-09-25: its text of the table page lost the header of one illustration and doubled the page, so the table figures were wrong or null. With `mlx-vlm`, the way its makers say for a Mac: `mlx-community/GLM-OCR-bf16`. It passes the checks of "A model must run cleanly" there. The copy in Ollama (`glm-ocr`) does not: it never ends an answer in the normal way. Its public score was reached with the makers' full toolkit, which first cuts a page into pieces; the bare model has no prompt for a whole page. |
-| Granite-Docling (IBM) | 0.26 billion, 0.6 GB | not in that test | Apache 2.0 | Tested on S1 and deleted on 2026-09-25: it wrote the big table as an empty box, so every table figure was null. In `mlx-vlm` from the makers' own Apple copy `ibm-granite/granite-docling-258M-mlx`. It is also in Ollama (`ibm/granite-docling`), and both runners gave the same text on S1 page 8. Reads a whole page with one question: `Convert this page to docling.` It does not write Markdown. It writes DocTags, its own tag format, which IBM's Docling tool turns into Markdown. Makers' settings, read on 2026-09-22: temperature 0, up to 8,192 tokens. |
+Two other OCR models were tested on S1 and deleted again. Their S1 results stay in the report of S1.
 
-Models that we looked at and do not use. The rules are the three rules above.
-
-| Model | Why we do not use it |
+| Model | Why it lost |
 |---|---|
-| PaddleOCR-VL-1.6 (score 96.3) | Rule 3. The makers' way needs their own Python toolkit. It first works out where the blocks of the page are, cuts the page, and only then reads each piece. |
-| MinerU2.5-Pro (score 95.7) | Rule 3, the same reason. Their package `mineru-vl-utils` asks the model two times for every page: first where the blocks are, then the text of each block, one question per block. There is no question for a whole page. Checked on 2026-09-22 in their own code. |
-| DeepSeek-OCR-2 | It runs in neither of our two runners. It is not in Ollama. In the `mlx-vlm` server 0.7.1 it stops with an error inside the server's own code for this model: "There is no Stream(gpu, 4) in current thread". Version 0.7.2 of `mlx-vlm` names no fix for it. Our rule "no patches" says we do not repair a runner, so the model is out. Tried on 2026-09-22 with the copy `mlx-community/DeepSeek-OCR-2-bf16`. |
-| Chandra OCR 2 | Rule 2. Its licence limits the use inside a product that is sold. |
-| HunyuanOCR-1.5 | Rule 2, the same reason. |
-| DeepSeek-OCR (the first version) | Iker's decision on 2026-09-22, to keep the list short. The second version is newer. |
-| LightOnOCR-2-1B | Iker's decision on 2026-09-22, to keep the list short. |
-| dots.mocr | Iker's decision on 2026-09-22, to keep the list short. |
-| A big general model that can see | Iker's decision on 2026-09-22, to keep the list short. Public tests say the small OCR models read documents better. |
+| GLM-OCR (`mlx-community/GLM-OCR-bf16`, MIT, score 95.2) | It has no prompt for a whole page, only fixed prompts for text, tables and formulas; its makers' toolkit cuts the page into pieces first. Sent a whole page, it lost the header of one illustration on the table page and wrote the page two times, so the table figures were wrong or null. |
+| Granite-Docling (`ibm-granite/granite-docling-258M-mlx`, IBM, Apache 2.0, 0.26 billion) | It writes DocTags, its own format, not Markdown. It wrote the big table as an empty box, so every table figure was null. |
 
-A parameter is one number inside an AI model. More parameters mean a bigger file, more memory and a slower answer.
+Not tried, by the three rules: PaddleOCR-VL and MinerU2.5-Pro (rule 3: their makers' way needs their own toolkit,
+which cuts the page first), Chandra OCR 2 and HunyuanOCR-1.5 (rule 2: their licence limits the use in a product that
+is sold), DeepSeek-OCR-2 (it runs in neither runner: it is not in Ollama, and `mlx-vlm` 0.7.1 stops with an error
+inside its own code for this model; "no patches" says we do not repair a runner).
 
 **Text -> Value, the second model.** The model finds the value on the page. Our program judges nothing; it only
 puts the question together and reads the answer.
@@ -439,25 +431,23 @@ when the insurer adds a page. So up to three questions are asked for an item, in
 - Why the named page always comes first: on a wrong page the model can meet a label or a table that looks the same
   and give a wrong value.
 
-Models to try, checked online on 2026-09-21 against the three rules. All are in Ollama and run on the Mac (64 GB
-of memory). The models that are on this Mac today are in part 6. The text of one page is short, so every one of them accepts it easily. The length a model accepts is called
-its context window. It is counted in tokens; a token is a piece of a word. Ollama
-uses a much smaller window unless we set it, so every Test must set it.
+**The value model is `qwen3.8:27b`** (Alibaba, Apache 2.0, 17 GB, in Ollama). It is the only model that got every
+S1 figure right, the two "which year" figures included. The text of one page is short, so it fits easily. The length
+a model accepts is called its context window. It is counted in tokens; a token is a piece of a word. Ollama uses a
+much smaller window unless we set it, so every setting must set it (see "The settings of a run").
 
-| Model | File size | Context window | Licence | Also takes pictures | Note |
-|---|---|---|---|---|---|
-| `qwen3.8:27b` (Alibaba) | 18 GB | 256,000 tokens | Apache 2.0 | yes | The chosen model. The only one that got every S1 figure right, both "which year" figures included. |
-| `qwen3.6:35b` (Alibaba) | 23 GB | 256,000 | Apache 2.0, to be checked on the model's own page before the download | yes | |
-| `gemma4:31b` (Google) | 20 GB | 256,000 | Apache 2.0 | yes | The best public scores of this list (MMLU-Pro 85.2, GPQA Diamond 84.3). Tested on S1 and deleted on 2026-09-25: it answered the value instead of the year for the breakeven, and the whole year/age cell for the cover period, and its thinking was three times slower than qwen's. |
-| `gemma4:12b` (Google) | 7.6 GB | 256,000 | Apache 2.0 | yes | A small model, to see how small still works. |
-| `granite4.2:30b` (IBM) | 18 GB | 128,000 | Apache 2.0 | no | Built for business documents and JSON answers. |
-| `granite4.2:8b` (IBM) | 5.3 GB | 128,000 | Apache 2.0 | no | A small model. Tested on S1 and deleted on 2026-09-25: it thought past its makers' limit on three figures, and with three times the room it answered the year/age cell for both "which year" figures. |
-| `muse-glimmer:30b` (Meta) | 18 GB | 128,000 | Apache 2.0 | yes | |
-| `nemotron-3.5-lightning:30b` (NVIDIA) | 25 GB | 1,000,000 | OpenMDW-1.1, NVIDIA's own licence, free for a product | no | Only 3 of its 30 billion parameters work on each word, so it answers fast. Tested on S1 and deleted on 2026-09-25: it thought past its limit on two easy figures, and answered the value instead of the year for the breakeven. |
+Other value models were tested on S1 and deleted again. Their S1 results stay in the report of S1.
 
-Tested and removed again on Iker's decision (2026-09-23): `qwen3.5:9b`, the smallest Qwen with thinking. Also tried and removed (2026-09-25): the same `qwen3.8:27b` as the 4-bit copy `mlx-community/Qwen3.8-27B-4bit` in the `mlx-vlm` server. That server writes faster (22 tokens a second against 16 in Ollama), but that copy thinks two to five times longer on the same questions and answered the year/age cell twice on S1, so the runs were slower and worse. Not
-allowed by rule 1: `glm-5.3-flash`, `deepseek-v4-flash`, `kimi-k3` and `minimax-m3`. They exist in Ollama only
-with a `cloud` tag. They are also far too big for one machine.
+| Model | Why it lost |
+|---|---|
+| `gemma4:31b` (Google, 20 GB) | The best public scores of the candidates, but it answered the value instead of the year for the breakeven and the whole year/age cell ("26/57") for the cover period, and its thinking was three times slower than qwen's. |
+| `granite4.2:8b` (IBM, 5.3 GB) | A small model. It thought past its makers' limit on three figures, and with three times the room it answered the year/age cell for both "which year" figures. |
+| `nemotron-3.5-lightning:30b` (NVIDIA, 25 GB) | Fast per token, but it thought past its limit on two easy figures and answered the value instead of the year for the breakeven. |
+| `qwen3.5:9b` (Alibaba, 6.6 GB) | The smallest Qwen with thinking. It thought past its limit on two figures, and on the cover period its reasoning leaked into the answer. |
+| `qwen3.8:27b` as `mlx-community/Qwen3.8-27B-4bit` in the `mlx-vlm` server | The same model in the other runner. The server writes faster (22 tokens a second against 16), but that copy thinks two to five times longer on the same questions and answered the year/age cell twice on S1, so the runs were slower and worse. |
+
+The pattern across all of them: the "which year" questions (breakeven, cover period) are the ones that break, and
+only `qwen3.8:27b` with thinking gets both.
 
 
 ### 2.2 `WorkedOut`
@@ -494,12 +484,11 @@ Ollama version before the first run.
 | `num_predict` | The most tokens the model may write in its answer. | Always set, high enough for the full answer (and for the thinking, when thinking is on). Without a limit, a confused model can write without end and the run never finishes. |
 | `format` | Forces the shape of the answer: Ollama can make the model write JSON of a given shape and nothing else. | Not used. It is not free of effect: on a worked-out question the model answered null with a forced shape and the right number without it (S1, 2026-09-22). The program takes the trimmed text as the answer, and the text `null` as null. |
 | `top_k`, `top_p`, `min_p` | They make the list of possible next pieces shorter before the model picks. | The maker's numbers for thinking mode (see "Thinking and temperature" below). Nothing else. |
-| `think` | Many new models can think first: the model writes its reasoning for itself, and only then the answer. This is turned on or off. Thinking is slower, sometimes by many minutes. It usually helps on tasks with several steps, for example "the first year where the value reaches the total premium". Ollama gives the thinking text back apart from the answer. | Always on (Iker, 2026-09-22). Both were tested on S1: without thinking the models got the "which year" figures wrong, with thinking qwen got all of them right. So the settings without thinking and their results were removed. The thinking text is saved, because it shows why a value is wrong. |
+| `think` | Many new models can think first: the model writes its reasoning for itself, and only then the answer. This is turned on or off. Thinking is slower, sometimes by many minutes. It usually helps on tasks with several steps, for example "the first year where the value reaches the total premium". Ollama gives the thinking text back apart from the answer. | Always on. Without thinking the models got the "which year" figures of S1 wrong; with thinking qwen got all of them right. The thinking text is saved, because it shows why a value is wrong. |
 
 **Thinking and temperature.** The makers say that their model must not run at `temperature` 0 when thinking is on:
 at 0 the thinking can fall into a loop and repeat the same sentences without end. Each maker gives its own numbers
-(Alibaba for Qwen3.8: `temperature` 1.0, `top_p` 0.95, `top_k` 20; Google for Gemma 4: `temperature` 1.0, `top_p`
-0.95, `top_k` 64). So the rule is: a setting with thinking uses the maker's numbers. They are read from the page of
+(Alibaba for Qwen3.8: `temperature` 1.0, `top_p` 0.95, `top_k` 20, `min_p` 0). So the rule is: a setting with thinking uses the maker's numbers. They are read from the page of
 that exact model version before the run, never from memory, and the file of the model names the page. With a
 `temperature` above 0 one run proves little, because the next run can differ. So every setting is run at least two
 times (this is what the run number in the file name is for), and we look if the values stay the same. On S1 they
@@ -526,7 +515,7 @@ One run of the flow writes one JSON file into the `value-result` folder of the t
 
 ```text
 value-result/<name of the OCR setting>_<name of the other setting>-<run number>.json
-value-result/mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-1.json
+value-result/mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-1.json
 ```
 
 One run holds two settings, so the file name holds both names, with `_` between them. A setting name can never hold
@@ -540,9 +529,10 @@ A new run adds a new file. An old file is never changed.
   "ocrRunner": { "name": "mlx-vlm", "version": "0.7.1" },
   "text": "mlx-ovisocr2-bf16-1",
   "valueSetting": {
-    "name": "ollama-qwen3.8-27b-thinking",
+    "name": "ollama-qwen3.8-27b-thinking-pagefirst",
     "model": "qwen3.8:27b",
     "think": true,
+    "pageFirst": true,
     "readContext": "Below is the text of one page of an insurance illustration, ...",
     "workOutContext": "Below is an instruction with a formula, ...",
     "options": { "temperature": 1, "top_p": 0.95, "top_k": 20, "min_p": 0, "seed": 1, "num_ctx": 32768, "num_predict": 8192 }
@@ -598,7 +588,7 @@ The values in this example are examples only. The settings are shown shorter tha
 | `number` | Only on a number figure (`expected.type` is `"number"`): the number taken out of `value`, the way part 3 describes. `null` when `value` is `null`, or when the text gave no number; then `notANumber` says why ("the text holds no number", "the text holds 2 numbers: 15, 46"). This number is what later items get in their values found before. |
 | `foundOnPages` | The page or pages whose text gave the value. `null` when `value` is `null`, and for a `WorkedOut` item. It differs from `pages` when the page was pushed forward or backward. |
 | `valuesGiven` | The exact lines of the values that were found before, as they were given to the model for this item. |
-| `calls` | The facts of every question that was asked for this item, in the order they were asked: one for the named page, and one more for each other page that was tried. `pages` is the page or pages whose text was sent (empty for a `WorkedOut` item). Then: when the question started, how long it took, the tokens that went in and came out, and the context window that was set. `thinking` is the thinking text of the model when thinking was on, else `null`. `answer` is what the model answered to this question. `prompt` is the exact question text that was sent, word for word, with the page text inside it (since 2026-09-22; older runs do not have it). |
+| `calls` | The facts of every question that was asked for this item, in the order they were asked: one for the named page, and one more for each other page that was tried. `pages` is the page or pages whose text was sent (empty for a `WorkedOut` item). Then: when the question started, how long it took, the tokens that went in and came out, and the context window that was set. `thinking` is the thinking text of the model when thinking was on, else `null`. `answer` is what the model answered to this question. `prompt` is the exact question text that was sent, word for word, with the page text inside it. |
 
 The file does not hold a score and does not say if a value is right or wrong. The report works that out when it is
 built, so the way of comparing can change later without running the models again.
@@ -651,9 +641,6 @@ models again.
 
 Not decided yet:
 
-- Which other OCR models are tried.
-- Which other models for Text -> Value and `WorkedOut` are downloaded, and in which order they are tried. Each one is
-  about 20 GB on the disk. And if `WorkedOut` should get a model of its own.
 - The final words of the two context texts. One thing seen on S1: "write it exactly the way the page writes it"
   made Gemma answer the whole cell "26/57" (year and age) where the year 26 was asked. A "which year" instruction
   and a "which value" instruction may need different words.
@@ -663,11 +650,11 @@ Not decided yet:
 
 ## 5. The scripts
 
-All scripts of the flow are written. To use them, run `npm install` one time in this folder. The terminal must use Node 24 (`nvm use` reads `.nvmrc`). This project uses plain npm. It shares nothing with
+To use the scripts, run `npm install` one time in this folder. The terminal must use Node 24 (`nvm use` reads `.nvmrc`). This project uses plain npm. It shares nothing with
 the Lumimory client repo.
 
 With npm, everything that a command gets must stand after ` -- ` when it holds an option with dashes:
-`npm run generate:value -- dataset/S1 --ocr mlx-ovisocr2-bf16 --value ollama-qwen3.8-27b-thinking`.
+`npm run generate:value -- dataset/S1 --ocr mlx-ovisocr2-bf16 --value ollama-qwen3.8-27b-thinking-pagefirst`.
 
 **The tmux session.** `mux start pdf-reader` opens a tmux session named `pdf-reader` in this folder, with Node 24
 and four windows: `nvim` (the editor), `cli` (for the commands), `ollama` and `mlx`. The two server windows do not
@@ -742,11 +729,12 @@ src/                   the parts that the commands use
   ValueModel.ts        the contract of a model that finds values (Text -> Value) and works them out
   Settings.ts          reads every file in models/, and checks the names of all settings
   models/
-    GlmOcr.ts          everything about the OCR model glm-ocr: its runner, its named settings, how it reads one page
-    OvisOcr2.ts        the same for the OCR model OvisOCR2
+    OvisOcr2.ts        everything about the OCR model OvisOCR2: its runner, its named settings, how it reads one page
     Qwen38.ts          everything about the model qwen3.8: its runner, its named settings, its two context texts, how
                        it is asked and how its answer is read
-    Gemma4.ts          the same for the model gemma4
+    GlmOcr.ts, GraniteDocling.ts, Gemma4.ts, Granite42.ts, Nemotron35.ts
+                       models that were tested on S1 and deleted from the Mac. The files stay so that the settings
+                       of the S1 results can be read.
   TextResult.ts        the file of the page texts: open it, read a page into it, save it
   ValueResult.ts       the shape of the result file of a run, and how all runs of a test case are read
   Compare.ts           the rules that say if a value is right (part 4, 3)
@@ -785,7 +773,7 @@ models-hf/             the model files of mlx-vlm, downloaded from Hugging Face 
 **Named settings.** No setting is typed on the command line. A run only picks the name of a setting. The model is
 not named on the command line, because the name of the setting already says it.
 
-- **The format of a name:** short, for example `mlx-ovisocr2-bf16`, `ollama-qwen3.8-27b-thinking`.
+- **The format of a name:** short, for example `mlx-ovisocr2-bf16`, `ollama-qwen3.8-27b-thinking-pagefirst`.
   A good name says the runner, the model and its version, and then, if needed, a short label for what is special
   about this setting. Only small letters, digits, dots and dashes are allowed, and a name must not end with a dash
   and a number, because the file name is `<name>-<run number>.json`. No two settings in the whole project have the
@@ -802,9 +790,6 @@ not named on the command line, because the name of the setting already says it.
 **No test cases.** This project holds no test files (Iker, 2026-09-21). When Beta must check a piece of code, it
 writes a throw-away check, runs it, and deletes it.
 
-An OCR model whose makers' way needs their own Python toolkit around the model (PaddleOCR-VL, MinerU) is not used,
-by rule 3 in part 4. So no third runner is written.
-
 ## 6. What is on this Mac for this project
 
 **Everything that is installed or downloaded for this project gets a row in this table before it is installed or
@@ -812,11 +797,11 @@ downloaded.** Iker reads the row and says yes first. This is true for every prog
 
 | What | Where | Why | How to remove |
 |---|---|---|---|
-| Ollama 0.34.2 (upgraded from 0.33.3 on 2026-09-21 with `brew upgrade ollama`, because 0.33.3 did not close the answers of `glm-ocr` correctly) | installed with Homebrew | Runs AI models on this Mac. Homebrew also installed the `mlx` and `mlx-c` packages, which Ollama needs. It is not set to start by itself. | `brew uninstall ollama`, then `brew autoremove` |
+| Ollama 0.34.2 | installed with Homebrew | Runs the value model on this Mac. Homebrew also installed the `mlx` and `mlx-c` packages, which Ollama needs. It is not set to start by itself. | `brew uninstall ollama`, then `brew autoremove` |
 | uv 0.12.11 | installed with Homebrew | Installs Python and Python packages inside a project folder only. | `brew uninstall uv` |
-| Model `qwen3.8:27b` (Alibaba), 17 GB, downloaded on 2026-09-19 | `models/` in this folder. Ignored by git. Ollama is started with `OLLAMA_MODELS` set to this folder. | The chosen model for Text -> Value and `WorkedOut`. Licence: Apache 2.0. Other value models were tested on S1 and deleted again on 2026-09-25 (Iker): `gemma4:31b`, `granite4.2:8b`, `nemotron-3.5-lightning:30b`, and the `mlx-vlm` copy `mlx-community/Qwen3.8-27B-4bit`; their S1 results stay in `dataset/S1`, and part 4 says why they lost. | delete it from `models/` with `ollama rm qwen3.8:27b` while our Ollama runs, or delete the folder |
-| `mlx-vlm` 0.7.1, a Python program, with the Python packages it needs (575 MB), installed on 2026-09-21. It runs on Python 3.13, which was already on this Mac. | `runners/mlx-vlm/.venv/` in this folder, installed by `uv sync`. Ignored by git. | A runner for vision models on Apple chips. The makers of `glm-ocr` name it as the way to run their model on a Mac, because Ollama's copy of `glm-ocr` does not end its answers correctly. Licence: MIT. It runs as a local server; our TypeScript code talks to it. | delete `runners/mlx-vlm/.venv/` |
-| Model `ATH-MaaS/OvisOCR2`, the makers' own files, 1.6 GB, downloaded on 2026-09-22 | `models-hf/` in this folder. Ignored by git. | The chosen OCR model: the best public score of the models that read a whole page by design (see the list in part 4). Published by Alibaba's ATH-MaaS team. Downloaded from huggingface.co. Licence: Apache 2.0. `mlx-vlm` 0.7.1 loads the makers' files directly; it passed the four checks of `model:check` on 2026-09-22. The other OCR models that were tried, `mlx-community/GLM-OCR-bf16` and `ibm-granite/granite-docling-258M-mlx`, were deleted on 2026-09-25 (Iker); their S1 results stay in `dataset/S1`. | delete `models-hf/` |
+| Model `qwen3.8:27b` (Alibaba), 17 GB, downloaded on 2026-09-19 | `models/` in this folder. Ignored by git. Ollama is started with `OLLAMA_MODELS` set to this folder. | The chosen model for Text -> Value and `WorkedOut` (part 4, 2.1). Licence: Apache 2.0. Downloaded with `npm run ollama:pull qwen3.8:27b`. | delete it from `models/` with `ollama rm qwen3.8:27b` while our Ollama runs, or delete the folder |
+| `mlx-vlm` 0.7.1, a Python program, with the Python packages it needs (575 MB). It runs on Python 3.13, which was already on this Mac. | `runners/mlx-vlm/.venv/` in this folder, installed by `uv sync`. Ignored by git. | A runner for vision models on Apple chips. It runs the OCR model as a local server; our TypeScript code talks to it. Licence: MIT. | delete `runners/mlx-vlm/.venv/` |
+| Model `ATH-MaaS/OvisOCR2`, the makers' own files, 1.6 GB, downloaded on 2026-09-22 | `models-hf/` in this folder. Ignored by git. | The chosen OCR model (part 4, 2.1). Published by Alibaba's ATH-MaaS team. Licence: Apache 2.0. Downloaded from huggingface.co with `npm run mlx:pull ATH-MaaS/OvisOCR2`; `mlx-vlm` loads the makers' files directly. | delete `models-hf/` |
 | The Python packages `torchvision` 0.29.0 and `torch` 2.14.0, with four small packages they need (about 1.4 GB), installed on 2026-09-22 with `uv add torchvision` | `runners/mlx-vlm/.venv/` in this folder. Ignored by git. They are written in `runners/mlx-vlm/pyproject.toml` and `uv.lock`. | The `mlx-vlm` server could not open the picture for Granite-Docling without them. That model is deleted now, so nothing needs them any more; they are still installed. Licence: BSD. | `uv remove torchvision` in `runners/mlx-vlm` |
 
 The npm packages are not in this table. They are listed in `package.json`, with their versions, and they live only
