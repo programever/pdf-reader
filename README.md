@@ -490,9 +490,9 @@ Ollama version before the first run.
 at 0 the thinking can fall into a loop and repeat the same sentences without end. Each maker gives its own numbers
 (Alibaba for Qwen3.8: `temperature` 1.0, `top_p` 0.95, `top_k` 20, `min_p` 0). So the rule is: a setting with thinking uses the maker's numbers. They are read from the page of
 that exact model version before the run, never from memory, and the file of the model names the page. With a
-`temperature` above 0 one run proves little, because the next run can differ. So every setting is run at least two
-times (this is what the run number in the file name is for), and we look if the values stay the same. On S1 they
-did, for every setting.
+`temperature` above 0 two runs can give different answers. Every setting runs at least one time on a test case
+(Iker, 2026-09-29). A second run, with the next run number in the file name, is made only when we want to see if
+the values stay the same; the part "Stability" of the report compares them.
 
 **Settings that we leave alone**
 
@@ -621,7 +621,7 @@ The page has seven parts:
    questions of that figure took in that run, with the number of questions and the tokens that came out. It shows
    which questions are expensive.
 5. **Stability.** For every pair of settings that ran more than one time: how many figures got the same answer in
-   every run, and which ones differ. Every setting runs at a temperature above 0, so this must be checked.
+   every run, and which ones differ. Every setting runs at a temperature above 0, so two runs can differ.
 6. **The runs.** One block per run, reached from the column header: the score and the time; the OCR model and the
    value model, each with its runner and version and every value of its setting (the prompts, the context texts
    and the options in full, so nothing about a run is hidden); and that run's own table of figures with the
