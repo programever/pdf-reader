@@ -23,11 +23,13 @@ export type ReadQuestion = {
   pageText: string
   instruction: string
   valuesSoFar: string
+  example: string
 }
 
 export type WorkOutQuestion = {
   instruction: string
   valuesSoFar: string
+  example: string
 }
 
 export type ValueModel<Setting extends ValueSetting = ValueSetting> = {

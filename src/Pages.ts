@@ -16,6 +16,18 @@ export function pictureFile(folder: string, page: number): string {
   return join(folder, `${page}.png`)
 }
 
+export type Drawing = { pages: number; seconds: number; startedAt: string }
+
+export function drawingFile(folder: string): string {
+  return join(folder, "drawing.json")
+}
+
+export async function readDrawing(folder: string): Promise<Drawing> {
+  const file = drawingFile(folder)
+  if (!existsSync(file)) throw new Error(`There is no drawing.json in ${folder}. Draw the pages first: npm run generate:pages`)
+  return JSON.parse(await readFile(file, "utf8"))
+}
+
 export async function pageCount(pdfFile: string): Promise<number> {
   const library = await PDFiumLibrary.init()
   const document = await library.loadDocument(await readFile(pdfFile))

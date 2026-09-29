@@ -1,7 +1,8 @@
 import { existsSync } from "node:fs"
 import { join } from "node:path"
 import { parseArgs } from "node:util"
-import { drawMissingPages, pageCount, picturesName } from "../src/Pages.ts"
+import { writeFile } from "node:fs/promises"
+import { drawingFile, drawMissingPages, pageCount, picturesName, type Drawing } from "../src/Pages.ts"
 import { testCaseAt } from "../src/TestCase.ts"
 
 const usage = "npm run generate:pages -- <test case folder> [--dpi 200]"
@@ -18,7 +19,12 @@ async function main(): Promise<void> {
   const count = await pageCount(testCase.inputPdf)
   const allPages = Array.from({ length: count }, (_, i) => i + 1)
   const picturesFolder = join(testCase.pagesFolder, await picturesName(dpi))
+  const startedAt = new Date()
   const drawn = await drawMissingPages(testCase.inputPdf, picturesFolder, allPages, dpi)
+  if (drawn.length === count) {
+    const drawing: Drawing = { pages: count, seconds: Math.round((Date.now() - startedAt.getTime()) / 1000), startedAt: startedAt.toISOString() }
+    await writeFile(drawingFile(picturesFolder), `${JSON.stringify(drawing, null, 2)}\n`)
+  }
   console.log(`Pictures: ${picturesFolder}`)
   console.log(`${count} pages: ${drawn.length} drawn now, ${count - drawn.length} were already there.`)
 }

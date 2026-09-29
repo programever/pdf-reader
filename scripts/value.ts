@@ -1,13 +1,13 @@
 import { existsSync } from "node:fs"
 import { mkdir, writeFile } from "node:fs/promises"
 import { parseArgs } from "node:util"
-import { pageCount } from "../src/Pages.ts"
+import { pageCount, readDrawing } from "../src/Pages.ts"
 import { numberIn, readTemplate, type Figure } from "../src/Template.ts"
 import { newestRun, resultFile, testCaseAt } from "../src/TestCase.ts"
 import { chooseTextModel } from "../src/TextModel.ts"
 import { openTextResult, type OpenTextResult } from "../src/TextResult.ts"
 import { chooseValueModel, type ChosenValueModel } from "../src/ValueModel.ts"
-import type { Outcome, Try, ValueResult } from "../src/ValueResult.ts"
+import type { Outcome, Time, Try, ValueResult } from "../src/ValueResult.ts"
 
 const usage = "npm run generate:value -- <test case folder> --ocr <setting> --value <setting>"
 
@@ -26,6 +26,7 @@ async function main(): Promise<void> {
 
   const count = await pageCount(testCase.inputPdf)
   const text = await openTextResult(testCase, folder, ocrModel, false)
+  const drawing = await readDrawing(text.picturesFolder)
   const name = `${ocrModel.setting.name}_${valueModel.setting.name}`
   const run = ((await newestRun(testCase.valueResultFolder, name)) ?? 0) + 1
   const file = resultFile(testCase.valueResultFolder, name, run)
@@ -58,6 +59,7 @@ async function main(): Promise<void> {
     valueRunner: await valueModel.runner(),
     startedAt: startedAt.toISOString(),
     seconds: Math.round((Date.now() - startedAt.getTime()) / 1000),
+    time: timeOf(drawing.pages, drawing.seconds, text, results),
     results,
   }
   await mkdir(testCase.valueResultFolder, { recursive: true })
@@ -79,7 +81,7 @@ async function readFromPdf(figure: Figure, valuesGiven: string, count: number, t
       if ("failed" in read) return { failed: `page ${page} could not be read: ${read.failed}`, valuesGiven, calls }
       pageTexts.push(read.text)
     }
-    const answer = await model.readValue({ pageText: pageTexts.join("\n\n"), instruction: figure.instruction, valuesSoFar: valuesGiven })
+    const answer = await model.readValue({ pageText: pageTexts.join("\n\n"), instruction: figure.instruction, valuesSoFar: valuesGiven, example: figure.expecting?.example ?? "" })
     if ("failed" in answer) return { failed: answer.failed, valuesGiven, calls }
     calls.push({ pages, ...answer.call })
     if (answer.value !== null) return { value: answer.value, foundOnPages: pages, valuesGiven, calls }
@@ -88,7 +90,7 @@ async function readFromPdf(figure: Figure, valuesGiven: string, count: number, t
 }
 
 async function workedOut(figure: Figure, valuesGiven: string, model: ChosenValueModel): Promise<Outcome> {
-  const answer = await model.workOut({ instruction: figure.instruction, valuesSoFar: valuesGiven })
+  const answer = await model.workOut({ instruction: figure.instruction, valuesSoFar: valuesGiven, example: figure.expecting?.example ?? "" })
   if ("failed" in answer) return { failed: answer.failed, valuesGiven, calls: [] }
   return { value: answer.value, foundOnPages: null, valuesGiven, calls: [{ pages: [], ...answer.call }] }
 }
@@ -99,6 +101,22 @@ function withNumber(outcome: Outcome): Outcome {
   if (value === null) return { value, number: null, ...rest }
   const number = numberIn(value)
   return typeof number === "number" ? { value, number, ...rest } : { value, number: null, ...number, ...rest }
+}
+
+function timeOf(pageTotal: number, drawSeconds: number, text: OpenTextResult, results: ValueResult["results"]): Time {
+  const perQuestion = results.flatMap((result) => ("calls" in result ? result.calls.map((call) => ({ figure: result.name, pages: call.pages, seconds: call.seconds })) : []))
+  const pages = [...new Set(perQuestion.flatMap((question) => question.pages))].sort((a, b) => a - b)
+  const readSeconds = pages.reduce((sum, page) => {
+    const read = text.pageText(page)
+    return sum + (read !== undefined && "calls" in read ? read.calls.reduce((s, call) => s + call.seconds, 0) : 0)
+  }, 0)
+  const valueSeconds = perQuestion.reduce((sum, question) => sum + question.seconds, 0)
+  return {
+    drawPages: { pages: pageTotal, seconds: drawSeconds },
+    readPages: { pages, seconds: readSeconds },
+    readValues: { questions: perQuestion.length, seconds: valueSeconds, perQuestion },
+    total: drawSeconds + readSeconds + valueSeconds,
+  }
 }
 
 function valuesSoFar(results: ValueResult["results"]): string {

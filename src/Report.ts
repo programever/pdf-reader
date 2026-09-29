@@ -96,7 +96,7 @@ function callOf(call: Try, index: number): string {
 }
 
 function timeAndScoreChart(input: ReportInput): string {
-  const longest = Math.max(1, ...input.runs.map((run) => run.seconds))
+  const longest = Math.max(1, ...input.runs.map((run) => run.time?.total ?? run.seconds))
   const rows = input.runs.map((run, runIndex) => {
     const counts = countsOf(run, input.figures)
     const asked = Math.max(1, counts.right + counts.wrong + counts.null + counts.failed)
@@ -104,10 +104,21 @@ function timeAndScoreChart(input: ReportInput): string {
       .filter((verdict) => counts[verdict] > 0)
       .map((verdict) => `<span class="bar ${verdict}" style="width:${(100 * counts[verdict]) / asked}%" title="${counts[verdict]} ${verdict}">${counts[verdict]}</span>`)
       .join("")
-    const time = `<span class="bar time" style="width:${(100 * run.seconds) / longest}%">${minutes(run.seconds)}</span>`
+    const time =
+      run.time === undefined
+        ? `<span class="bar time" style="width:${(100 * run.seconds) / longest}%">${minutes(run.seconds)}</span>`
+        : [
+            ["draw", run.time.drawPages.seconds, "PDF -> pictures"],
+            ["read", run.time.readPages.seconds, "pictures -> texts"],
+            ["time", run.time.readValues.seconds, "texts -> values"],
+          ]
+            .filter(([, seconds]) => (seconds as number) > 0)
+            .map(([cls, seconds, label]) => `<span class="bar ${cls}" style="width:${(100 * (seconds as number)) / longest}%" title="${label}: ${seconds} s">${minutes(seconds as number)}</span>`)
+            .join("")
     return `<tr><th><a href="#run-${runIndex}">${runLabel(runIndex)}</a></th><td class="names">${escape(run.ocrSetting.name)}<br>${escape(run.valueSetting.name)} run ${run.run}</td><td class="chart"><div class="bars">${score}</div></td><td class="chart"><div class="bars">${time}</div></td></tr>`
   })
-  return `<table class="chart"><thead><tr><th></th><th>Settings</th><th>Score (green right, red wrong, grey null, yellow failed)</th><th>Time of the run</th></tr></thead><tbody>${rows.join("\n")}</tbody></table>`
+  return `<table class="chart"><thead><tr><th></th><th>Settings</th><th>Score (green right, red wrong, grey null, yellow failed)</th><th>Time of the run (dark blue PDF -> pictures, light blue pictures -> texts, blue texts -> values)</th></tr></thead><tbody>${rows.join("\n")}</tbody></table>
+<p>A page is drawn one time and read one time, then reused by every later run of the same test case. The time of the first two steps is the time of that first time.</p>`
 }
 
 function timePerFigureChart(input: ReportInput): string {
@@ -200,6 +211,7 @@ function runSection(run: NamedValueResult, runIndex: number, figures: Figure[]):
 <div class="setting"><h4>OCR model (Image -> Text)</h4><p>Runner: ${escape(run.ocrRunner.name)} ${escape(run.ocrRunner.version)}</p>${settingTable(run.ocrSetting)}</div>
 <div class="setting"><h4>Value model (Text -> Value, WorkedOut)</h4><p>Runner: ${escape(run.valueRunner.name)} ${escape(run.valueRunner.version)}</p>${settingTable(run.valueSetting)}</div>
 </div>
+${timeSection(run)}
 <h4>The figures of this run</h4>
 <p>Click a row to see its questions on the right.</p>
 <div class="side-by-side">
@@ -207,6 +219,21 @@ function runSection(run: NamedValueResult, runIndex: number, figures: Figure[]):
 <div class="run-details"><p class="placeholder"><i>The questions of the clicked row appear here.</i></p>${figures.map((figure, figureIndex) => detailsOf(run, runIndex, figure, figureIndex)).join("")}</div>
 </div>
 </section>`
+}
+
+function timeSection(run: NamedValueResult): string {
+  if (run.time === undefined) return ""
+  const { drawPages, readPages, readValues, total } = run.time
+  const pages = readPages.pages.map((page) => `<a href="#page-${page}">${page}</a>`).join(", ")
+  const questions = readValues.perQuestion.map((question) => `<tr><td>${escape(question.figure)}</td><td>${question.pages.length === 0 ? "-" : question.pages.join("+")}</td><td>${question.seconds} s</td></tr>`).join("")
+  return `<h4>Time</h4>
+<table class="figures time">
+<tr><th>1. PDF -> pictures</th><td>${drawPages.pages} pages</td><td>${drawPages.seconds} s</td></tr>
+<tr><th>2. Pictures -> texts</th><td>pages ${pages}</td><td>${readPages.seconds} s</td></tr>
+<tr><th>3. Texts -> values</th><td>${readValues.questions} question${readValues.questions === 1 ? "" : "s"}</td><td>${readValues.seconds} s</td></tr>
+<tr><th>Total</th><td></td><td><b>${total} s</b> (${minutes(total)})</td></tr>
+</table>
+<details><summary>Every question of step 3, in the order asked</summary><table class="figures time"><thead><tr><th>Figure</th><th>Page</th><th>Seconds</th></tr></thead><tbody>${questions}</tbody></table></details>`
 }
 
 // Every value of a setting is shown, whatever the model file put in it, so no field is ever hidden by the report.
@@ -286,7 +313,8 @@ table.chart td.chart { width: 34%; min-width: 220px; vertical-align: middle; }
 .bars { display: flex; width: 100%; height: 18px; background: #f4f4f4; border: 1px solid #ddd; }
 .bar { display: block; height: 100%; overflow: hidden; font-size: 11px; line-height: 18px; padding-left: 4px; white-space: nowrap; box-sizing: border-box; }
 .bar.right { background: #8fd48f; } .bar.wrong { background: #f09c9c; } .bar.null { background: #c8c8c8; } .bar.failed { background: #f2dc7a; }
-.bar.time { background: #9bbbe8; }
+.bar.time { background: #9bbbe8; } .bar.draw { background: #3b5f9e; color: #fff; } .bar.read { background: #c9dcf5; }
+table.time { margin: 4px 0 8px; } table.time th { font-weight: normal; }
 table.chart small { display: block; margin-top: 2px; }
 details summary { cursor: pointer; color: #335; }
 td.right { background: #d8f3d8; }

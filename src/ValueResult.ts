@@ -29,7 +29,15 @@ export type ValueResult = {
   valueRunner: RunnerVersion
   startedAt: string
   seconds: number
+  time?: Time
   results: (Figure | (Figure & Outcome))[]
+}
+
+export type Time = {
+  drawPages: { pages: number; seconds: number }
+  readPages: { pages: number[]; seconds: number }
+  readValues: { questions: number; seconds: number; perQuestion: { figure: string; pages: number[]; seconds: number }[] }
+  total: number
 }
 
 export type NamedValueResult = { name: string } & ValueResult

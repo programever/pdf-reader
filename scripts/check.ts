@@ -50,7 +50,7 @@ async function valueReader(settingName: string): Promise<() => Promise<Reading>>
   const runner = await model.runner()
   console.log(`Setting: ${settingName}\nRunner:  ${runner.name} ${runner.version}\nInput:   a made-up page, asked for "Sum Assured"\n`)
   return async () => {
-    const answer = await model.readValue({ pageText: madeUpPage, instruction: "Sum Assured", valuesSoFar: "Currency = US Dollars" })
+    const answer = await model.readValue({ pageText: madeUpPage, instruction: "Sum Assured", valuesSoFar: "Currency = US Dollars", example: "US$1,000,000" })
     return "failed" in answer ? answer : { text: String(answer.value), calls: [answer.call] }
   }
 }
