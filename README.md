@@ -641,7 +641,7 @@ models again.
 
 Not decided yet:
 
-- The final words of the two context texts. One thing seen on S1: "write it exactly the way the page writes it"
+- The final words of the two context texts. One thing seen on S1: "Answer with the value exactly the way the page writes it"
   made Gemma answer the whole cell "26/57" (year and age) where the year 26 was asked. A "which year" instruction
   and a "which value" instruction may need different words.
 - Counting the tokens of the input before a run, and stopping with an error when they do not fit in `num_ctx`.
