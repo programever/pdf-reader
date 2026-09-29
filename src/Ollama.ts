@@ -7,7 +7,6 @@ export type Options = {
   top_p?: number
   top_k?: number
   min_p?: number
-  presence_penalty?: number
   seed: number
   num_ctx: number
   num_predict: number
