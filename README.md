@@ -1,10 +1,10 @@
-# Lumimory illustration test
+# PDF Reader
 
-A test project on its own. It is not part of the Lumimory code base and uses nothing from it.
+A test project on its own: can local AI models read values out of insurance illustration PDFs?
 
 ## 1. The goal
 
-Lumimory must read values out of insurance illustration PDFs. An illustration is the PDF that an insurer makes for
+PDF Reader reads values out of insurance illustration PDFs. An illustration is the PDF that an insurer makes for
 one product and one client. It shows the premiums and the values for each year. Today an adviser reads these values
 out of each PDF by hand. We want AI models to do that, on our own machine, with no cloud service.
 
