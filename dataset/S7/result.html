@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>S7</title>
+<style>
+body { font: 14px/1.4 system-ui, sans-serif; margin: 16px; color: #222; }
+h1 { font-size: 22px; }
+h2 { font-size: 18px; margin: 24px 0 8px; }
+h2 small { font-weight: normal; color: #666; margin-left: 8px; }
+h3 { font-size: 15px; margin: 8px 0 4px; }
+h4 { font-size: 13px; margin: 12px 0 4px; }
+p.nav a { margin-right: 4px; }
+code { background: #f0f0f0; padding: 0 3px; }
+section.run { margin-top: 20px; border: 1px solid #ddd; padding: 8px 12px; }
+section.run .side-by-side { gap: 24px; }
+div.setting { flex: 1 1 50%; min-width: 0; }
+table.setting { border-collapse: collapse; width: 100%; font-size: 12px; }
+table.setting th, table.setting td { border: 1px solid #e0e0e0; padding: 3px 6px; text-align: left; vertical-align: top; }
+table.setting th { width: 120px; font-weight: normal; color: #555; background: #fafafa; }
+table.setting pre { margin: 0; }
+th.run a { font-weight: bold; }
+table.figures { border-collapse: collapse; }
+table.figures th, table.figures td { border: 1px solid #ccc; padding: 4px 8px; text-align: left; vertical-align: top; }
+table.figures thead th { background: #f2f2f2; }
+table.figures th.run { font-weight: normal; font-family: monospace; }
+table.figures th.figure { font-weight: normal; }
+[data-details] { cursor: pointer; }
+tr[data-details]:hover td, tr[data-details]:hover th { background: #eef4ff; }
+table.chart td.names { font-family: monospace; font-size: 12px; white-space: nowrap; }
+table.chart td.chart { width: 34%; min-width: 220px; vertical-align: middle; }
+.bars { display: flex; width: 100%; height: 18px; background: #f4f4f4; border: 1px solid #ddd; }
+.bar { display: block; height: 100%; overflow: hidden; font-size: 11px; line-height: 18px; padding-left: 4px; white-space: nowrap; box-sizing: border-box; }
+.bar.right { background: #8fd48f; } .bar.wrong { background: #f09c9c; } .bar.null { background: #c8c8c8; } .bar.failed { background: #f2dc7a; }
+.bar.time { background: #9bbbe8; } .bar.draw { background: #3b5f9e; color: #fff; } .bar.read { background: #c9dcf5; }
+table.time { margin: 4px 0 8px; } table.time th { font-weight: normal; }
+table.chart small { display: block; margin-top: 2px; }
+details summary { cursor: pointer; color: #335; }
+td.right { background: #d8f3d8; }
+td.wrong { background: #f8d0d0; }
+td.null { background: #e6e6e6; color: #555; }
+td.failed { background: #fff3b0; }
+td.not-asked { background: #fafafa; }
+td.score { font-weight: bold; }
+small { color: #555; }
+small.wrong-text { color: #a00; }
+.details { display: none; border: 1px solid #ccc; padding: 8px 12px; background: #fbfbfb; }
+.details.open { display: block; }
+.details h2 { margin-top: 0; }
+.run-table { flex: 0 0 52%; min-width: 0; }
+.run-details { flex: 1 1 48%; min-width: 0; position: sticky; top: 8px; align-self: flex-start; max-height: 95vh; overflow: auto; }
+.run-details .placeholder { color: #777; }
+.run-details:has(.details.open) .placeholder { display: none; }
+.call { border-top: 1px solid #e0e0e0; padding-top: 6px; }
+pre { white-space: pre-wrap; word-break: break-word; background: #f6f6f6; padding: 6px; margin: 4px 0; font-size: 12px; }
+p.failed, i.failed { color: #a00; }
+section.page { margin-top: 32px; border-top: 2px solid #ddd; padding-top: 8px; }
+.side-by-side { display: flex; gap: 16px; align-items: flex-start; }
+.picture { flex: 0 0 50%; }
+.picture img { width: 100%; border: 1px solid #ccc; }
+.texts { flex: 1 1 50%; min-width: 0; }
+.texts pre { max-height: 90vh; overflow: auto; }
+</style>
+</head>
+<body>
+<h1>S7</h1>
+<p class="nav"><a href="#comparison">Comparison</a> · <a href="#time-and-score">Time and score</a> · <a href="#time-per-figure">Time per figure</a> · <a href="#stability">Stability</a> · <a href="#runs">Runs</a> · <a href="#pages">Pages</a></p>
+<h2 id="comparison">Comparison</h2>
+<p>1 run, one column each. Click a cell to see its questions in the block of that run. Click a column header to see the run. Click a page number to see the page.</p>
+<table class="figures">
+<thead><tr><th>Figure</th><th>Kind</th><th>Page</th><th>Expected</th><th class="run"><a href="#run-0">Run A</a><br>mlx-ovisocr2-bf16<br>ollama-qwen3.8-27b-thinking-pagefirst-with-example<br>run 1</th></tr></thead>
+<tbody><tr><th class="figure">Currency</th><td>ReadFromPdf</td><td><a href="#page-1">1</a></td><td>US Dollars</td><td class="right" data-details="d-0-0">US Dollars</td></tr>
+<tr><th class="figure">Premium Term</th><td>ReadFromPdf</td><td><a href="#page-4">4</a></td><td>1</td><td class="right" data-details="d-0-1">1</td></tr>
+<tr><th class="figure">Cover</th><td>ReadFromPdf</td><td><a href="#page-4">4</a></td><td>20,000,000.00</td><td class="right" data-details="d-0-2">20,000,000.00 <small>= 20000000</small></td></tr>
+<tr><th class="figure">Yearly Premium</th><td>ReadFromPdf</td><td><a href="#page-4">4</a></td><td>10,672,432.00</td><td class="right" data-details="d-0-3">10,672,432.00 <small>= 10672432</small></td></tr>
+<tr><th class="figure">Total Premium</th><td>WorkedOut</td><td></td><td>10,672,432.00</td><td class="right" data-details="d-0-4">10,672,432.00 <small>= 10672432</small></td></tr>
+<tr><th class="figure">Day 1 Cash Value</th><td>ReadFromPdf</td><td><a href="#page-7">7</a></td><td>USD 8,576,905</td><td class="right" data-details="d-0-5">USD 8,576,905 <small>= 8576905</small></td></tr>
+<tr><th class="figure">Multiples of premium paid</th><td>WorkedOut</td><td></td><td>1.87</td><td class="right" data-details="d-0-6">1.87</td></tr>
+<tr><th class="figure">*Projected Breakeven (End of Year)</th><td>ReadFromPdf</td><td><a href="#page-6">6</a></td><td>10</td><td class="right" data-details="d-0-7">10</td></tr>
+<tr><th class="figure">Guaranteed Breakeven (End of Year)</th><td>NotApplicable</td><td></td><td></td><td class="not-asked"></td></tr>
+<tr><th class="figure">*Projected surrender value in year 15</th><td>ReadFromPdf</td><td><a href="#page-6">6</a></td><td>13,229,106</td><td class="right" data-details="d-0-9">13,229,106 <small>= 13229106</small></td></tr>
+<tr><th class="figure">*Projected surrender value in year 20</th><td>ReadFromPdf</td><td><a href="#page-6">6</a></td><td>15,378,710</td><td class="right" data-details="d-0-10">15,378,710 <small>= 15378710</small></td></tr>
+<tr><th class="figure">*Projected surrender value in year 25</th><td>ReadFromPdf</td><td><a href="#page-6">6</a></td><td>17,802,003</td><td class="right" data-details="d-0-11">17,802,003 <small>= 17802003</small></td></tr>
+<tr><th class="figure">Guaranteed cover period</th><td>ReadFromPdf</td><td><a href="#page-6">6</a></td><td>23</td><td class="right" data-details="d-0-12">23</td></tr></tbody>
+<tfoot><tr><th>Score</th><td></td><td></td><td></td><td class="score">12 right of 12. 6 min</td></tr></tfoot>
+</table>
+<h2 id="time-and-score">Time and score per run</h2>
+<table class="chart"><thead><tr><th></th><th>Settings</th><th>Score (green right, red wrong, grey null, yellow failed)</th><th>Time of the run (dark blue PDF -> pictures, light blue pictures -> texts, blue texts -> values)</th></tr></thead><tbody><tr><th><a href="#run-0">Run A</a></th><td class="names">mlx-ovisocr2-bf16<br>ollama-qwen3.8-27b-thinking-pagefirst-with-example run 1</td><td class="chart"><div class="bars"><span class="bar right" style="width:100%" title="12 right">12</span></div></td><td class="chart"><div class="bars"><span class="bar draw" style="width:6.284153005464481%" title="PDF -> pictures: 23 s">23 s</span><span class="bar read" style="width:17.759562841530055%" title="pictures -> texts: 65 s">65 s</span><span class="bar time" style="width:75.95628415300547%" title="texts -> values: 278 s">5 min</span></div></td></tr></tbody></table>
+<p>A page is drawn one time and read one time, then reused by every later run of the same test case. The time of the first two steps is the time of that first time.</p>
+<h2 id="time-per-figure">Time per figure</h2>
+<p>Seconds for all questions of the figure in that run, as a bar. The small number is how many tokens came out, thinking included. Click a cell to see its questions.</p>
+<table class="chart figures"><thead><tr><th>Figure</th><th class="run"><a href="#run-0">Run A</a></th></tr></thead><tbody><tr><th class="figure">Currency</th><td class="chart" data-details="d-0-0"><div class="bars"><span class="bar time" style="width:19.23076923076923%">10 s</span></div><small>1 question, 57 out</small></td></tr>
+<tr><th class="figure">Premium Term</th><td class="chart" data-details="d-0-1"><div class="bars"><span class="bar time" style="width:32.69230769230769%">17 s</span></div><small>1 question, 127 out</small></td></tr>
+<tr><th class="figure">Cover</th><td class="chart" data-details="d-0-2"><div class="bars"><span class="bar time" style="width:32.69230769230769%">17 s</span></div><small>1 question, 172 out</small></td></tr>
+<tr><th class="figure">Yearly Premium</th><td class="chart" data-details="d-0-3"><div class="bars"><span class="bar time" style="width:34.61538461538461%">18 s</span></div><small>1 question, 186 out</small></td></tr>
+<tr><th class="figure">Total Premium</th><td class="chart" data-details="d-0-4"><div class="bars"><span class="bar time" style="width:11.538461538461538%">6 s</span></div><small>1 question, 75 out</small></td></tr>
+<tr><th class="figure">Day 1 Cash Value</th><td class="chart" data-details="d-0-5"><div class="bars"><span class="bar time" style="width:32.69230769230769%">17 s</span></div><small>1 question, 106 out</small></td></tr>
+<tr><th class="figure">Multiples of premium paid</th><td class="chart" data-details="d-0-6"><div class="bars"><span class="bar time" style="width:100%">52 s</span></div><small>1 question, 774 out</small></td></tr>
+<tr><th class="figure">*Projected Breakeven (End of Year)</th><td class="chart" data-details="d-0-7"><div class="bars"><span class="bar time" style="width:100%">52 s</span></div><small>1 question, 287 out</small></td></tr>
+<tr><th class="figure">*Projected surrender value in year 15</th><td class="chart" data-details="d-0-9"><div class="bars"><span class="bar time" style="width:38.46153846153846%">20 s</span></div><small>1 question, 200 out</small></td></tr>
+<tr><th class="figure">*Projected surrender value in year 20</th><td class="chart" data-details="d-0-10"><div class="bars"><span class="bar time" style="width:53.84615384615385%">28 s</span></div><small>1 question, 306 out</small></td></tr>
+<tr><th class="figure">*Projected surrender value in year 25</th><td class="chart" data-details="d-0-11"><div class="bars"><span class="bar time" style="width:34.61538461538461%">18 s</span></div><small>1 question, 140 out</small></td></tr>
+<tr><th class="figure">Guaranteed cover period</th><td class="chart" data-details="d-0-12"><div class="bars"><span class="bar time" style="width:44.23076923076923%">23 s</span></div><small>1 question, 206 out</small></td></tr></tbody></table>
+<h2 id="stability">Stability</h2>
+<p>For every pair of settings that ran more than one time: how many figures got the same answer in every run.</p>
+<p><i>No pair of settings has run more than one time yet.</i></p>
+<h2 id="runs">Runs</h2>
+<section class="run" id="run-0">
+<h3>Run A: mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</h3>
+<p><b>Score:</b> 12 right of 12. 6 min. Started 2026-09-29T11:50:30.629Z. Page texts from <code>text-result/mlx-ovisocr2-bf16-1.json</code>.</p>
+<div class="side-by-side">
+<div class="setting"><h4>OCR model (Image -> Text)</h4><p>Runner: mlx-vlm 0.7.1</p><table class="setting"><tr><th>name</th><td>mlx-ovisocr2-bf16</td></tr><tr><th>model</th><td>ATH-MaaS/OvisOCR2</td></tr><tr><th>dpi</th><td>200</td></tr><tr><th>prompt</th><td><pre>
+Extract all readable content from the image in natural human reading order and output the result as a single Markdown document. For charts or images, represent them using an HTML image tag: &lt;img src=&quot;images/bbox_{left}_{top}_{right}_{bottom}.jpg&quot; /&gt;, where left, top, right, bottom are bounding box coordinates scaled to [0, 1000). Format formulas as LaTeX. Format tables as HTML: &lt;table&gt;...&lt;/table&gt;. Transcribe all other text as standard Markdown. Preserve the original text without translation or paraphrasing.</pre></td></tr><tr><th>options</th><td><pre>{
+  &quot;temperature&quot;: 0,
+  &quot;top_p&quot;: 1,
+  &quot;top_k&quot;: 0,
+  &quot;repetition_penalty&quot;: 1,
+  &quot;seed&quot;: 1,
+  &quot;max_tokens&quot;: 16384
+}</pre></td></tr></table></div>
+<div class="setting"><h4>Value model (Text -> Value, WorkedOut)</h4><p>Runner: ollama 0.34.2</p><table class="setting"><tr><th>name</th><td>ollama-qwen3.8-27b-thinking-pagefirst-with-example</td></tr><tr><th>model</th><td>qwen3.8:27b</td></tr><tr><th>think</th><td>true</td></tr><tr><th>readContext</th><td><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.</pre></td></tr><tr><th>workOutContext</th><td><pre>Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.
+Work out the value of the formula from these values.
+Answer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If a value that the formula needs is missing or null, answer null. Do not guess.</pre></td></tr><tr><th>options</th><td><pre>{
+  &quot;temperature&quot;: 1,
+  &quot;top_p&quot;: 0.95,
+  &quot;top_k&quot;: 20,
+  &quot;min_p&quot;: 0,
+  &quot;seed&quot;: 1,
+  &quot;num_ctx&quot;: 32768,
+  &quot;num_predict&quot;: 8192
+}</pre></td></tr></table></div>
+</div>
+<h4>Time</h4>
+<table class="figures time">
+<tr><th>1. PDF -> pictures</th><td>17 pages</td><td>23 s</td></tr>
+<tr><th>2. Pictures -> texts</th><td>pages <a href="#page-1">1</a>, <a href="#page-4">4</a>, <a href="#page-6">6</a>, <a href="#page-7">7</a></td><td>65 s</td></tr>
+<tr><th>3. Texts -> values</th><td>12 questions</td><td>278 s</td></tr>
+<tr><th>Total</th><td></td><td><b>366 s</b> (6 min)</td></tr>
+</table>
+<details><summary>Every question of step 3, in the order asked</summary><table class="figures time"><thead><tr><th>Figure</th><th>Page</th><th>Seconds</th></tr></thead><tbody><tr><td>Currency</td><td>1</td><td>10 s</td></tr><tr><td>Premium Term</td><td>4</td><td>17 s</td></tr><tr><td>Cover</td><td>4</td><td>17 s</td></tr><tr><td>Yearly Premium</td><td>4</td><td>18 s</td></tr><tr><td>Total Premium</td><td>-</td><td>6 s</td></tr><tr><td>Day 1 Cash Value</td><td>7</td><td>17 s</td></tr><tr><td>Multiples of premium paid</td><td>-</td><td>52 s</td></tr><tr><td>*Projected Breakeven (End of Year)</td><td>6</td><td>52 s</td></tr><tr><td>*Projected surrender value in year 15</td><td>6</td><td>20 s</td></tr><tr><td>*Projected surrender value in year 20</td><td>6</td><td>28 s</td></tr><tr><td>*Projected surrender value in year 25</td><td>6</td><td>18 s</td></tr><tr><td>Guaranteed cover period</td><td>6</td><td>23 s</td></tr></tbody></table></details>
+<h4>The figures of this run</h4>
+<p>Click a row to see its questions on the right.</p>
+<div class="side-by-side">
+<div class="run-table"><table class="figures"><thead><tr><th>Figure</th><th>Expected</th><th>Value</th><th>Verdict</th><th>Pages asked</th><th>Time</th><th>Tokens</th></tr></thead><tbody><tr data-details="d-0-0"><th class="figure">Currency</th><td>US Dollars</td><td class="right">US Dollars</td><td>right</td><td>1</td><td>10 s</td><td>928 in, 57 out</td></tr>
+<tr data-details="d-0-1"><th class="figure">Premium Term</th><td>1</td><td class="right">1</td><td>right</td><td>4</td><td>17 s</td><td>1351 in, 127 out</td></tr>
+<tr data-details="d-0-2"><th class="figure">Cover</th><td>20,000,000.00</td><td class="right">20,000,000.00</td><td>right</td><td>4</td><td>17 s</td><td>1364 in, 172 out</td></tr>
+<tr data-details="d-0-3"><th class="figure">Yearly Premium</th><td>10,672,432.00</td><td class="right">10,672,432.00</td><td>right</td><td>4</td><td>18 s</td><td>1380 in, 186 out</td></tr>
+<tr data-details="d-0-4"><th class="figure">Total Premium</th><td>10,672,432.00</td><td class="right">10,672,432.00</td><td>right</td><td>-</td><td>6 s</td><td>181 in, 75 out</td></tr>
+<tr data-details="d-0-5"><th class="figure">Day 1 Cash Value</th><td>USD 8,576,905</td><td class="right">USD 8,576,905</td><td>right</td><td>7</td><td>17 s</td><td>1676 in, 106 out</td></tr>
+<tr data-details="d-0-6"><th class="figure">Multiples of premium paid</th><td>1.87</td><td class="right">1.87</td><td>right</td><td>-</td><td>52 s</td><td>198 in, 774 out</td></tr>
+<tr data-details="d-0-7"><th class="figure">*Projected Breakeven (End of Year)</th><td>10</td><td class="right">10</td><td>right</td><td>6</td><td>52 s</td><td>5793 in, 287 out</td></tr>
+<tr><th class="figure">Guaranteed Breakeven (End of Year)</th><td colspan="6" class="not-asked">NotApplicable, not asked</td></tr>
+<tr data-details="d-0-9"><th class="figure">*Projected surrender value in year 15</th><td>13,229,106</td><td class="right">13,229,106</td><td>right</td><td>6</td><td>20 s</td><td>5803 in, 200 out</td></tr>
+<tr data-details="d-0-10"><th class="figure">*Projected surrender value in year 20</th><td>15,378,710</td><td class="right">15,378,710</td><td>right</td><td>6</td><td>28 s</td><td>5823 in, 306 out</td></tr>
+<tr data-details="d-0-11"><th class="figure">*Projected surrender value in year 25</th><td>17,802,003</td><td class="right">17,802,003</td><td>right</td><td>6</td><td>18 s</td><td>5843 in, 140 out</td></tr>
+<tr data-details="d-0-12"><th class="figure">Guaranteed cover period</th><td>23</td><td class="right">23</td><td>right</td><td>6</td><td>23 s</td><td>5856 in, 206 out</td></tr></tbody></table></div>
+<div class="run-details"><p class="placeholder"><i>The questions of the clicked row appear here.</i></p><div class="details" id="d-0-0">
+<h2>Currency <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Policy Currency (Extracted from PDF or Admin panel)</pre>
+
+<p>Values found before:</p><pre><i>none</i></pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-1">1</a>, 10 s, 928 tokens in, 57 out, window 32768.</p><details><summary>Full input sent to the model (3438 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+AIA
+
+This Cover Page is an important document.
+
+- It highlights the key features and risks of this product and should be read together with the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable.
+
+- It is important to read the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable, before deciding whether to purchase this product. If you do not have a copy of these documents, please contact us at 1800 248 8000 or your Financial Services Consultant / Insurance Representative to ask for them.
+
+- You should not purchase this product if you do not understand or are not comfortable with the risks of this product.
+
+AIA Platinum Legacy (IX)
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Product Type&lt;/td&gt;&lt;td&gt;Universal Life Plan&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Term&lt;/td&gt;&lt;td&gt;Single Premium&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Policy Term&lt;/td&gt;&lt;td&gt;Whole Life&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Current Crediting Rate&lt;/td&gt;&lt;td&gt;4.70%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Guaranteed Crediting Rate&lt;/td&gt;&lt;td&gt;4.70% for the first 3 years1.50% for subsequent years&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Name of Insurer&lt;/td&gt;&lt;td&gt;AIA SINGAPORE PRIVATE LIMITED&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Policy Currency&lt;/td&gt;&lt;td&gt;US Dollars&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+WHAT ARE YOU PURCHASING?
+
+This is a non-participating universal life plan. It is a product which offers you insurance coverage and also invests part of your premiums in the insurer's Non-participating Fund. It comprises guaranteed and non-guaranteed benefits and may not be suitable for you if you want all benefits to be guaranteed.
+
+WHAT ARE THE KEY RISKS OF A UNIVERSAL LIFE PLAN?
+
+By purchasing a universal life plan, your premiums will be pooled together and invested with premiums from other policyholders in the Non-participating Fund managed by AIA SINGAPORE PRIVATE LIMITED. As a policyholder, the key risks commonly associated with universal life plan are:
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Investment Risks&lt;/td&gt;&lt;td&gt;Lower than expected investment returns earned by the fund.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insurance Risks&lt;/td&gt;&lt;td&gt;Higher than expected claims made by policyholders (e.g. due to death or other terminations).&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Expense Risks&lt;/td&gt;&lt;td&gt;Higher than expected expenses incurred for managing the Non-participating Fund.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency Risk&lt;/td&gt;&lt;td&gt;If your home currency is not denominated in the U.S. Dollars, the payments you make or receive may be worth less over time when expressed in your home currency.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Signature
+
+Prepared By
+
+INSURANCE REPRESENTATIVE
+
+Date
+
+08-Aug-2025
+
+Signature of Life Insured / Applicant
+
+Name
+
+CI****
+
+Date
+
+08-Aug-2025
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+SQS R-20250709-01-Q08
+
+1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Page 1 of 3
+
+*UBA0718*
+
+COVER PAGE FOR NON-PARTICIPATING UNIVERSAL LIFE PLAN
+
+Values found before:
+
+
+Instruction:
+Policy Currency (Extracted from PDF or Admin panel)
+
+Example of the form of the answer, not the answer:
+US Dollars</pre></details><details open><summary>Response from the model</summary><p>Thinking (215 letters):</p><pre>The user wants me to find the &quot;Policy Currency&quot; value from the page text.
+
+Looking at the table in the text:
+- Policy Currency: US Dollars
+
+The example form shows &quot;US Dollars&quot; which matches what I found in the text.</pre><p>Answer: <b>US Dollars</b></p></details></div>
+</div><div class="details" id="d-0-1">
+<h2>Premium Term <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Premium Term (Years) column</pre>
+<p>Number taken out of the answer: <b>1</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-4">4</a>, 17 s, 1351 tokens in, 127 out, window 32768.</p><details><summary>Full input sent to the model (4682 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+AIA
+
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+PLAN SUMMARY
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;2&quot; colspan=&quot;2&quot;&gt;Plan/Rider&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;Premium&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;Coverage&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Amount ($)&lt;/td&gt;&lt;td&gt;Term (Years)&lt;/td&gt;&lt;td&gt;Amount ($)&lt;/td&gt;&lt;td&gt;Term (Years)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;6&quot;&gt;Plan&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;UL9&lt;/td&gt;&lt;td&gt;AIA Platinum Legacy (IX)&lt;/td&gt;&lt;td&gt;10,672,432.00&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;20,000,000.00&lt;/td&gt;&lt;td&gt;Whole Life&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Guaranteed Crediting Rate on Initial Premium for first 3 years
+
+4.70%
+
+Guaranteed Special Bonus payable:
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;End of Policy Year&lt;/td&gt;&lt;td&gt;Special Bonus Rate (% of prevailing Accumulation Value)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;0.50%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15&lt;/td&gt;&lt;td&gt;1.00%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20&lt;/td&gt;&lt;td&gt;1.50%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30&lt;/td&gt;&lt;td&gt;1.50%&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+## Introduction
+
+This Policy Illustration is valid in Singapore and any other jurisdiction where it is not prohibited.
+
+AIA Singapore Private Limited (AIA Singapore) believes that it is important that you fully appreciate the benefits of your policy. You should also understand how the cost of your insurance cover and the expenses of administration and sales affect the benefits that you will receive.
+
+The illustration that follows shows how the value of your policy progresses over time and the sum(s) that would be payable. The methods used to derive the values shown follow guidelines established by the Life Insurance Association, Singapore, to ensure that a fair and consistent approach is used in preparing this illustration.
+
+Please note that your policy illustration provides two sets of illustrated values:
+
+(1) Illustrated values at the minimum guaranteed crediting rate and maximum charges
+
+The crediting rate used in this illustration is a guaranteed minimum that cannot be lowered any further and charges are the maximum chargeable that cannot be increased any further.
+
+(2) Illustrated values at the current crediting rate and current charges
+
+The crediting rate used in this illustration, which does not exceed the rate supportable by underlying asset portfolio, is not guaranteed and may be varied at the company's discretion, subject to the guaranteed minimum. Charges are not guaranteed and may be increased in the future up to the maximum limits. The crediting rate and charges used are the rate and charges prevailing at the date of this illustration.
+
+As buying a life insurance policy is a long-term commitment, an early termination of the policy usually involves high costs and the surrender value, if any, that is payable to you may be zero or less than the total premiums paid.
+
+If you need clarification, please do not hesitate to ask your AIA Financial Services Consultant / Insurance Representative.
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08
+
+1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+ULTP 1192000.00
+
+E. &amp; O. E.
+
+Page 1 of 14
+
+{{S22D12A}
+
+*S22D12A*
+
+The image contains a single, continuous horizontal line with no text or symbols. According to the instructions, if no text is present, the OCR should output nothing.
+
+Therefore, the corrected OCR text is:
+
+``
+
+Values found before:
+Currency = US Dollars
+
+Instruction:
+Premium Term (Years) column
+
+Example of the form of the answer, not the answer:
+10</pre></details><details open><summary>Response from the model</summary><p>Thinking (363 letters):</p><pre>The instruction asks for the &quot;Premium Term (Years) column&quot; value. Looking at the Plan Summary table, I can see the columns are:
+- Plan/Rider
+- Premium Amount ($)
+- Premium Term (Years)
+- Coverage Amount ($)
+- Coverage Term (Years)
+
+For the row &quot;UL9 | AIA Platinum Legacy (IX) | 10,672,432.00 | 1 | 20,000,000.00 | Whole Life&quot;
+
+The Premium Term (Years) value is 1.</pre><p>Answer: <b>1</b></p></details></div>
+</div><div class="details" id="d-0-2">
+<h2>Cover <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Coverage Amount</pre>
+<p>Number taken out of the answer: <b>20000000</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-4">4</a>, 17 s, 1364 tokens in, 172 out, window 32768.</p><details><summary>Full input sent to the model (4698 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+AIA
+
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+PLAN SUMMARY
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;2&quot; colspan=&quot;2&quot;&gt;Plan/Rider&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;Premium&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;Coverage&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Amount ($)&lt;/td&gt;&lt;td&gt;Term (Years)&lt;/td&gt;&lt;td&gt;Amount ($)&lt;/td&gt;&lt;td&gt;Term (Years)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;6&quot;&gt;Plan&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;UL9&lt;/td&gt;&lt;td&gt;AIA Platinum Legacy (IX)&lt;/td&gt;&lt;td&gt;10,672,432.00&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;20,000,000.00&lt;/td&gt;&lt;td&gt;Whole Life&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Guaranteed Crediting Rate on Initial Premium for first 3 years
+
+4.70%
+
+Guaranteed Special Bonus payable:
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;End of Policy Year&lt;/td&gt;&lt;td&gt;Special Bonus Rate (% of prevailing Accumulation Value)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;0.50%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15&lt;/td&gt;&lt;td&gt;1.00%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20&lt;/td&gt;&lt;td&gt;1.50%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30&lt;/td&gt;&lt;td&gt;1.50%&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+## Introduction
+
+This Policy Illustration is valid in Singapore and any other jurisdiction where it is not prohibited.
+
+AIA Singapore Private Limited (AIA Singapore) believes that it is important that you fully appreciate the benefits of your policy. You should also understand how the cost of your insurance cover and the expenses of administration and sales affect the benefits that you will receive.
+
+The illustration that follows shows how the value of your policy progresses over time and the sum(s) that would be payable. The methods used to derive the values shown follow guidelines established by the Life Insurance Association, Singapore, to ensure that a fair and consistent approach is used in preparing this illustration.
+
+Please note that your policy illustration provides two sets of illustrated values:
+
+(1) Illustrated values at the minimum guaranteed crediting rate and maximum charges
+
+The crediting rate used in this illustration is a guaranteed minimum that cannot be lowered any further and charges are the maximum chargeable that cannot be increased any further.
+
+(2) Illustrated values at the current crediting rate and current charges
+
+The crediting rate used in this illustration, which does not exceed the rate supportable by underlying asset portfolio, is not guaranteed and may be varied at the company's discretion, subject to the guaranteed minimum. Charges are not guaranteed and may be increased in the future up to the maximum limits. The crediting rate and charges used are the rate and charges prevailing at the date of this illustration.
+
+As buying a life insurance policy is a long-term commitment, an early termination of the policy usually involves high costs and the surrender value, if any, that is payable to you may be zero or less than the total premiums paid.
+
+If you need clarification, please do not hesitate to ask your AIA Financial Services Consultant / Insurance Representative.
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08
+
+1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+ULTP 1192000.00
+
+E. &amp; O. E.
+
+Page 1 of 14
+
+{{S22D12A}
+
+*S22D12A*
+
+The image contains a single, continuous horizontal line with no text or symbols. According to the instructions, if no text is present, the OCR should output nothing.
+
+Therefore, the corrected OCR text is:
+
+``
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+
+Instruction:
+Coverage Amount
+
+Example of the form of the answer, not the answer:
+12,345,678.91</pre></details><details open><summary>Response from the model</summary><p>Thinking (400 letters):</p><pre>The instruction asks for the &quot;Coverage Amount&quot;. Looking at the PLAN SUMMARY table, I can see:
+
+- Plan: UL9, AIA Platinum Legacy (IX)
+- Premium Amount: 10,672,432.00
+- Premium Term: 1
+- Coverage Amount: 20,000,000.00
+- Coverage Term: Whole Life
+
+The Coverage Amount is 20,000,000.00.
+
+The example format shows: 12,345,678.91 (with commas and two decimal places)
+
+So the answer should be: 20,000,000.00</pre><p>Answer: <b>20,000,000.00</b></p></details></div>
+</div><div class="details" id="d-0-3">
+<h2>Yearly Premium <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Premium Amount (Single Pay)</pre>
+<p>Number taken out of the answer: <b>10672432</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-4">4</a>, 18 s, 1380 tokens in, 186 out, window 32768.</p><details><summary>Full input sent to the model (4727 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+AIA
+
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+PLAN SUMMARY
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;2&quot; colspan=&quot;2&quot;&gt;Plan/Rider&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;Premium&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;Coverage&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Amount ($)&lt;/td&gt;&lt;td&gt;Term (Years)&lt;/td&gt;&lt;td&gt;Amount ($)&lt;/td&gt;&lt;td&gt;Term (Years)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;6&quot;&gt;Plan&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;UL9&lt;/td&gt;&lt;td&gt;AIA Platinum Legacy (IX)&lt;/td&gt;&lt;td&gt;10,672,432.00&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;20,000,000.00&lt;/td&gt;&lt;td&gt;Whole Life&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Guaranteed Crediting Rate on Initial Premium for first 3 years
+
+4.70%
+
+Guaranteed Special Bonus payable:
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;End of Policy Year&lt;/td&gt;&lt;td&gt;Special Bonus Rate (% of prevailing Accumulation Value)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;0.50%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15&lt;/td&gt;&lt;td&gt;1.00%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20&lt;/td&gt;&lt;td&gt;1.50%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30&lt;/td&gt;&lt;td&gt;1.50%&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+## Introduction
+
+This Policy Illustration is valid in Singapore and any other jurisdiction where it is not prohibited.
+
+AIA Singapore Private Limited (AIA Singapore) believes that it is important that you fully appreciate the benefits of your policy. You should also understand how the cost of your insurance cover and the expenses of administration and sales affect the benefits that you will receive.
+
+The illustration that follows shows how the value of your policy progresses over time and the sum(s) that would be payable. The methods used to derive the values shown follow guidelines established by the Life Insurance Association, Singapore, to ensure that a fair and consistent approach is used in preparing this illustration.
+
+Please note that your policy illustration provides two sets of illustrated values:
+
+(1) Illustrated values at the minimum guaranteed crediting rate and maximum charges
+
+The crediting rate used in this illustration is a guaranteed minimum that cannot be lowered any further and charges are the maximum chargeable that cannot be increased any further.
+
+(2) Illustrated values at the current crediting rate and current charges
+
+The crediting rate used in this illustration, which does not exceed the rate supportable by underlying asset portfolio, is not guaranteed and may be varied at the company's discretion, subject to the guaranteed minimum. Charges are not guaranteed and may be increased in the future up to the maximum limits. The crediting rate and charges used are the rate and charges prevailing at the date of this illustration.
+
+As buying a life insurance policy is a long-term commitment, an early termination of the policy usually involves high costs and the surrender value, if any, that is payable to you may be zero or less than the total premiums paid.
+
+If you need clarification, please do not hesitate to ask your AIA Financial Services Consultant / Insurance Representative.
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08
+
+1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+ULTP 1192000.00
+
+E. &amp; O. E.
+
+Page 1 of 14
+
+{{S22D12A}
+
+*S22D12A*
+
+The image contains a single, continuous horizontal line with no text or symbols. According to the instructions, if no text is present, the OCR should output nothing.
+
+Therefore, the corrected OCR text is:
+
+``
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+
+Instruction:
+Premium Amount (Single Pay)
+
+Example of the form of the answer, not the answer:
+12,345,678.91</pre></details><details open><summary>Response from the model</summary><p>Thinking (443 letters):</p><pre>The instruction asks for &quot;Premium Amount (Single Pay)&quot;. Looking at the page, I can see the Plan Summary table which shows:
+
+- Plan: UL9, AIA Platinum Legacy (IX)
+- Premium Amount ($): 10,672,432.00
+- Term (Years): 1
+- Coverage Amount ($): 20,000,000.00
+- Term (Years): Whole Life
+
+The premium term is 1 year (single pay), and the premium amount is 10,672,432.00.
+
+The example format shows: 12,345,678.91
+
+So the answer should be: 10,672,432.00</pre><p>Answer: <b>10,672,432.00</b></p></details></div>
+</div><div class="details" id="d-0-4">
+<h2>Total Premium <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Yearly Premium * Premium Term</pre>
+<p>Number taken out of the answer: <b>10672432</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> no page, 6 s, 181 tokens in, 75 out, window 32768.</p><details><summary>Full input sent to the model (612 letters)</summary><pre>Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.
+Work out the value of the formula from these values.
+Answer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If a value that the formula needs is missing or null, answer null. Do not guess.
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+
+Instruction:
+Yearly Premium * Premium Term
+
+Example of the form of the answer, not the answer:
+12,345,678.91</pre></details><details open><summary>Response from the model</summary><p>Thinking (90 letters):</p><pre>Yearly Premium = 10672432
+Premium Term = 1
+
+10672432 * 1 = 10672432
+
+Format: 10,672,432.00</pre><p>Answer: <b>10,672,432.00</b></p></details></div>
+</div><div class="details" id="d-0-5">
+<h2>Day 1 Cash Value <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Day 1 Cash Value is illustrated to be</pre>
+<p>Number taken out of the answer: <b>8576905</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-7">7</a>, 17 s, 1676 tokens in, 106 out, window 32768.</p><details><summary>Full input sent to the model (4121 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;3&quot;&gt;End of Policy Year / Age&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Total Premiums Paid To-date ($)&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Annual Withdrawal ($)&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Guaranteed Basis&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Non-Guaranteed Basis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Minimum Guaranteed Crediting Rate* 1.50% &amp;amp; Maximum Charges&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Current Crediting Rate** &amp;amp; Current Charges&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;45/117&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;44,318,971&lt;/td&gt;&lt;td&gt;44,318,971&lt;/td&gt;&lt;td&gt;44,318,971&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;46/118&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;46,401,962&lt;/td&gt;&lt;td&gt;46,401,962&lt;/td&gt;&lt;td&gt;46,401,962&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;47/119&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;48,582,854&lt;/td&gt;&lt;td&gt;48,582,854&lt;/td&gt;&lt;td&gt;48,582,854&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;48/120&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;50,866,249&lt;/td&gt;&lt;td&gt;50,866,249&lt;/td&gt;&lt;td&gt;50,866,249&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;49/121&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;53,256,962&lt;/td&gt;&lt;td&gt;53,256,962&lt;/td&gt;&lt;td&gt;53,256,962&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;50/122&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;55,760,039&lt;/td&gt;&lt;td&gt;55,760,039&lt;/td&gt;&lt;td&gt;55,760,039&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+* The illustration takes into account the Guaranteed Crediting Rate (on the Initial Premium) for the first 3 years of 4.70% and Guaranteed Special Bonus payable at the end of Policy Year 10, 15, 20 and 30.
+
+# Crediting rate of 4.70% p.a. is applicable on initial premium and subsequent premiums (if any).
+
+Day 1 Cash Value is illustrated to be USD 8,576,905.
+
+Minimum Premium required for each of the first 8 years is USD 1,282,740.
+
+This is only a supplementary illustration and must be read in conjunction with the main policy illustration.
+
+Based on the minimum guaranteed crediting rate of 1.50% p.a. and maximum charges, the policy is projected to have lapsed before age 112.
+
+Based on the current crediting rate of 4.70% p.a. and current charges, your total Illustrated Yield upon surrender at age 112 is 3.03% p.a.
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+SQS R-20250709-01-Q08 1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Signature of Applicant
+
+Page 4 of 14
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+
+Instruction:
+Day 1 Cash Value is illustrated to be
+
+Example of the form of the answer, not the answer:
+USD 1,234,567</pre></details><details open><summary>Response from the model</summary><p>Thinking (251 letters):</p><pre>The user is asking me to find the &quot;Day 1 Cash Value&quot; from the page text.
+
+Looking at the text, I can find: &quot;Day 1 Cash Value is illustrated to be USD 8,576,905.&quot;
+
+The example format is &quot;USD 1,234,567&quot; so I need to format the answer as &quot;USD 8,576,905&quot;.</pre><p>Answer: <b>USD 8,576,905</b></p></details></div>
+</div><div class="details" id="d-0-6">
+<h2>Multiples of premium paid <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Cover / Total Premium</pre>
+<p>Number taken out of the answer: <b>1.87</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> no page, 52 s, 198 tokens in, 774 out, window 32768.</p><details><summary>Full input sent to the model (647 letters)</summary><pre>Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.
+Work out the value of the formula from these values.
+Answer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If a value that the formula needs is missing or null, answer null. Do not guess.
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+
+Instruction:
+Cover / Total Premium
+
+Example of the form of the answer, not the answer:
+1.23</pre></details><details open><summary>Response from the model</summary><p>Thinking (1185 letters):</p><pre>The user wants me to calculate Cover / Total Premium.
+
+Cover = 20000000
+Total Premium = 10672432
+
+20000000 / 10672432 = 1.87399...
+
+Let me calculate more precisely:
+20000000 / 10672432 = 1.8740...
+
+Let me do this division:
+20000000 / 10672432 = 1.874...
+
+10672432 * 1 = 10672432
+20000000 - 10672432 = 9327568
+9327568 / 10672432 = 0.8739...
+
+So approximately 1.87
+
+The example shows the form as 1.23, which is a decimal number with 2 decimal places. Let me round to 2 decimal places.
+
+20000000 / 10672432 = 1.8740...
+
+Let me be more precise:
+10672432 * 1.87 = 10672432 * 1 + 10672432 * 0.87
+= 10672432 + 9285015.84
+= 19957447.84
+
+10672432 * 1.874 = 10672432 * 1.87 + 10672432 * 0.004
+= 19957447.84 + 42689.728
+= 20000137.568
+
+So it's approximately 1.874.
+
+Rounding to 2 decimal places: 1.87
+
+Wait, let me recalculate:
+20000000 / 10672432
+
+Let me try: 10672432 * 1.874 = ?
+10672432 * 1 = 10672432
+10672432 * 0.8 = 8537945.6
+10672432 * 0.07 = 747070.24
+10672432 * 0.004 = 42689.728
+Total: 10672432 + 8537945.6 + 747070.24 + 42689.728 = 20000137.568
+
+So 20000000 / 10672432 ≈ 1.874 (slightly less than 1.874)
+
+To 2 decimal places: 1.87
+
+The example format shows 1.23, so I'll go with 1.87.</pre><p>Answer: <b>1.87</b></p></details></div>
+</div><div class="details" id="d-0-7">
+<h2>*Projected Breakeven (End of Year) <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Supplementary Illustration  -&gt;
+Non-Guaranteed Basis -&gt;
+Cash Value -&gt;
+Cash Value &gt;= Total Premium 
+(Year whereby cash value exceeded the total premium amount)</pre>
+<p>Number taken out of the answer: <b>10</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-6">6</a>, 52 s, 5793 tokens in, 287 out, window 32768.</p><details><summary>Full input sent to the model (9356 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+SUPPLEMENTARY ILLUSTRATION
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;3&quot;&gt;End of Policy Year / Age&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Total Premiums Paid To-date ($)&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Annual Withdrawal ($)&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Guaranteed Basis&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Non-Guaranteed Basis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Minimum Guaranteed Crediting Rate* 1.50% &amp;amp; Maximum Charges&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Current Crediting Rate** &amp;amp; Current Charges&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1/73&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2/74&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3/75&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4/76&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,904,248&lt;/td&gt;&lt;td&gt;10,334,048&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,236,620&lt;/td&gt;&lt;td&gt;10,666,420&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5/77&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,711,391&lt;/td&gt;&lt;td&gt;10,141,191&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,390,445&lt;/td&gt;&lt;td&gt;10,820,245&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;6/78&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,491,116&lt;/td&gt;&lt;td&gt;9,920,916&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,539,615&lt;/td&gt;&lt;td&gt;10,969,415&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7/79&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,246,378&lt;/td&gt;&lt;td&gt;9,676,178&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,682,796&lt;/td&gt;&lt;td&gt;11,112,596&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;8/80&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,128,240&lt;/td&gt;&lt;td&gt;9,403,240&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,973,165&lt;/td&gt;&lt;td&gt;11,248,165&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9/81&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,148,923&lt;/td&gt;&lt;td&gt;9,096,123&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,425,836&lt;/td&gt;&lt;td&gt;11,373,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10/82&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,020,292&lt;/td&gt;&lt;td&gt;8,792,892&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,769,594&lt;/td&gt;&lt;td&gt;11,542,194&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11/83&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,930,402&lt;/td&gt;&lt;td&gt;8,630,402&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,174,666&lt;/td&gt;&lt;td&gt;11,874,666&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12/84&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,865,471&lt;/td&gt;&lt;td&gt;8,426,871&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,646,941&lt;/td&gt;&lt;td&gt;12,208,341&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13/85&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,776,294&lt;/td&gt;&lt;td&gt;8,175,694&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,143,598&lt;/td&gt;&lt;td&gt;12,542,998&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14/86&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,640,745&lt;/td&gt;&lt;td&gt;7,868,545&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,650,464&lt;/td&gt;&lt;td&gt;12,878,264&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15/87&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,453,476&lt;/td&gt;&lt;td&gt;7,570,476&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,229,106&lt;/td&gt;&lt;td&gt;13,346,106&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16/88&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;17/89&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;18/90&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19/91&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20/92&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21/93&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22/94&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;23/95&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24/96&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;25/97&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;26/98&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;27/99&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;28/100&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;29/101&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30/102&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;31/103&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;32/104&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;33/105&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;34/106&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;35/107&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;36/108&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;37/109&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;38/110&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;39/111&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;40/112&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;41/113&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;42/114&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;43/115&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;44/116&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08 1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Page 3 of 14
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+
+Instruction:
+Supplementary Illustration  -&gt;
+Non-Guaranteed Basis -&gt;
+Cash Value -&gt;
+Cash Value &gt;= Total Premium 
+(Year whereby cash value exceeded the total premium amount)
+
+Example of the form of the answer, not the answer:
+20</pre></details><details open><summary>Response from the model</summary><p>Thinking (533 letters):</p><pre>The instruction asks for the year whereby the Cash Value (Non-Guaranteed Basis) exceeded the Total Premium amount.
+
+Total Premium = 10,672,432
+
+I need to find the first year where Non-Guaranteed Cash Value &gt;= 10,672,432.
+
+Let me go through the Non-Guaranteed Cash Values:
+- Year 1: 8,762,133
+- Year 2: 8,921,427
+- Year 3: 9,079,854
+- Year 4: 9,236,620
+- Year 5: 9,390,445
+- Year 6: 9,539,615
+- Year 7: 9,682,796
+- Year 8: 9,973,165
+- Year 9: 10,425,836
+- Year 10: 10,769,594
+
+Year 10: 10,769,594 &gt;= 10,672,432 ✓
+
+So the answer is 10.</pre><p>Answer: <b>10</b></p></details></div>
+</div><div class="details" id="d-0-9">
+<h2>*Projected surrender value in year 15 <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Supplementary Illustration  - &gt;
+Non-Guaranteed Basis -&gt;
+Cash Value &gt; Year 15</pre>
+<p>Number taken out of the answer: <b>13229106</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+*Projected Breakeven (End of Year) = 10</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-6">6</a>, 20 s, 5803 tokens in, 200 out, window 32768.</p><details><summary>Full input sent to the model (9323 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+SUPPLEMENTARY ILLUSTRATION
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;3&quot;&gt;End of Policy Year / Age&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Total Premiums Paid To-date ($)&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Annual Withdrawal ($)&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Guaranteed Basis&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Non-Guaranteed Basis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Minimum Guaranteed Crediting Rate* 1.50% &amp;amp; Maximum Charges&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Current Crediting Rate** &amp;amp; Current Charges&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1/73&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2/74&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3/75&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4/76&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,904,248&lt;/td&gt;&lt;td&gt;10,334,048&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,236,620&lt;/td&gt;&lt;td&gt;10,666,420&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5/77&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,711,391&lt;/td&gt;&lt;td&gt;10,141,191&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,390,445&lt;/td&gt;&lt;td&gt;10,820,245&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;6/78&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,491,116&lt;/td&gt;&lt;td&gt;9,920,916&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,539,615&lt;/td&gt;&lt;td&gt;10,969,415&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7/79&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,246,378&lt;/td&gt;&lt;td&gt;9,676,178&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,682,796&lt;/td&gt;&lt;td&gt;11,112,596&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;8/80&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,128,240&lt;/td&gt;&lt;td&gt;9,403,240&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,973,165&lt;/td&gt;&lt;td&gt;11,248,165&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9/81&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,148,923&lt;/td&gt;&lt;td&gt;9,096,123&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,425,836&lt;/td&gt;&lt;td&gt;11,373,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10/82&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,020,292&lt;/td&gt;&lt;td&gt;8,792,892&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,769,594&lt;/td&gt;&lt;td&gt;11,542,194&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11/83&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,930,402&lt;/td&gt;&lt;td&gt;8,630,402&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,174,666&lt;/td&gt;&lt;td&gt;11,874,666&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12/84&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,865,471&lt;/td&gt;&lt;td&gt;8,426,871&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,646,941&lt;/td&gt;&lt;td&gt;12,208,341&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13/85&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,776,294&lt;/td&gt;&lt;td&gt;8,175,694&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,143,598&lt;/td&gt;&lt;td&gt;12,542,998&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14/86&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,640,745&lt;/td&gt;&lt;td&gt;7,868,545&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,650,464&lt;/td&gt;&lt;td&gt;12,878,264&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15/87&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,453,476&lt;/td&gt;&lt;td&gt;7,570,476&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,229,106&lt;/td&gt;&lt;td&gt;13,346,106&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16/88&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;17/89&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;18/90&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19/91&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20/92&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21/93&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22/94&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;23/95&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24/96&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;25/97&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;26/98&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;27/99&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;28/100&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;29/101&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30/102&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;31/103&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;32/104&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;33/105&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;34/106&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;35/107&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;36/108&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;37/109&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;38/110&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;39/111&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;40/112&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;41/113&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;42/114&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;43/115&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;44/116&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08 1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Page 3 of 14
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+*Projected Breakeven (End of Year) = 10
+
+Instruction:
+Supplementary Illustration  - &gt;
+Non-Guaranteed Basis -&gt;
+Cash Value &gt; Year 15
+
+Example of the form of the answer, not the answer:
+12,345,678</pre></details><details open><summary>Response from the model</summary><p>Thinking (624 letters):</p><pre>The user wants me to find the value for:
+Supplementary Illustration -&gt; Non-Guaranteed Basis -&gt; Cash Value -&gt; Year 15
+
+Looking at the table, I need to find the row for Year 15 (15/87) and the column for Non-Guaranteed Basis -&gt; Cash Value ($).
+
+The columns are:
+- End of Policy Year / Age
+- Total Premiums Paid To-date ($)
+- Annual Withdrawal ($)
+- Guaranteed Basis: Cash Value ($), Accumulation Value ($), Death Benefit ($)
+- Non-Guaranteed Basis: Cash Value ($), Accumulation Value ($), Death Benefit ($)
+
+For Year 15 (15/87):
+- Non-Guaranteed Basis Cash Value = 13,229,106
+
+The format should be like the example: 12,345,678</pre><p>Answer: <b>13,229,106</b></p></details></div>
+</div><div class="details" id="d-0-10">
+<h2>*Projected surrender value in year 20 <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Supplementary Illustration  - &gt;
+Non-Guaranteed Basis -&gt;
+Cash Value &gt; Year 20</pre>
+<p>Number taken out of the answer: <b>15378710</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+*Projected Breakeven (End of Year) = 10
+*Projected surrender value in year 15 = 13229106</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-6">6</a>, 28 s, 5823 tokens in, 306 out, window 32768.</p><details><summary>Full input sent to the model (9372 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+SUPPLEMENTARY ILLUSTRATION
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;3&quot;&gt;End of Policy Year / Age&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Total Premiums Paid To-date ($)&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Annual Withdrawal ($)&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Guaranteed Basis&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Non-Guaranteed Basis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Minimum Guaranteed Crediting Rate* 1.50% &amp;amp; Maximum Charges&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Current Crediting Rate** &amp;amp; Current Charges&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1/73&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2/74&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3/75&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4/76&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,904,248&lt;/td&gt;&lt;td&gt;10,334,048&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,236,620&lt;/td&gt;&lt;td&gt;10,666,420&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5/77&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,711,391&lt;/td&gt;&lt;td&gt;10,141,191&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,390,445&lt;/td&gt;&lt;td&gt;10,820,245&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;6/78&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,491,116&lt;/td&gt;&lt;td&gt;9,920,916&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,539,615&lt;/td&gt;&lt;td&gt;10,969,415&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7/79&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,246,378&lt;/td&gt;&lt;td&gt;9,676,178&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,682,796&lt;/td&gt;&lt;td&gt;11,112,596&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;8/80&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,128,240&lt;/td&gt;&lt;td&gt;9,403,240&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,973,165&lt;/td&gt;&lt;td&gt;11,248,165&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9/81&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,148,923&lt;/td&gt;&lt;td&gt;9,096,123&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,425,836&lt;/td&gt;&lt;td&gt;11,373,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10/82&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,020,292&lt;/td&gt;&lt;td&gt;8,792,892&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,769,594&lt;/td&gt;&lt;td&gt;11,542,194&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11/83&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,930,402&lt;/td&gt;&lt;td&gt;8,630,402&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,174,666&lt;/td&gt;&lt;td&gt;11,874,666&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12/84&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,865,471&lt;/td&gt;&lt;td&gt;8,426,871&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,646,941&lt;/td&gt;&lt;td&gt;12,208,341&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13/85&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,776,294&lt;/td&gt;&lt;td&gt;8,175,694&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,143,598&lt;/td&gt;&lt;td&gt;12,542,998&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14/86&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,640,745&lt;/td&gt;&lt;td&gt;7,868,545&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,650,464&lt;/td&gt;&lt;td&gt;12,878,264&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15/87&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,453,476&lt;/td&gt;&lt;td&gt;7,570,476&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,229,106&lt;/td&gt;&lt;td&gt;13,346,106&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16/88&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;17/89&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;18/90&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19/91&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20/92&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21/93&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22/94&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;23/95&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24/96&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;25/97&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;26/98&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;27/99&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;28/100&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;29/101&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30/102&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;31/103&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;32/104&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;33/105&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;34/106&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;35/107&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;36/108&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;37/109&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;38/110&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;39/111&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;40/112&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;41/113&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;42/114&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;43/115&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;44/116&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08 1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Page 3 of 14
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+*Projected Breakeven (End of Year) = 10
+*Projected surrender value in year 15 = 13229106
+
+Instruction:
+Supplementary Illustration  - &gt;
+Non-Guaranteed Basis -&gt;
+Cash Value &gt; Year 20
+
+Example of the form of the answer, not the answer:
+12,345,678</pre></details><details open><summary>Response from the model</summary><p>Thinking (833 letters):</p><pre>The user wants me to find the value from the Supplementary Illustration table, specifically:
+Non-Guaranteed Basis -&gt; Cash Value &gt; Year 20
+
+Looking at the table, I need to find the row for Year 20 (which is &quot;20/92&quot; in the End of Policy Year / Age column) and look at the Non-Guaranteed Basis -&gt; Cash Value ($) column.
+
+Row 20/92:
+- Total Premiums Paid To-date: 10,672,432
+- Annual Withdrawal: 0
+- Guaranteed Basis Cash Value: 4,357,590
+- Guaranteed Basis Accumulation Value: 4,357,590
+- Guaranteed Basis Death Benefit: 20,000,000
+- Non-Guaranteed Basis Cash Value: 15,378,710
+- Non-Guaranteed Basis Accumulation Value: 15,378,710
+- Non-Guaranteed Basis Death Benefit: 20,000,000
+
+So the Non-Guaranteed Basis Cash Value for Year 20 is 15,378,710.
+
+The format should be like the example: 12,345,678 (with commas as thousand separators).</pre><p>Answer: <b>15,378,710</b></p></details></div>
+</div><div class="details" id="d-0-11">
+<h2>*Projected surrender value in year 25 <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Supplementary Illustration  - &gt;
+Non-Guaranteed Basis -&gt;
+Cash Value &gt; Year 25</pre>
+<p>Number taken out of the answer: <b>17802003</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+*Projected Breakeven (End of Year) = 10
+*Projected surrender value in year 15 = 13229106
+*Projected surrender value in year 20 = 15378710</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-6">6</a>, 18 s, 5843 tokens in, 140 out, window 32768.</p><details><summary>Full input sent to the model (9421 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+SUPPLEMENTARY ILLUSTRATION
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;3&quot;&gt;End of Policy Year / Age&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Total Premiums Paid To-date ($)&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Annual Withdrawal ($)&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Guaranteed Basis&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Non-Guaranteed Basis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Minimum Guaranteed Crediting Rate* 1.50% &amp;amp; Maximum Charges&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Current Crediting Rate** &amp;amp; Current Charges&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1/73&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2/74&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3/75&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4/76&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,904,248&lt;/td&gt;&lt;td&gt;10,334,048&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,236,620&lt;/td&gt;&lt;td&gt;10,666,420&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5/77&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,711,391&lt;/td&gt;&lt;td&gt;10,141,191&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,390,445&lt;/td&gt;&lt;td&gt;10,820,245&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;6/78&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,491,116&lt;/td&gt;&lt;td&gt;9,920,916&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,539,615&lt;/td&gt;&lt;td&gt;10,969,415&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7/79&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,246,378&lt;/td&gt;&lt;td&gt;9,676,178&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,682,796&lt;/td&gt;&lt;td&gt;11,112,596&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;8/80&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,128,240&lt;/td&gt;&lt;td&gt;9,403,240&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,973,165&lt;/td&gt;&lt;td&gt;11,248,165&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9/81&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,148,923&lt;/td&gt;&lt;td&gt;9,096,123&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,425,836&lt;/td&gt;&lt;td&gt;11,373,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10/82&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,020,292&lt;/td&gt;&lt;td&gt;8,792,892&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,769,594&lt;/td&gt;&lt;td&gt;11,542,194&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11/83&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,930,402&lt;/td&gt;&lt;td&gt;8,630,402&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,174,666&lt;/td&gt;&lt;td&gt;11,874,666&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12/84&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,865,471&lt;/td&gt;&lt;td&gt;8,426,871&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,646,941&lt;/td&gt;&lt;td&gt;12,208,341&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13/85&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,776,294&lt;/td&gt;&lt;td&gt;8,175,694&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,143,598&lt;/td&gt;&lt;td&gt;12,542,998&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14/86&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,640,745&lt;/td&gt;&lt;td&gt;7,868,545&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,650,464&lt;/td&gt;&lt;td&gt;12,878,264&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15/87&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,453,476&lt;/td&gt;&lt;td&gt;7,570,476&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,229,106&lt;/td&gt;&lt;td&gt;13,346,106&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16/88&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;17/89&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;18/90&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19/91&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20/92&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21/93&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22/94&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;23/95&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24/96&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;25/97&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;26/98&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;27/99&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;28/100&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;29/101&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30/102&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;31/103&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;32/104&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;33/105&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;34/106&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;35/107&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;36/108&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;37/109&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;38/110&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;39/111&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;40/112&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;41/113&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;42/114&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;43/115&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;44/116&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08 1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Page 3 of 14
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+*Projected Breakeven (End of Year) = 10
+*Projected surrender value in year 15 = 13229106
+*Projected surrender value in year 20 = 15378710
+
+Instruction:
+Supplementary Illustration  - &gt;
+Non-Guaranteed Basis -&gt;
+Cash Value &gt; Year 25
+
+Example of the form of the answer, not the answer:
+12,345,678</pre></details><details open><summary>Response from the model</summary><p>Thinking (428 letters):</p><pre>The user wants me to find the value from the Supplementary Illustration table, specifically:
+Non-Guaranteed Basis -&gt; Cash Value &gt; Year 25
+
+Looking at the table, I need to find the row for Year 25 (which is &quot;25/97&quot; in the End of Policy Year / Age column).
+
+In that row, under Non-Guaranteed Basis -&gt; Cash Value ($), the value is 17,802,003.
+
+The format should be like the example: 12,345,678 (with commas as thousand separators).</pre><p>Answer: <b>17,802,003</b></p></details></div>
+</div><div class="details" id="d-0-12">
+<h2>Guaranteed cover period <small>mlx-ovisocr2-bf16_ollama-qwen3.8-27b-thinking-pagefirst-with-example-1</small></h2>
+<p>Instruction:</p><pre>Supplementary Illustration  -&gt;
+Guranteed Basis -&gt;
+The year whereby it last pay out death benefit.</pre>
+<p>Number taken out of the answer: <b>23</b></p>
+<p>Values found before:</p><pre>Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+*Projected Breakeven (End of Year) = 10
+*Projected surrender value in year 15 = 13229106
+*Projected surrender value in year 20 = 15378710
+*Projected surrender value in year 25 = 17802003</pre>
+<p>Questions asked:</p>
+<div class="call"><p><b>1.</b> page <a href="#page-6">6</a>, 23 s, 5856 tokens in, 206 out, window 32768.</p><details><summary>Full input sent to the model (9483 letters)</summary><pre>Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.
+Find the value that the instruction names on this page.
+Answer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.
+Write no explanation.
+If the value is not on this page, answer null. Do not guess.
+
+Text of the page:
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+SUPPLEMENTARY ILLUSTRATION
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;3&quot;&gt;End of Policy Year / Age&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Total Premiums Paid To-date ($)&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Annual Withdrawal ($)&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Guaranteed Basis&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Non-Guaranteed Basis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Minimum Guaranteed Crediting Rate* 1.50% &amp;amp; Maximum Charges&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Current Crediting Rate** &amp;amp; Current Charges&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1/73&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2/74&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3/75&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4/76&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,904,248&lt;/td&gt;&lt;td&gt;10,334,048&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,236,620&lt;/td&gt;&lt;td&gt;10,666,420&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5/77&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,711,391&lt;/td&gt;&lt;td&gt;10,141,191&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,390,445&lt;/td&gt;&lt;td&gt;10,820,245&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;6/78&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,491,116&lt;/td&gt;&lt;td&gt;9,920,916&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,539,615&lt;/td&gt;&lt;td&gt;10,969,415&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7/79&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,246,378&lt;/td&gt;&lt;td&gt;9,676,178&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,682,796&lt;/td&gt;&lt;td&gt;11,112,596&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;8/80&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,128,240&lt;/td&gt;&lt;td&gt;9,403,240&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,973,165&lt;/td&gt;&lt;td&gt;11,248,165&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9/81&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,148,923&lt;/td&gt;&lt;td&gt;9,096,123&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,425,836&lt;/td&gt;&lt;td&gt;11,373,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10/82&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,020,292&lt;/td&gt;&lt;td&gt;8,792,892&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,769,594&lt;/td&gt;&lt;td&gt;11,542,194&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11/83&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,930,402&lt;/td&gt;&lt;td&gt;8,630,402&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,174,666&lt;/td&gt;&lt;td&gt;11,874,666&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12/84&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,865,471&lt;/td&gt;&lt;td&gt;8,426,871&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,646,941&lt;/td&gt;&lt;td&gt;12,208,341&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13/85&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,776,294&lt;/td&gt;&lt;td&gt;8,175,694&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,143,598&lt;/td&gt;&lt;td&gt;12,542,998&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14/86&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,640,745&lt;/td&gt;&lt;td&gt;7,868,545&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,650,464&lt;/td&gt;&lt;td&gt;12,878,264&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15/87&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,453,476&lt;/td&gt;&lt;td&gt;7,570,476&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,229,106&lt;/td&gt;&lt;td&gt;13,346,106&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16/88&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;17/89&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;18/90&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19/91&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20/92&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21/93&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22/94&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;23/95&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24/96&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;25/97&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;26/98&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;27/99&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;28/100&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;29/101&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30/102&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;31/103&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;32/104&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;33/105&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;34/106&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;35/107&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;36/108&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;37/109&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;38/110&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;39/111&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;40/112&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;41/113&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;42/114&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;43/115&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;44/116&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08 1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Page 3 of 14
+
+Values found before:
+Currency = US Dollars
+Premium Term = 1
+Cover = 20000000
+Yearly Premium = 10672432
+Total Premium = 10672432
+Day 1 Cash Value = 8576905
+Multiples of premium paid = 1.87
+*Projected Breakeven (End of Year) = 10
+*Projected surrender value in year 15 = 13229106
+*Projected surrender value in year 20 = 15378710
+*Projected surrender value in year 25 = 17802003
+
+Instruction:
+Supplementary Illustration  -&gt;
+Guranteed Basis -&gt;
+The year whereby it last pay out death benefit.
+
+Example of the form of the answer, not the answer:
+10</pre></details><details open><summary>Response from the model</summary><p>Thinking (486 letters):</p><pre>The instruction asks for the year whereby the Guaranteed Basis last pays out death benefit.
+
+Looking at the Guaranteed Basis Death Benefit column:
+- Year 1/73: 20,000,000
+- Year 2/74: 20,000,000
+- ...
+- Year 23/95: 20,000,000
+- Year 24/96: 0
+- Year 25/97: 0
+- ...
+- Year 44/116: 0
+
+So the last year the death benefit is paid out (non-zero) in the Guaranteed Basis is Year 23 (age 95), where it shows 20,000,000. After that, from Year 24 onwards, it drops to 0.
+
+The answer should be 23.</pre><p>Answer: <b>23</b></p></details></div>
+</div></div>
+</div>
+</section>
+<h2 id="pages">Pages</h2>
+<section class="page" id="page-1"><h2>Page 1</h2><div class="side-by-side"><div class="picture"><img src="pages/pdfium-2.1.13-200dpi/1.png" alt="page 1"></div><div class="texts"><div class="reading"><h3>mlx-ovisocr2-bf16-1</h3><pre>AIA
+
+This Cover Page is an important document.
+
+- It highlights the key features and risks of this product and should be read together with the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable.
+
+- It is important to read the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable, before deciding whether to purchase this product. If you do not have a copy of these documents, please contact us at 1800 248 8000 or your Financial Services Consultant / Insurance Representative to ask for them.
+
+- You should not purchase this product if you do not understand or are not comfortable with the risks of this product.
+
+AIA Platinum Legacy (IX)
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Product Type&lt;/td&gt;&lt;td&gt;Universal Life Plan&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Term&lt;/td&gt;&lt;td&gt;Single Premium&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Policy Term&lt;/td&gt;&lt;td&gt;Whole Life&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Current Crediting Rate&lt;/td&gt;&lt;td&gt;4.70%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Guaranteed Crediting Rate&lt;/td&gt;&lt;td&gt;4.70% for the first 3 years1.50% for subsequent years&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Name of Insurer&lt;/td&gt;&lt;td&gt;AIA SINGAPORE PRIVATE LIMITED&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Policy Currency&lt;/td&gt;&lt;td&gt;US Dollars&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+WHAT ARE YOU PURCHASING?
+
+This is a non-participating universal life plan. It is a product which offers you insurance coverage and also invests part of your premiums in the insurer's Non-participating Fund. It comprises guaranteed and non-guaranteed benefits and may not be suitable for you if you want all benefits to be guaranteed.
+
+WHAT ARE THE KEY RISKS OF A UNIVERSAL LIFE PLAN?
+
+By purchasing a universal life plan, your premiums will be pooled together and invested with premiums from other policyholders in the Non-participating Fund managed by AIA SINGAPORE PRIVATE LIMITED. As a policyholder, the key risks commonly associated with universal life plan are:
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Investment Risks&lt;/td&gt;&lt;td&gt;Lower than expected investment returns earned by the fund.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insurance Risks&lt;/td&gt;&lt;td&gt;Higher than expected claims made by policyholders (e.g. due to death or other terminations).&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Expense Risks&lt;/td&gt;&lt;td&gt;Higher than expected expenses incurred for managing the Non-participating Fund.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency Risk&lt;/td&gt;&lt;td&gt;If your home currency is not denominated in the U.S. Dollars, the payments you make or receive may be worth less over time when expressed in your home currency.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Signature
+
+Prepared By
+
+INSURANCE REPRESENTATIVE
+
+Date
+
+08-Aug-2025
+
+Signature of Life Insured / Applicant
+
+Name
+
+CI****
+
+Date
+
+08-Aug-2025
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+SQS R-20250709-01-Q08
+
+1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Page 1 of 3
+
+*UBA0718*
+
+COVER PAGE FOR NON-PARTICIPATING UNIVERSAL LIFE PLAN</pre></div></div></div></section>
+<section class="page" id="page-4"><h2>Page 4</h2><div class="side-by-side"><div class="picture"><img src="pages/pdfium-2.1.13-200dpi/4.png" alt="page 4"></div><div class="texts"><div class="reading"><h3>mlx-ovisocr2-bf16-1</h3><pre>AIA
+
+Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+PLAN SUMMARY
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;2&quot; colspan=&quot;2&quot;&gt;Plan/Rider&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;Premium&lt;/td&gt;&lt;td colspan=&quot;2&quot;&gt;Coverage&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Amount ($)&lt;/td&gt;&lt;td&gt;Term (Years)&lt;/td&gt;&lt;td&gt;Amount ($)&lt;/td&gt;&lt;td&gt;Term (Years)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;6&quot;&gt;Plan&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;UL9&lt;/td&gt;&lt;td&gt;AIA Platinum Legacy (IX)&lt;/td&gt;&lt;td&gt;10,672,432.00&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;20,000,000.00&lt;/td&gt;&lt;td&gt;Whole Life&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Guaranteed Crediting Rate on Initial Premium for first 3 years
+
+4.70%
+
+Guaranteed Special Bonus payable:
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;End of Policy Year&lt;/td&gt;&lt;td&gt;Special Bonus Rate (% of prevailing Accumulation Value)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10&lt;/td&gt;&lt;td&gt;0.50%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15&lt;/td&gt;&lt;td&gt;1.00%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20&lt;/td&gt;&lt;td&gt;1.50%&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30&lt;/td&gt;&lt;td&gt;1.50%&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+## Introduction
+
+This Policy Illustration is valid in Singapore and any other jurisdiction where it is not prohibited.
+
+AIA Singapore Private Limited (AIA Singapore) believes that it is important that you fully appreciate the benefits of your policy. You should also understand how the cost of your insurance cover and the expenses of administration and sales affect the benefits that you will receive.
+
+The illustration that follows shows how the value of your policy progresses over time and the sum(s) that would be payable. The methods used to derive the values shown follow guidelines established by the Life Insurance Association, Singapore, to ensure that a fair and consistent approach is used in preparing this illustration.
+
+Please note that your policy illustration provides two sets of illustrated values:
+
+(1) Illustrated values at the minimum guaranteed crediting rate and maximum charges
+
+The crediting rate used in this illustration is a guaranteed minimum that cannot be lowered any further and charges are the maximum chargeable that cannot be increased any further.
+
+(2) Illustrated values at the current crediting rate and current charges
+
+The crediting rate used in this illustration, which does not exceed the rate supportable by underlying asset portfolio, is not guaranteed and may be varied at the company's discretion, subject to the guaranteed minimum. Charges are not guaranteed and may be increased in the future up to the maximum limits. The crediting rate and charges used are the rate and charges prevailing at the date of this illustration.
+
+As buying a life insurance policy is a long-term commitment, an early termination of the policy usually involves high costs and the surrender value, if any, that is payable to you may be zero or less than the total premiums paid.
+
+If you need clarification, please do not hesitate to ask your AIA Financial Services Consultant / Insurance Representative.
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08
+
+1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+ULTP 1192000.00
+
+E. &amp; O. E.
+
+Page 1 of 14
+
+{{S22D12A}
+
+*S22D12A*
+
+The image contains a single, continuous horizontal line with no text or symbols. According to the instructions, if no text is present, the OCR should output nothing.
+
+Therefore, the corrected OCR text is:
+
+``</pre></div></div></div></section>
+<section class="page" id="page-6"><h2>Page 6</h2><div class="side-by-side"><div class="picture"><img src="pages/pdfium-2.1.13-200dpi/6.png" alt="page 6"></div><div class="texts"><div class="reading"><h3>mlx-ovisocr2-bf16-1</h3><pre>Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+SUPPLEMENTARY ILLUSTRATION
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;3&quot;&gt;End of Policy Year / Age&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Total Premiums Paid To-date ($)&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Annual Withdrawal ($)&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Guaranteed Basis&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Non-Guaranteed Basis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Minimum Guaranteed Crediting Rate* 1.50% &amp;amp; Maximum Charges&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Current Crediting Rate** &amp;amp; Current Charges&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;1/73&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,762,133&lt;/td&gt;&lt;td&gt;10,191,933&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;2/74&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;8,921,427&lt;/td&gt;&lt;td&gt;10,351,227&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;3/75&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,079,854&lt;/td&gt;&lt;td&gt;10,509,654&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;4/76&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,904,248&lt;/td&gt;&lt;td&gt;10,334,048&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,236,620&lt;/td&gt;&lt;td&gt;10,666,420&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;5/77&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,711,391&lt;/td&gt;&lt;td&gt;10,141,191&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,390,445&lt;/td&gt;&lt;td&gt;10,820,245&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;6/78&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,491,116&lt;/td&gt;&lt;td&gt;9,920,916&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,539,615&lt;/td&gt;&lt;td&gt;10,969,415&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;7/79&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,246,378&lt;/td&gt;&lt;td&gt;9,676,178&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,682,796&lt;/td&gt;&lt;td&gt;11,112,596&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;8/80&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,128,240&lt;/td&gt;&lt;td&gt;9,403,240&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;9,973,165&lt;/td&gt;&lt;td&gt;11,248,165&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;9/81&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,148,923&lt;/td&gt;&lt;td&gt;9,096,123&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,425,836&lt;/td&gt;&lt;td&gt;11,373,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10/82&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;8,020,292&lt;/td&gt;&lt;td&gt;8,792,892&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;10,769,594&lt;/td&gt;&lt;td&gt;11,542,194&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11/83&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,930,402&lt;/td&gt;&lt;td&gt;8,630,402&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,174,666&lt;/td&gt;&lt;td&gt;11,874,666&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;12/84&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,865,471&lt;/td&gt;&lt;td&gt;8,426,871&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;11,646,941&lt;/td&gt;&lt;td&gt;12,208,341&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;13/85&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,776,294&lt;/td&gt;&lt;td&gt;8,175,694&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,143,598&lt;/td&gt;&lt;td&gt;12,542,998&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;14/86&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,640,745&lt;/td&gt;&lt;td&gt;7,868,545&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;12,650,464&lt;/td&gt;&lt;td&gt;12,878,264&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;15/87&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,453,476&lt;/td&gt;&lt;td&gt;7,570,476&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,229,106&lt;/td&gt;&lt;td&gt;13,346,106&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;16/88&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;7,123,986&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;13,694,304&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;17/89&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;6,588,001&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;14,046,097&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;18/90&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;5,950,069&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;14,404,465&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;19/91&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;5,192,649&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;14,771,962&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;20/92&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;4,357,590&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;15,378,710&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;21/93&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;3,293,716&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;15,800,719&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;22/94&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;2,025,561&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;16,247,846&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;23/95&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;508,624&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;16,727,167&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;24/96&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;17,240,661&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;25/97&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;17,802,003&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;26/98&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;18,434,036&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;27/99&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;19,157,480&lt;/td&gt;&lt;td&gt;20,000,000&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;28/100&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;td&gt;20,000,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;29/101&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;td&gt;20,940,002&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;30/102&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;td&gt;22,253,045&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;31/103&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;td&gt;23,298,938&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;32/104&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;td&gt;24,393,988&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;33/105&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;td&gt;25,540,506&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;34/106&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;td&gt;26,740,909&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;35/107&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;td&gt;27,997,732&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;36/108&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;td&gt;29,313,625&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;37/109&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;td&gt;30,691,366&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;38/110&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;td&gt;32,133,860&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;39/111&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;td&gt;33,644,151&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;40/112&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;td&gt;35,225,426&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;41/113&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;td&gt;36,881,021&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;42/114&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;td&gt;38,614,429&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;43/115&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;td&gt;40,429,307&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;44/116&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;td&gt;42,329,485&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+Signature of Applicant
+
+SQS R-20250709-01-Q08 1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Page 3 of 14</pre></div></div></div></section>
+<section class="page" id="page-7"><h2>Page 7</h2><div class="side-by-side"><div class="picture"><img src="pages/pdfium-2.1.13-200dpi/7.png" alt="page 7"></div><div class="texts"><div class="reading"><h3>mlx-ovisocr2-bf16-1</h3><pre>Policy No
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td&gt;Life Insured&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;Insured&amp;#x27;s Age Last Birthday (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Insured&amp;#x27;s Occupation&lt;/td&gt;&lt;td&gt;: Director, Admin Duties only&lt;/td&gt;&lt;td&gt;Smoker&lt;/td&gt;&lt;td&gt;: N&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Country of Residence&lt;/td&gt;&lt;td&gt;: Singapore&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Premium Class&lt;/td&gt;&lt;td&gt;: Standard&lt;/td&gt;&lt;td&gt;Applicant&amp;#x27;s / Owner&amp;#x27;s Age (ALB) / Gender&lt;/td&gt;&lt;td&gt;: 72 / Female&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Percentage Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Per Mille Loading&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;td&gt;Death Benefit Option&lt;/td&gt;&lt;td&gt;: 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Applicant / Owner&lt;/td&gt;&lt;td&gt;: CI****&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Currency&lt;/td&gt;&lt;td&gt;: USD&lt;/td&gt;&lt;td&gt;Backdate&lt;/td&gt;&lt;td&gt;: -&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+&lt;table border=1&gt;&lt;tr&gt;&lt;td rowspan=&quot;3&quot;&gt;End of Policy Year / Age&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Total Premiums Paid To-date ($)&lt;/td&gt;&lt;td rowspan=&quot;3&quot;&gt;Annual Withdrawal ($)&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Guaranteed Basis&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Non-Guaranteed Basis&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Minimum Guaranteed Crediting Rate* 1.50% &amp;amp; Maximum Charges&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;Illustrated Values at Current Crediting Rate** &amp;amp; Current Charges&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;td&gt;Cash Value ($)&lt;/td&gt;&lt;td&gt;Accumulation Value ($)&lt;/td&gt;&lt;td&gt;Death Benefit ($)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;45/117&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;44,318,971&lt;/td&gt;&lt;td&gt;44,318,971&lt;/td&gt;&lt;td&gt;44,318,971&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;46/118&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;46,401,962&lt;/td&gt;&lt;td&gt;46,401,962&lt;/td&gt;&lt;td&gt;46,401,962&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;47/119&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;48,582,854&lt;/td&gt;&lt;td&gt;48,582,854&lt;/td&gt;&lt;td&gt;48,582,854&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;48/120&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;50,866,249&lt;/td&gt;&lt;td&gt;50,866,249&lt;/td&gt;&lt;td&gt;50,866,249&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;49/121&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;53,256,962&lt;/td&gt;&lt;td&gt;53,256,962&lt;/td&gt;&lt;td&gt;53,256,962&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;50/122&lt;/td&gt;&lt;td&gt;10,672,432&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;55,760,039&lt;/td&gt;&lt;td&gt;55,760,039&lt;/td&gt;&lt;td&gt;55,760,039&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+
+* The illustration takes into account the Guaranteed Crediting Rate (on the Initial Premium) for the first 3 years of 4.70% and Guaranteed Special Bonus payable at the end of Policy Year 10, 15, 20 and 30.
+
+# Crediting rate of 4.70% p.a. is applicable on initial premium and subsequent premiums (if any).
+
+Day 1 Cash Value is illustrated to be USD 8,576,905.
+
+Minimum Premium required for each of the first 8 years is USD 1,282,740.
+
+This is only a supplementary illustration and must be read in conjunction with the main policy illustration.
+
+Based on the minimum guaranteed crediting rate of 1.50% p.a. and maximum charges, the policy is projected to have lapsed before age 112.
+
+Based on the current crediting rate of 4.70% p.a. and current charges, your total Illustrated Yield upon surrender at age 112 is 3.03% p.a.
+
+Signature of Insurance Representative
+
+AIA Singapore Private Limited (Reg. No. 201106386R)
+
+SQS R-20250709-01-Q08 1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG
+
+E. &amp; O. E.
+
+Signature of Applicant
+
+Page 4 of 14</pre></div></div></div></section>
+<script>
+for (const cell of document.querySelectorAll("[data-details]")) {
+  cell.addEventListener("click", () => {
+    const wanted = document.getElementById(cell.dataset.details)
+    for (const open of document.querySelectorAll(".details.open")) if (open !== wanted) open.classList.remove("open")
+    wanted.classList.toggle("open")
+    if (wanted.classList.contains("open")) {
+      const inRunBlock = cell.closest("section.run") !== null
+      if (!inRunBlock) wanted.closest("section.run").scrollIntoView({ block: "start" })
+    }
+  })
+}
+</script>
+</body>
+</html>

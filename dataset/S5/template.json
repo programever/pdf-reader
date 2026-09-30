@@ -1,0 +1,193 @@
+[
+  {
+    "name": "Currency",
+    "pages": [
+      1
+    ],
+    "instruction": "Policy Currency (Extracted from PDF or Admin panel)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "string",
+      "example": "USD"
+    },
+    "expected": {
+      "type": "string",
+      "value": "USD"
+    }
+  },
+  {
+    "name": "Premium Term",
+    "pages": [
+      7
+    ],
+    "instruction": "Premium Payment Period",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "string",
+      "example": "Single"
+    },
+    "expected": {
+      "type": "string",
+      "value": "Single"
+    }
+  },
+  {
+    "name": "Cover",
+    "pages": [
+      7
+    ],
+    "instruction": "Initial Sum Insured",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "1,234,567"
+    },
+    "expected": {
+      "type": "number",
+      "value": "1,000,000"
+    }
+  },
+  {
+    "name": "Yearly Premium",
+    "pages": [
+      7
+    ],
+    "instruction": "Single Premium (Single Pay)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "123,456"
+    },
+    "expected": {
+      "type": "number",
+      "value": "114,720"
+    }
+  },
+  {
+    "name": "Total Premium",
+    "instruction": "Yearly Premium * Premium Term. Premium Term \"Single\" means 1.",
+    "kind": "WorkedOut",
+    "expecting": {
+      "type": "number",
+      "example": "123,456"
+    },
+    "expected": {
+      "type": "number",
+      "value": "114,720"
+    }
+  },
+  {
+    "name": "Day 1 Cash Value",
+    "pages": [
+      8
+    ],
+    "instruction": "Please note that the Day 1 Cash Value for this policy is illustrated to be",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "USD 12,345"
+    },
+    "expected": {
+      "type": "number",
+      "value": "USD 91,542"
+    }
+  },
+  {
+    "name": "Multiples of premium paid",
+    "instruction": "Cover / Total Premium",
+    "kind": "WorkedOut",
+    "expecting": {
+      "type": "number",
+      "example": "1.23"
+    },
+    "expected": {
+      "type": "number",
+      "value": "8.72"
+    }
+  },
+  {
+    "name": "*Projected Breakeven (End of Year)",
+    "pages": [
+      11
+    ],
+    "instruction": "THIS IS ONLY A SUPPLEMENTARY ILLUSTRATION AND MUST BE READ IN CONJUNCTION WITH THE MAIN ILLUSTRATION\nEquivalent year where Illustrated (Non-Guaranteed) Basis -> Cash Value column >= Total Premium \n(Year whereby cash value exceeded the total premium amount)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "7"
+    }
+  },
+  {
+    "name": "Guaranteed Breakeven (End of Year)",
+    "instruction": "NA",
+    "kind": "NotApplicable"
+  },
+  {
+    "name": "*Projected surrender value in year 15",
+    "pages": [
+      11
+    ],
+    "instruction": "THIS IS ONLY A SUPPLEMENTARY ILLUSTRATION AND MUST BE READ IN CONJUNCTION WITH THE MAIN ILLUSTRATION\nEquivalent year where Illustrated (Non-Guaranteed) Basis -> \nCash Value column -> Year 15",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "123,456"
+    },
+    "expected": {
+      "type": "number",
+      "value": "168,185"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 20",
+    "pages": [
+      11
+    ],
+    "instruction": "THIS IS ONLY A SUPPLEMENTARY ILLUSTRATION AND MUST BE READ IN CONJUNCTION WITH THE MAIN ILLUSTRATION\nEquivalent year where Illustrated (Non-Guaranteed) Basis -> \nCash Value column -> Year 20",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "123,456"
+    },
+    "expected": {
+      "type": "number",
+      "value": "206,791"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 25",
+    "pages": [
+      11
+    ],
+    "instruction": "THIS IS ONLY A SUPPLEMENTARY ILLUSTRATION AND MUST BE READ IN CONJUNCTION WITH THE MAIN ILLUSTRATION\nEquivalent year where Illustrated (Non-Guaranteed) Basis -> \nCash Value column -> Year 25",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "123,456"
+    },
+    "expected": {
+      "type": "number",
+      "value": "251,081"
+    }
+  },
+  {
+    "name": "Guaranteed cover period",
+    "pages": [
+      12
+    ],
+    "instruction": "Guaranteed Basus column -> \nThe year whereby it last pay out death benefit.",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "41"
+    }
+  }
+]

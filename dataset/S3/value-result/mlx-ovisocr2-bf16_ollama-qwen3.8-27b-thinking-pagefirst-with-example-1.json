@@ -1,0 +1,588 @@
+{
+  "run": 1,
+  "ocrSetting": {
+    "name": "mlx-ovisocr2-bf16",
+    "model": "ATH-MaaS/OvisOCR2",
+    "dpi": 200,
+    "prompt": "\nExtract all readable content from the image in natural human reading order and output the result as a single Markdown document. For charts or images, represent them using an HTML image tag: <img src=\"images/bbox_{left}_{top}_{right}_{bottom}.jpg\" />, where left, top, right, bottom are bounding box coordinates scaled to [0, 1000). Format formulas as LaTeX. Format tables as HTML: <table>...</table>. Transcribe all other text as standard Markdown. Preserve the original text without translation or paraphrasing.",
+    "options": {
+      "temperature": 0,
+      "top_p": 1,
+      "top_k": 0,
+      "repetition_penalty": 1,
+      "seed": 1,
+      "max_tokens": 16384
+    }
+  },
+  "ocrRunner": {
+    "name": "mlx-vlm",
+    "version": "0.7.1"
+  },
+  "text": "mlx-ovisocr2-bf16-1",
+  "valueSetting": {
+    "name": "ollama-qwen3.8-27b-thinking-pagefirst-with-example",
+    "model": "qwen3.8:27b",
+    "think": true,
+    "readContext": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.",
+    "workOutContext": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.",
+    "options": {
+      "temperature": 1,
+      "top_p": 0.95,
+      "top_k": 20,
+      "min_p": 0,
+      "seed": 1,
+      "num_ctx": 32768,
+      "num_predict": 8192
+    }
+  },
+  "valueRunner": {
+    "name": "ollama",
+    "version": "0.34.2"
+  },
+  "startedAt": "2026-09-29T11:23:28.632Z",
+  "seconds": 324,
+  "time": {
+    "drawPages": {
+      "pages": 25,
+      "seconds": 38
+    },
+    "readPages": {
+      "pages": [
+        1,
+        4,
+        7,
+        13,
+        14,
+        16
+      ],
+      "seconds": 86
+    },
+    "readValues": {
+      "questions": 12,
+      "seconds": 236,
+      "perQuestion": [
+        {
+          "figure": "Currency",
+          "pages": [
+            1
+          ],
+          "seconds": 11
+        },
+        {
+          "figure": "Premium Term",
+          "pages": [
+            4
+          ],
+          "seconds": 17
+        },
+        {
+          "figure": "Cover",
+          "pages": [
+            4
+          ],
+          "seconds": 13
+        },
+        {
+          "figure": "Yearly Premium",
+          "pages": [
+            4
+          ],
+          "seconds": 17
+        },
+        {
+          "figure": "Total Premium",
+          "pages": [],
+          "seconds": 7
+        },
+        {
+          "figure": "Day 1 Cash Value",
+          "pages": [
+            7
+          ],
+          "seconds": 11
+        },
+        {
+          "figure": "Multiples of premium paid",
+          "pages": [],
+          "seconds": 13
+        },
+        {
+          "figure": "*Projected Breakeven (End of Year)",
+          "pages": [
+            16
+          ],
+          "seconds": 35
+        },
+        {
+          "figure": "*Projected surrender value in year 15",
+          "pages": [
+            16
+          ],
+          "seconds": 19
+        },
+        {
+          "figure": "*Projected surrender value in year 20",
+          "pages": [
+            16
+          ],
+          "seconds": 19
+        },
+        {
+          "figure": "*Projected surrender value in year 25",
+          "pages": [
+            16
+          ],
+          "seconds": 23
+        },
+        {
+          "figure": "Guaranteed cover period",
+          "pages": [
+            13,
+            14
+          ],
+          "seconds": 51
+        }
+      ]
+    },
+    "total": 360
+  },
+  "results": [
+    {
+      "name": "Currency",
+      "pages": [
+        1
+      ],
+      "instruction": "Policy Currency (Extracted from PDF or Admin panel)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "string",
+        "example": "US Dollars"
+      },
+      "expected": {
+        "type": "string",
+        "value": "US Dollars"
+      },
+      "value": "US Dollars",
+      "foundOnPages": [
+        1
+      ],
+      "valuesGiven": "",
+      "calls": [
+        {
+          "pages": [
+            1
+          ],
+          "thinking": "The user is asking me to find the \"Policy Currency\" value from the insurance illustration page.\n\nLooking at the table on the page, I can see:\n- Policy Currency: US Dollars\n\nThe example form shows \"US Dollars\" which matches what's in the document.",
+          "startedAt": "2026-09-29T11:23:35.682Z",
+          "seconds": 11,
+          "inputTokens": 981,
+          "outputTokens": 62,
+          "contextLimit": 32768,
+          "answer": "US Dollars",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nAIA\n\nThis Cover Page is an important document.\n\n- It highlights the key features and risks of this product and should be read together with the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable.\n\n- It is important to read the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable, before deciding whether to purchase this product. If you do not have a copy of these documents, please contact us at 1800 248 8000 or your Financial Services Consultant to ask for them.\n\n- You should not purchase this product if you do not understand or are not comfortable with the risks of this product.\n\nAIA Platinum Indexed Legacy (II)\n\n<table border=1><tr><td>Product Type</td><td>Universal Life Plan</td></tr><tr><td>Premium Term</td><td>Flexible Premium</td></tr><tr><td>Policy Term</td><td>Whole Life</td></tr><tr><td>Fixed AccountCurrent Crediting Rate</td><td>4.30%</td></tr><tr><td>Index AccountAssumed Current Crediting Rate</td><td>S&amp;P 500: 6.25%</td></tr><tr><td>Guaranteed Crediting Rate</td><td>Fixed Account:• 4.30% on initial premium (for the first 3 years)• 2.00% on subsequent premiumsIndex Account: 0.00%</td></tr><tr><td>Name of Insurer</td><td>AIA SINGAPORE PRIVATE LIMITED</td></tr><tr><td>Policy Currency</td><td>US Dollars</td></tr></table>\n\n## WHAT ARE YOU PURCHASING?\n\nThis is a non-participating universal life plan. It is a product which offers you insurance coverage and also invests part of your premiums in the insurer's Non-participating Fund. It comprises guaranteed and non-guaranteed benefits and may not be suitable for you if you want all benefits to be guaranteed.\n\n## WHAT ARE THE KEY RISKS OF A UNIVERSAL LIFE PLAN?\n\nBy purchasing a universal life plan, your premiums will be pooled together and invested with premiums from other policyholders in the Non-participating Fund managed by AIA SINGAPORE PRIVATE LIMITED. As a policyholder, the key risks commonly associated with universal life plan are:\n\n<table border=1><tr><td>Investment Risk</td><td>Lower than expected investment returns earned by the fund.</td></tr><tr><td>Insurance Risks</td><td>Higher than expected claims made by policyholders (e.g. due to death or other terminations).</td></tr><tr><td>Expense Risks</td><td>Higher than expected expenses incurred for managing the Non-participating Fund.</td></tr><tr><td>Currency Risk</td><td>If your home currency is not denominated in the U.S. Dollars, the payments you make or receive may be worth less over time when expressed in your home currency.</td></tr></table>\n\nSignature\n\nPrepared By\n\nINSURANCE REPRESENTATIVE\n\nDate\n\n17-Mar-2026\n\nSignature of Life Insured / Applicant\n\nName\n\ncl****\n\nDate\n\n17-Mar-2026\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\nSQS R-20260202-01\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nE. & O. E.\n\nPage 1 of 3\n\n*UBA0718*\n\nCOVER PAGE FOR NON-PARTICIPATING UNIVERSAL LIFE PLAN\n\nValues found before:\n\n\nInstruction:\nPolicy Currency (Extracted from PDF or Admin panel)\n\nExample of the form of the answer, not the answer:\nUS Dollars"
+        }
+      ]
+    },
+    {
+      "name": "Premium Term",
+      "pages": [
+        4
+      ],
+      "instruction": "Premium Term (Years) column",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "1"
+      },
+      "value": "1",
+      "number": 1,
+      "foundOnPages": [
+        4
+      ],
+      "valuesGiven": "Currency = US Dollars",
+      "calls": [
+        {
+          "pages": [
+            4
+          ],
+          "thinking": "The user is asking me to find the \"Premium Term (Years)\" value from the page text.\n\nLooking at the PLAN SUMMARY table:\n- Plan/Rider: UI2 - AIA Platinum Indexed Legacy (II)\n- Premium Amount ($): 500,000.00\n- Term (Years): 1\n- Coverage Amount ($): 3,398,971.00\n- Term (Years): Whole Life\n\nThe \"Premium Term (Years)\" column shows the value \"1\".\n\nThe example form shows just a number like \"10\", so the answer should be \"1\".",
+          "startedAt": "2026-09-29T11:23:55.739Z",
+          "seconds": 17,
+          "inputTokens": 1365,
+          "outputTokens": 138,
+          "contextLimit": 32768,
+          "answer": "1",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nAIA\n\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\nPLAN SUMMARY\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\">Plan/Rider</td><td colspan=\"2\">Premium</td><td colspan=\"2\">Coverage</td></tr><tr><td>Amount ($)</td><td>Term (Years)</td><td>Amount ($)</td><td>Term (Years)</td></tr><tr><td colspan=\"6\">Plan</td></tr><tr><td>UI2</td><td>AIA Platinum Indexed Legacy (II)</td><td>500,000.00</td><td>1</td><td>3,398,971.00</td><td>Whole Life</td></tr></table>\n\nBased on your selection, AIA Platinum Indexed Legacy (II) allocates the premium you paid after premium charge (referred to as “Net Premium”) into two different accounts to grow your policy value:\n\n## Initial Account Allocation\n\n(i) 0% of net premium into the Fixed Account\n\n(ii) 100% of net premium into the Index Account\n\n## Fixed Account\n\nCurrent Crediting Rate : 4.30% p.a.\n\nGuaranteed Crediting Rate : 4.30% p.a. on initial premium (for the first 3 years) and 2.00% p.a. on subsequent premiums.\n\nGuaranteed Special Bonus payable : 0.35% p.a. starting from policy year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday, payable on the Fixed Account.\n\nIndex Account\n\n<table border=1><tr><td>Index Sub-Account</td><td>Allocation in Index Account</td><td>Minimum Floor Rate</td><td>Assumed Current Crediting Rate</td><td>Cap Rate</td></tr><tr><td>S&amp;P 500</td><td>100%</td><td>0.00%</td><td>6.25% p.a.</td><td>9.00%</td></tr></table>\n\nGuaranteed Special Bonus payable : 0.35% p.a. starting from policy year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday, payable on the Index Account (comprising of the Holding Account, Interim Holding Account, and Index Segments).\n\nScheduled Premium Transfer: Yes\n\nDuration: 12 months\n\nIf Scheduled Premium Transfer is selected, a portion of your premiums will be regularly transferred into Index Segments over the duration you selected. The purpose of the Scheduled Premium Transfer is to ensure stable long-term returns in the Index Account by smoothing out the impact of changes in market conditions. It enables the policy to enjoy returns through a regular savings approach, instead of being fully invested into one single Index Segment.\n\nNote that the Policy Illustration does not illustrate Scheduled Premium Transfer. Instead, it assumes that the premium allocated to the Index Account is fully invested into one single Index Segment at policy inception. The actual effect of Scheduled Premium Transfer can only be appreciated in a volatile market environment, causing the underlying index to rise and fall, thus resulting in varying crediting rates.\n\nDeath Benefit Bequest Option: As you have not selected the Death Benefit Bequest Option, you will receive the Death Benefit in one lump sum. This arrangement cannot be changed after the Issue Date.\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nSignature of Applicant\n\nULTP 50746.64\n\nPage 1 of 22\n\n{{S22D12A\n\n*S22D12A*\n\n1\n\nValues found before:\nCurrency = US Dollars\n\nInstruction:\nPremium Term (Years) column\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    },
+    {
+      "name": "Cover",
+      "pages": [
+        4
+      ],
+      "instruction": "Coverage Amount",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567.89"
+      },
+      "expected": {
+        "type": "number",
+        "value": "3,398,971.00"
+      },
+      "value": "3,398,971.00",
+      "number": 3398971,
+      "foundOnPages": [
+        4
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1",
+      "calls": [
+        {
+          "pages": [
+            4
+          ],
+          "thinking": "The instruction asks for the \"Coverage Amount\". Looking at the PLAN SUMMARY table, I can see:\n\n- Plan: UI2 - AIA Platinum Indexed Legacy (II)\n- Premium Amount: 500,000.00\n- Premium Term: 1\n- Coverage Amount: 3,398,971.00\n- Coverage Term: Whole Life\n\nThe Coverage Amount is 3,398,971.00.",
+          "startedAt": "2026-09-29T11:24:13.092Z",
+          "seconds": 13,
+          "inputTokens": 1377,
+          "outputTokens": 118,
+          "contextLimit": 32768,
+          "answer": "3,398,971.00",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nAIA\n\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\nPLAN SUMMARY\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\">Plan/Rider</td><td colspan=\"2\">Premium</td><td colspan=\"2\">Coverage</td></tr><tr><td>Amount ($)</td><td>Term (Years)</td><td>Amount ($)</td><td>Term (Years)</td></tr><tr><td colspan=\"6\">Plan</td></tr><tr><td>UI2</td><td>AIA Platinum Indexed Legacy (II)</td><td>500,000.00</td><td>1</td><td>3,398,971.00</td><td>Whole Life</td></tr></table>\n\nBased on your selection, AIA Platinum Indexed Legacy (II) allocates the premium you paid after premium charge (referred to as “Net Premium”) into two different accounts to grow your policy value:\n\n## Initial Account Allocation\n\n(i) 0% of net premium into the Fixed Account\n\n(ii) 100% of net premium into the Index Account\n\n## Fixed Account\n\nCurrent Crediting Rate : 4.30% p.a.\n\nGuaranteed Crediting Rate : 4.30% p.a. on initial premium (for the first 3 years) and 2.00% p.a. on subsequent premiums.\n\nGuaranteed Special Bonus payable : 0.35% p.a. starting from policy year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday, payable on the Fixed Account.\n\nIndex Account\n\n<table border=1><tr><td>Index Sub-Account</td><td>Allocation in Index Account</td><td>Minimum Floor Rate</td><td>Assumed Current Crediting Rate</td><td>Cap Rate</td></tr><tr><td>S&amp;P 500</td><td>100%</td><td>0.00%</td><td>6.25% p.a.</td><td>9.00%</td></tr></table>\n\nGuaranteed Special Bonus payable : 0.35% p.a. starting from policy year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday, payable on the Index Account (comprising of the Holding Account, Interim Holding Account, and Index Segments).\n\nScheduled Premium Transfer: Yes\n\nDuration: 12 months\n\nIf Scheduled Premium Transfer is selected, a portion of your premiums will be regularly transferred into Index Segments over the duration you selected. The purpose of the Scheduled Premium Transfer is to ensure stable long-term returns in the Index Account by smoothing out the impact of changes in market conditions. It enables the policy to enjoy returns through a regular savings approach, instead of being fully invested into one single Index Segment.\n\nNote that the Policy Illustration does not illustrate Scheduled Premium Transfer. Instead, it assumes that the premium allocated to the Index Account is fully invested into one single Index Segment at policy inception. The actual effect of Scheduled Premium Transfer can only be appreciated in a volatile market environment, causing the underlying index to rise and fall, thus resulting in varying crediting rates.\n\nDeath Benefit Bequest Option: As you have not selected the Death Benefit Bequest Option, you will receive the Death Benefit in one lump sum. This arrangement cannot be changed after the Issue Date.\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nSignature of Applicant\n\nULTP 50746.64\n\nPage 1 of 22\n\n{{S22D12A\n\n*S22D12A*\n\n1\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\n\nInstruction:\nCoverage Amount\n\nExample of the form of the answer, not the answer:\n1,234,567.89"
+        }
+      ]
+    },
+    {
+      "name": "Yearly Premium",
+      "pages": [
+        4
+      ],
+      "instruction": "Premium Amount (Single Pay)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "123,456.78"
+      },
+      "expected": {
+        "type": "number",
+        "value": "500,000.00"
+      },
+      "value": "500,000.00",
+      "number": 500000,
+      "foundOnPages": [
+        4
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971",
+      "calls": [
+        {
+          "pages": [
+            4
+          ],
+          "thinking": "The user is asking for the \"Premium Amount (Single Pay)\" from the insurance illustration page.\n\nLooking at the PLAN SUMMARY table:\n- Plan: UI2 - AIA Platinum Indexed Legacy (II)\n- Premium Amount ($): 500,000.00\n- Premium Term (Years): 1\n- Coverage Amount ($): 3,398,971.00\n- Coverage Term (Years): Whole Life\n\nThe premium term is 1 year, which indicates this is a single premium payment. The premium amount is 500,000.00.\n\nThe example form shows: 123,456.78\n\nSo the answer should be: 500,000.00",
+          "startedAt": "2026-09-29T11:24:26.339Z",
+          "seconds": 17,
+          "inputTokens": 1390,
+          "outputTokens": 179,
+          "contextLimit": 32768,
+          "answer": "500,000.00",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nAIA\n\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\nPLAN SUMMARY\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\">Plan/Rider</td><td colspan=\"2\">Premium</td><td colspan=\"2\">Coverage</td></tr><tr><td>Amount ($)</td><td>Term (Years)</td><td>Amount ($)</td><td>Term (Years)</td></tr><tr><td colspan=\"6\">Plan</td></tr><tr><td>UI2</td><td>AIA Platinum Indexed Legacy (II)</td><td>500,000.00</td><td>1</td><td>3,398,971.00</td><td>Whole Life</td></tr></table>\n\nBased on your selection, AIA Platinum Indexed Legacy (II) allocates the premium you paid after premium charge (referred to as “Net Premium”) into two different accounts to grow your policy value:\n\n## Initial Account Allocation\n\n(i) 0% of net premium into the Fixed Account\n\n(ii) 100% of net premium into the Index Account\n\n## Fixed Account\n\nCurrent Crediting Rate : 4.30% p.a.\n\nGuaranteed Crediting Rate : 4.30% p.a. on initial premium (for the first 3 years) and 2.00% p.a. on subsequent premiums.\n\nGuaranteed Special Bonus payable : 0.35% p.a. starting from policy year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday, payable on the Fixed Account.\n\nIndex Account\n\n<table border=1><tr><td>Index Sub-Account</td><td>Allocation in Index Account</td><td>Minimum Floor Rate</td><td>Assumed Current Crediting Rate</td><td>Cap Rate</td></tr><tr><td>S&amp;P 500</td><td>100%</td><td>0.00%</td><td>6.25% p.a.</td><td>9.00%</td></tr></table>\n\nGuaranteed Special Bonus payable : 0.35% p.a. starting from policy year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday, payable on the Index Account (comprising of the Holding Account, Interim Holding Account, and Index Segments).\n\nScheduled Premium Transfer: Yes\n\nDuration: 12 months\n\nIf Scheduled Premium Transfer is selected, a portion of your premiums will be regularly transferred into Index Segments over the duration you selected. The purpose of the Scheduled Premium Transfer is to ensure stable long-term returns in the Index Account by smoothing out the impact of changes in market conditions. It enables the policy to enjoy returns through a regular savings approach, instead of being fully invested into one single Index Segment.\n\nNote that the Policy Illustration does not illustrate Scheduled Premium Transfer. Instead, it assumes that the premium allocated to the Index Account is fully invested into one single Index Segment at policy inception. The actual effect of Scheduled Premium Transfer can only be appreciated in a volatile market environment, causing the underlying index to rise and fall, thus resulting in varying crediting rates.\n\nDeath Benefit Bequest Option: As you have not selected the Death Benefit Bequest Option, you will receive the Death Benefit in one lump sum. This arrangement cannot be changed after the Issue Date.\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nSignature of Applicant\n\nULTP 50746.64\n\nPage 1 of 22\n\n{{S22D12A\n\n*S22D12A*\n\n1\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\n\nInstruction:\nPremium Amount (Single Pay)\n\nExample of the form of the answer, not the answer:\n123,456.78"
+        }
+      ]
+    },
+    {
+      "name": "Total Premium",
+      "instruction": "Yearly Premium * Premium Term",
+      "kind": "WorkedOut",
+      "expecting": {
+        "type": "number",
+        "example": "123,456.78"
+      },
+      "expected": {
+        "type": "number",
+        "value": "500,000.00"
+      },
+      "value": "500,000.00",
+      "number": 500000,
+      "foundOnPages": null,
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000",
+      "calls": [
+        {
+          "pages": [],
+          "thinking": "Formula: Yearly Premium * Premium Term\nYearly Premium = 500000\nPremium Term = 1\nResult: 500000 * 1 = 500000\n\nFormat: 123,456.78 (number with commas, two decimal places)\nSo: 500,000.00",
+          "startedAt": "2026-09-29T11:24:43.376Z",
+          "seconds": 7,
+          "inputTokens": 175,
+          "outputTokens": 98,
+          "contextLimit": 32768,
+          "answer": "500,000.00",
+          "prompt": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\n\nInstruction:\nYearly Premium * Premium Term\n\nExample of the form of the answer, not the answer:\n123,456.78"
+        }
+      ]
+    },
+    {
+      "name": "Day 1 Cash Value",
+      "pages": [
+        7
+      ],
+      "instruction": "Day 1 Cash Value is illustrated to be",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "USD 123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "USD 380,853"
+      },
+      "value": "USD 380,853",
+      "number": 380853,
+      "foundOnPages": [
+        7
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000",
+      "calls": [
+        {
+          "pages": [
+            7
+          ],
+          "thinking": "The instruction asks for \"Day 1 Cash Value is illustrated to be\"\n\nLooking at the text, I can find: \"Day 1 Cash Value is illustrated to be USD 380,853.\"\n\nThe example format is \"USD 123,456\"\n\nSo the answer should be \"USD 380,853\"",
+          "startedAt": "2026-09-29T11:24:56.862Z",
+          "seconds": 11,
+          "inputTokens": 884,
+          "outputTokens": 91,
+          "contextLimit": 32768,
+          "answer": "USD 380,853",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPolicy No\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\n(ii) illustrated values as determined based on Minimum Surrender Value and current charges. The Minimum Surrender Value is determined using the minimum guaranteed crediting rate of 2.00% p.a. regardless of the actual crediting rate earned by the Fixed Account and Indexed Account, after deducting for the applicable monthly charges, and the surrender charge.\n\n* The Death Benefit illustrated above is before deduction of indebtedness.\n\nDay 1 Cash Value is illustrated to be USD 380,853.\n\nMinimum premium required for the first policy year is USD 457,640.\n\nBased on the Fixed Account minimum guaranteed crediting rate of 4.30% p.a. on initial premium (for the first 3 years), 2.00% p.a. on subsequent premiums, Index Account minimum floor crediting rate for the S&P 500 Sub-Account of 0.00% p.a., and maximum charges, the policy is projected to have lapsed before age 88.\n\nBased on the Fixed Account Current Crediting Rate of 4.30% p.a., assumed Index Account Current Crediting rate for the S&P 500 Sub-Account of 6.25% p.a., and current charges, your total Illustrated Yield upon surrender at age 88 is 3.87% p.a.\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nPage 4 of 22\n\nSignature of Applicant\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\n\nInstruction:\nDay 1 Cash Value is illustrated to be\n\nExample of the form of the answer, not the answer:\nUSD 123,456"
+        }
+      ]
+    },
+    {
+      "name": "Multiples of premium paid",
+      "instruction": "Cover / Total Premium",
+      "kind": "WorkedOut",
+      "expecting": {
+        "type": "number",
+        "example": "1.23"
+      },
+      "expected": {
+        "type": "number",
+        "value": "6.80"
+      },
+      "value": "6.80",
+      "number": 6.8,
+      "foundOnPages": null,
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853",
+      "calls": [
+        {
+          "pages": [],
+          "thinking": "The user wants me to calculate Cover / Total Premium.\n\nCover = 3398971\nTotal Premium = 500000\n\n3398971 / 500000 = 6.797942\n\nThe example shows the form as \"1.23\" - two decimal places.\n\nSo the answer should be 6.80 (rounded to 2 decimal places).\n\nWait, let me recalculate: 3398971 / 500000 = 6.797942\n\nRounded to 2 decimal places: 6.80\n\nThe example format shows 2 decimal places.",
+          "startedAt": "2026-09-29T11:25:07.492Z",
+          "seconds": 13,
+          "inputTokens": 192,
+          "outputTokens": 162,
+          "contextLimit": 32768,
+          "answer": "6.80",
+          "prompt": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\n\nInstruction:\nCover / Total Premium\n\nExample of the form of the answer, not the answer:\n1.23"
+        }
+      ]
+    },
+    {
+      "name": "*Projected Breakeven (End of Year)",
+      "pages": [
+        16
+      ],
+      "instruction": "Supplementary Illustration  - >\nNon-Guaranteed Basis ->\nIllustrated Values at Current Fixed Account Crediting Rate, assumed Index\nAccount Crediting Rate & Current Charges -> \nSurrender Value >= Total Premium \n(Year whereby cash value exceeded the total premium amount)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "8"
+      },
+      "value": "8",
+      "number": 8,
+      "foundOnPages": [
+        16
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8",
+      "calls": [
+        {
+          "pages": [
+            16
+          ],
+          "thinking": "The instruction asks for the year whereby the cash value (Surrender Value) exceeded the total premium amount.\n\nTotal Premium = 500,000\n\nLooking at the Surrender Value column:\n- Year 1: 393,573 < 500,000\n- Year 2: 405,426 < 500,000\n- Year 3: 417,894 < 500,000\n- Year 4: 430,925 < 500,000\n- Year 5: 444,555 < 500,000\n- Year 6: 458,831 < 500,000\n- Year 7: 481,609 < 500,000\n- Year 8: 505,161 > 500,000\n\nSo in Year 8, the Surrender Value (505,161) first exceeds the Total Premium (500,000).\n\nThe answer is 8.",
+          "startedAt": "2026-09-29T11:25:41.549Z",
+          "seconds": 35,
+          "inputTokens": 3343,
+          "outputTokens": 273,
+          "contextLimit": 32768,
+          "answer": "8",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\nThe Illustrated values in the Supplementary Illustration are determined based on the following rates (per annum):\n\n<table border=1><tr><td rowspan=\"2\"></td><td rowspan=\"2\">Policy Year</td><td colspan=\"2\">Non-Guaranteed Basis</td></tr><tr><td>Fixed Account</td><td>Index Account</td></tr><tr><td rowspan=\"2\">Crediting Rate on Initial Premium</td><td>Year 1-3</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Year 4 onwards</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Crediting Rate on Subsequent Premiums (if any)</td><td>All years</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Charges*</td><td></td><td colspan=\"2\">Current Charges</td></tr></table>\n\n* Charges refers to Premium Charge, Administrative Charge, and Insurance Risk Charge.\n\nIn addition to the above crediting rates, the Guaranteed Special Bonus of 0.35% p.a. will be applied to the Fixed Account and Index Account from Policy Year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday.\n\nSUPPLEMENTARY ILLUSTRATION\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-date ($)</td><td rowspan=\"3\">Annual Withdrawal ($)</td><td colspan=\"4\">Non-Guaranteed Basis</td></tr><tr><td colspan=\"4\">Illustrated Values at Current Fixed Account Crediting Rate, assumed Index Account Crediting Rate &amp; Current Charges</td></tr><tr><td>Minimum Surrender Value ($)1</td><td>Surrender Value ($)2</td><td>Accumulation Value ($)</td><td>Death Benefit ($)</td></tr><tr><td>1/49</td><td>500,000</td><td>0</td><td>374,328</td><td>393,573</td><td>471,307</td><td>3398971</td></tr><tr><td>2/50</td><td>500,000</td><td>0</td><td>366,059</td><td>405,426</td><td>483,160</td><td>3398971</td></tr><tr><td>3/51</td><td>500,000</td><td>0</td><td>357,484</td><td>417,894</td><td>495,629</td><td>3398971</td></tr><tr><td>4/52</td><td>500,000</td><td>0</td><td>348,502</td><td>430,925</td><td>508,659</td><td>3398971</td></tr><tr><td>5/53</td><td>500,000</td><td>0</td><td>339,103</td><td>444,555</td><td>522,290</td><td>3398971</td></tr><tr><td>6/54</td><td>500,000</td><td>0</td><td>329,283</td><td>458,831</td><td>536,566</td><td>3398971</td></tr><tr><td>7/55</td><td>500,000</td><td>0</td><td>326,846</td><td>481,609</td><td>551,560</td><td>3398971</td></tr><tr><td>8/56</td><td>500,000</td><td>0</td><td>324,006</td><td>505,161</td><td>567,362</td><td>3398971</td></tr><tr><td>9/57</td><td>500,000</td><td>0</td><td>324,708</td><td>533,491</td><td>584,033</td><td>3398971</td></tr><tr><td>10/58</td><td>500,000</td><td>0</td><td>324,977</td><td>562,694</td><td>601,578</td><td>3398971</td></tr><tr><td>11/59</td><td>500,000</td><td>0</td><td>320,822</td><td>590,929</td><td>622,029</td><td>3398971</td></tr><tr><td>12/60</td><td>500,000</td><td>0</td><td>316,037</td><td>620,195</td><td>643,512</td><td>3398971</td></tr><tr><td>13/61</td><td>500,000</td><td>0</td><td>310,513</td><td>650,481</td><td>666,015</td><td>3398971</td></tr><tr><td>14/62</td><td>500,000</td><td>0</td><td>304,190</td><td>681,825</td><td>689,608</td><td>3398971</td></tr><tr><td>15/63</td><td>500,000</td><td>0</td><td>293,111</td><td>710,384</td><td>714,259</td><td>3398971</td></tr><tr><td>16/64</td><td>500,000</td><td>0</td><td>295,951</td><td>755,243</td><td>755,243</td><td>3398971</td></tr><tr><td>17/65</td><td>500,000</td><td>0</td><td>294,004</td><td>798,253</td><td>798,253</td><td>3398971</td></tr><tr><td>18/66</td><td>500,000</td><td>0</td><td>290,955</td><td>843,307</td><td>843,307</td><td>3398971</td></tr><tr><td>19/67</td><td>500,000</td><td>0</td><td>286,570</td><td>890,406</td><td>890,406</td><td>3398971</td></tr><tr><td>20/68</td><td>500,000</td><td>0</td><td>280,569</td><td>939,527</td><td>939,527</td><td>3398971</td></tr><tr><td>21/69</td><td>500,000</td><td>0</td><td>272,642</td><td>990,645</td><td>990,645</td><td>3398971</td></tr><tr><td>22/70</td><td>500,000</td><td>0</td><td>262,432</td><td>1,043,721</td><td>1,043,721</td><td>3398971</td></tr><tr><td>23/71</td><td>500,000</td><td>0</td><td>249,136</td><td>1,098,403</td><td>1,098,403</td><td>3398971</td></tr><tr><td>24/72</td><td>500,000</td><td>0</td><td>233,348</td><td>1,155,424</td><td>1,155,424</td><td>3398971</td></tr><tr><td>25/73</td><td>500,000</td><td>0</td><td>214,796</td><td>1,214,900</td><td>1,214,900</td><td>3398971</td></tr><tr><td>26/74</td><td>500,000</td><td>0</td><td>192,899</td><td>1,276,761</td><td>1,276,761</td><td>3398971</td></tr><tr><td>27/75</td><td>500,000</td><td>0</td><td>167,070</td><td>1,340,989</td><td>1,340,989</td><td>3398971</td></tr></table>\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nPage 13 of 22\n\nSignature of Applicant\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n\nInstruction:\nSupplementary Illustration  - >\nNon-Guaranteed Basis ->\nIllustrated Values at Current Fixed Account Crediting Rate, assumed Index\nAccount Crediting Rate & Current Charges -> \nSurrender Value >= Total Premium \n(Year whereby cash value exceeded the total premium amount)\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    },
+    {
+      "name": "Guaranteed Breakeven (End of Year)",
+      "instruction": "NA",
+      "kind": "NotApplicable"
+    },
+    {
+      "name": "*Projected surrender value in year 15",
+      "pages": [
+        16
+      ],
+      "instruction": "Supplementary Illustration  - >\nNon-Guaranteed Basis ->\nIllustrated Values at Current Fixed Account Crediting Rate, assumed Index\nAccount Crediting Rate & Current Charges -> \nSurrender Value > Year 15",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "710,384"
+      },
+      "value": "710,384",
+      "number": 710384,
+      "foundOnPages": [
+        16
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n*Projected Breakeven (End of Year) = 8",
+      "calls": [
+        {
+          "pages": [
+            16
+          ],
+          "thinking": "The user is asking for the Surrender Value at Year 15 from the Supplementary Illustration table.\n\nLooking at the table, I need to find the row for Year 15 (15/63) and the column \"Surrender Value ($)2\".\n\nThe row for 15/63 shows:\n- Minimum Surrender Value: 293,111\n- Surrender Value: 710,384\n- Accumulation Value: 714,259\n- Death Benefit: 3398971\n\nSo the Surrender Value at Year 15 is 710,384.\n\nThe example format shows: 123,456\n\nSo the answer should be: 710,384",
+          "startedAt": "2026-09-29T11:26:16.861Z",
+          "seconds": 19,
+          "inputTokens": 3352,
+          "outputTokens": 185,
+          "contextLimit": 32768,
+          "answer": "710,384",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\nThe Illustrated values in the Supplementary Illustration are determined based on the following rates (per annum):\n\n<table border=1><tr><td rowspan=\"2\"></td><td rowspan=\"2\">Policy Year</td><td colspan=\"2\">Non-Guaranteed Basis</td></tr><tr><td>Fixed Account</td><td>Index Account</td></tr><tr><td rowspan=\"2\">Crediting Rate on Initial Premium</td><td>Year 1-3</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Year 4 onwards</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Crediting Rate on Subsequent Premiums (if any)</td><td>All years</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Charges*</td><td></td><td colspan=\"2\">Current Charges</td></tr></table>\n\n* Charges refers to Premium Charge, Administrative Charge, and Insurance Risk Charge.\n\nIn addition to the above crediting rates, the Guaranteed Special Bonus of 0.35% p.a. will be applied to the Fixed Account and Index Account from Policy Year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday.\n\nSUPPLEMENTARY ILLUSTRATION\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-date ($)</td><td rowspan=\"3\">Annual Withdrawal ($)</td><td colspan=\"4\">Non-Guaranteed Basis</td></tr><tr><td colspan=\"4\">Illustrated Values at Current Fixed Account Crediting Rate, assumed Index Account Crediting Rate &amp; Current Charges</td></tr><tr><td>Minimum Surrender Value ($)1</td><td>Surrender Value ($)2</td><td>Accumulation Value ($)</td><td>Death Benefit ($)</td></tr><tr><td>1/49</td><td>500,000</td><td>0</td><td>374,328</td><td>393,573</td><td>471,307</td><td>3398971</td></tr><tr><td>2/50</td><td>500,000</td><td>0</td><td>366,059</td><td>405,426</td><td>483,160</td><td>3398971</td></tr><tr><td>3/51</td><td>500,000</td><td>0</td><td>357,484</td><td>417,894</td><td>495,629</td><td>3398971</td></tr><tr><td>4/52</td><td>500,000</td><td>0</td><td>348,502</td><td>430,925</td><td>508,659</td><td>3398971</td></tr><tr><td>5/53</td><td>500,000</td><td>0</td><td>339,103</td><td>444,555</td><td>522,290</td><td>3398971</td></tr><tr><td>6/54</td><td>500,000</td><td>0</td><td>329,283</td><td>458,831</td><td>536,566</td><td>3398971</td></tr><tr><td>7/55</td><td>500,000</td><td>0</td><td>326,846</td><td>481,609</td><td>551,560</td><td>3398971</td></tr><tr><td>8/56</td><td>500,000</td><td>0</td><td>324,006</td><td>505,161</td><td>567,362</td><td>3398971</td></tr><tr><td>9/57</td><td>500,000</td><td>0</td><td>324,708</td><td>533,491</td><td>584,033</td><td>3398971</td></tr><tr><td>10/58</td><td>500,000</td><td>0</td><td>324,977</td><td>562,694</td><td>601,578</td><td>3398971</td></tr><tr><td>11/59</td><td>500,000</td><td>0</td><td>320,822</td><td>590,929</td><td>622,029</td><td>3398971</td></tr><tr><td>12/60</td><td>500,000</td><td>0</td><td>316,037</td><td>620,195</td><td>643,512</td><td>3398971</td></tr><tr><td>13/61</td><td>500,000</td><td>0</td><td>310,513</td><td>650,481</td><td>666,015</td><td>3398971</td></tr><tr><td>14/62</td><td>500,000</td><td>0</td><td>304,190</td><td>681,825</td><td>689,608</td><td>3398971</td></tr><tr><td>15/63</td><td>500,000</td><td>0</td><td>293,111</td><td>710,384</td><td>714,259</td><td>3398971</td></tr><tr><td>16/64</td><td>500,000</td><td>0</td><td>295,951</td><td>755,243</td><td>755,243</td><td>3398971</td></tr><tr><td>17/65</td><td>500,000</td><td>0</td><td>294,004</td><td>798,253</td><td>798,253</td><td>3398971</td></tr><tr><td>18/66</td><td>500,000</td><td>0</td><td>290,955</td><td>843,307</td><td>843,307</td><td>3398971</td></tr><tr><td>19/67</td><td>500,000</td><td>0</td><td>286,570</td><td>890,406</td><td>890,406</td><td>3398971</td></tr><tr><td>20/68</td><td>500,000</td><td>0</td><td>280,569</td><td>939,527</td><td>939,527</td><td>3398971</td></tr><tr><td>21/69</td><td>500,000</td><td>0</td><td>272,642</td><td>990,645</td><td>990,645</td><td>3398971</td></tr><tr><td>22/70</td><td>500,000</td><td>0</td><td>262,432</td><td>1,043,721</td><td>1,043,721</td><td>3398971</td></tr><tr><td>23/71</td><td>500,000</td><td>0</td><td>249,136</td><td>1,098,403</td><td>1,098,403</td><td>3398971</td></tr><tr><td>24/72</td><td>500,000</td><td>0</td><td>233,348</td><td>1,155,424</td><td>1,155,424</td><td>3398971</td></tr><tr><td>25/73</td><td>500,000</td><td>0</td><td>214,796</td><td>1,214,900</td><td>1,214,900</td><td>3398971</td></tr><tr><td>26/74</td><td>500,000</td><td>0</td><td>192,899</td><td>1,276,761</td><td>1,276,761</td><td>3398971</td></tr><tr><td>27/75</td><td>500,000</td><td>0</td><td>167,070</td><td>1,340,989</td><td>1,340,989</td><td>3398971</td></tr></table>\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nPage 13 of 22\n\nSignature of Applicant\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n*Projected Breakeven (End of Year) = 8\n\nInstruction:\nSupplementary Illustration  - >\nNon-Guaranteed Basis ->\nIllustrated Values at Current Fixed Account Crediting Rate, assumed Index\nAccount Crediting Rate & Current Charges -> \nSurrender Value > Year 15\n\nExample of the form of the answer, not the answer:\n123,456"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 20",
+      "pages": [
+        16
+      ],
+      "instruction": "Supplementary Illustration  - >\nNon-Guaranteed Basis ->\nIllustrated Values at Current Fixed Account Crediting Rate, assumed Index\nAccount Crediting Rate & Current Charges -> \nSurrender Value > Year 20",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "939,527"
+      },
+      "value": "939,527",
+      "number": 939527,
+      "foundOnPages": [
+        16
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n*Projected Breakeven (End of Year) = 8\n*Projected surrender value in year 15 = 710384",
+      "calls": [
+        {
+          "pages": [
+            16
+          ],
+          "thinking": "The user is asking for the Surrender Value in Year 20 from the Supplementary Illustration table.\n\nLooking at the table, I need to find the row for Year 20 (age 68) and the column \"Surrender Value ($)2\".\n\nFrom the table:\n- Row 20/68: Minimum Surrender Value = 280,569, Surrender Value = 939,527, Accumulation Value = 939,527, Death Benefit = 3398971\n\nThe Surrender Value in Year 20 is 939,527.\n\nThe format should be like the example: 123,456 (with comma separator)\n\nSo the answer is 939,527.",
+          "startedAt": "2026-09-29T11:26:35.455Z",
+          "seconds": 19,
+          "inputTokens": 3370,
+          "outputTokens": 188,
+          "contextLimit": 32768,
+          "answer": "939,527",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\nThe Illustrated values in the Supplementary Illustration are determined based on the following rates (per annum):\n\n<table border=1><tr><td rowspan=\"2\"></td><td rowspan=\"2\">Policy Year</td><td colspan=\"2\">Non-Guaranteed Basis</td></tr><tr><td>Fixed Account</td><td>Index Account</td></tr><tr><td rowspan=\"2\">Crediting Rate on Initial Premium</td><td>Year 1-3</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Year 4 onwards</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Crediting Rate on Subsequent Premiums (if any)</td><td>All years</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Charges*</td><td></td><td colspan=\"2\">Current Charges</td></tr></table>\n\n* Charges refers to Premium Charge, Administrative Charge, and Insurance Risk Charge.\n\nIn addition to the above crediting rates, the Guaranteed Special Bonus of 0.35% p.a. will be applied to the Fixed Account and Index Account from Policy Year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday.\n\nSUPPLEMENTARY ILLUSTRATION\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-date ($)</td><td rowspan=\"3\">Annual Withdrawal ($)</td><td colspan=\"4\">Non-Guaranteed Basis</td></tr><tr><td colspan=\"4\">Illustrated Values at Current Fixed Account Crediting Rate, assumed Index Account Crediting Rate &amp; Current Charges</td></tr><tr><td>Minimum Surrender Value ($)1</td><td>Surrender Value ($)2</td><td>Accumulation Value ($)</td><td>Death Benefit ($)</td></tr><tr><td>1/49</td><td>500,000</td><td>0</td><td>374,328</td><td>393,573</td><td>471,307</td><td>3398971</td></tr><tr><td>2/50</td><td>500,000</td><td>0</td><td>366,059</td><td>405,426</td><td>483,160</td><td>3398971</td></tr><tr><td>3/51</td><td>500,000</td><td>0</td><td>357,484</td><td>417,894</td><td>495,629</td><td>3398971</td></tr><tr><td>4/52</td><td>500,000</td><td>0</td><td>348,502</td><td>430,925</td><td>508,659</td><td>3398971</td></tr><tr><td>5/53</td><td>500,000</td><td>0</td><td>339,103</td><td>444,555</td><td>522,290</td><td>3398971</td></tr><tr><td>6/54</td><td>500,000</td><td>0</td><td>329,283</td><td>458,831</td><td>536,566</td><td>3398971</td></tr><tr><td>7/55</td><td>500,000</td><td>0</td><td>326,846</td><td>481,609</td><td>551,560</td><td>3398971</td></tr><tr><td>8/56</td><td>500,000</td><td>0</td><td>324,006</td><td>505,161</td><td>567,362</td><td>3398971</td></tr><tr><td>9/57</td><td>500,000</td><td>0</td><td>324,708</td><td>533,491</td><td>584,033</td><td>3398971</td></tr><tr><td>10/58</td><td>500,000</td><td>0</td><td>324,977</td><td>562,694</td><td>601,578</td><td>3398971</td></tr><tr><td>11/59</td><td>500,000</td><td>0</td><td>320,822</td><td>590,929</td><td>622,029</td><td>3398971</td></tr><tr><td>12/60</td><td>500,000</td><td>0</td><td>316,037</td><td>620,195</td><td>643,512</td><td>3398971</td></tr><tr><td>13/61</td><td>500,000</td><td>0</td><td>310,513</td><td>650,481</td><td>666,015</td><td>3398971</td></tr><tr><td>14/62</td><td>500,000</td><td>0</td><td>304,190</td><td>681,825</td><td>689,608</td><td>3398971</td></tr><tr><td>15/63</td><td>500,000</td><td>0</td><td>293,111</td><td>710,384</td><td>714,259</td><td>3398971</td></tr><tr><td>16/64</td><td>500,000</td><td>0</td><td>295,951</td><td>755,243</td><td>755,243</td><td>3398971</td></tr><tr><td>17/65</td><td>500,000</td><td>0</td><td>294,004</td><td>798,253</td><td>798,253</td><td>3398971</td></tr><tr><td>18/66</td><td>500,000</td><td>0</td><td>290,955</td><td>843,307</td><td>843,307</td><td>3398971</td></tr><tr><td>19/67</td><td>500,000</td><td>0</td><td>286,570</td><td>890,406</td><td>890,406</td><td>3398971</td></tr><tr><td>20/68</td><td>500,000</td><td>0</td><td>280,569</td><td>939,527</td><td>939,527</td><td>3398971</td></tr><tr><td>21/69</td><td>500,000</td><td>0</td><td>272,642</td><td>990,645</td><td>990,645</td><td>3398971</td></tr><tr><td>22/70</td><td>500,000</td><td>0</td><td>262,432</td><td>1,043,721</td><td>1,043,721</td><td>3398971</td></tr><tr><td>23/71</td><td>500,000</td><td>0</td><td>249,136</td><td>1,098,403</td><td>1,098,403</td><td>3398971</td></tr><tr><td>24/72</td><td>500,000</td><td>0</td><td>233,348</td><td>1,155,424</td><td>1,155,424</td><td>3398971</td></tr><tr><td>25/73</td><td>500,000</td><td>0</td><td>214,796</td><td>1,214,900</td><td>1,214,900</td><td>3398971</td></tr><tr><td>26/74</td><td>500,000</td><td>0</td><td>192,899</td><td>1,276,761</td><td>1,276,761</td><td>3398971</td></tr><tr><td>27/75</td><td>500,000</td><td>0</td><td>167,070</td><td>1,340,989</td><td>1,340,989</td><td>3398971</td></tr></table>\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nPage 13 of 22\n\nSignature of Applicant\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n*Projected Breakeven (End of Year) = 8\n*Projected surrender value in year 15 = 710384\n\nInstruction:\nSupplementary Illustration  - >\nNon-Guaranteed Basis ->\nIllustrated Values at Current Fixed Account Crediting Rate, assumed Index\nAccount Crediting Rate & Current Charges -> \nSurrender Value > Year 20\n\nExample of the form of the answer, not the answer:\n123,456"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 25",
+      "pages": [
+        16
+      ],
+      "instruction": "Supplementary Illustration  - >\nNon-Guaranteed Basis ->\nIllustrated Values at Current Fixed Account Crediting Rate, assumed Index\nAccount Crediting Rate & Current Charges -> \nSurrender Value > Year 25",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567"
+      },
+      "expected": {
+        "type": "number",
+        "value": "1,214,900"
+      },
+      "value": "1,214,900",
+      "number": 1214900,
+      "foundOnPages": [
+        16
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n*Projected Breakeven (End of Year) = 8\n*Projected surrender value in year 15 = 710384\n*Projected surrender value in year 20 = 939527",
+      "calls": [
+        {
+          "pages": [
+            16
+          ],
+          "thinking": "The user is asking for the Surrender Value at Year 25 from the Supplementary Illustration table.\n\nLooking at the table, I need to find the row for Year 25 (which is \"25/73\" in the End of Policy Year / Age column).\n\nThe columns under \"Non-Guaranteed Basis\" are:\n- Minimum Surrender Value ($)\n- Surrender Value ($)\n- Accumulation Value ($)\n- Death Benefit ($)\n\nFor Year 25/73:\n- Minimum Surrender Value: 214,796\n- Surrender Value: 1,214,900\n- Accumulation Value: 1,214,900\n- Death Benefit: 3398971\n\nThe instruction asks for \"Surrender Value > Year 25\" which is 1,214,900.\n\nThe example format shows: 1,234,567 (with comma separators, no dollar sign)",
+          "startedAt": "2026-09-29T11:26:54.846Z",
+          "seconds": 23,
+          "inputTokens": 3390,
+          "outputTokens": 232,
+          "contextLimit": 32768,
+          "answer": "1,214,900",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\nThe Illustrated values in the Supplementary Illustration are determined based on the following rates (per annum):\n\n<table border=1><tr><td rowspan=\"2\"></td><td rowspan=\"2\">Policy Year</td><td colspan=\"2\">Non-Guaranteed Basis</td></tr><tr><td>Fixed Account</td><td>Index Account</td></tr><tr><td rowspan=\"2\">Crediting Rate on Initial Premium</td><td>Year 1-3</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Year 4 onwards</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Crediting Rate on Subsequent Premiums (if any)</td><td>All years</td><td>4.30%</td><td>6.25%</td></tr><tr><td>Charges*</td><td></td><td colspan=\"2\">Current Charges</td></tr></table>\n\n* Charges refers to Premium Charge, Administrative Charge, and Insurance Risk Charge.\n\nIn addition to the above crediting rates, the Guaranteed Special Bonus of 0.35% p.a. will be applied to the Fixed Account and Index Account from Policy Year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday.\n\nSUPPLEMENTARY ILLUSTRATION\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-date ($)</td><td rowspan=\"3\">Annual Withdrawal ($)</td><td colspan=\"4\">Non-Guaranteed Basis</td></tr><tr><td colspan=\"4\">Illustrated Values at Current Fixed Account Crediting Rate, assumed Index Account Crediting Rate &amp; Current Charges</td></tr><tr><td>Minimum Surrender Value ($)1</td><td>Surrender Value ($)2</td><td>Accumulation Value ($)</td><td>Death Benefit ($)</td></tr><tr><td>1/49</td><td>500,000</td><td>0</td><td>374,328</td><td>393,573</td><td>471,307</td><td>3398971</td></tr><tr><td>2/50</td><td>500,000</td><td>0</td><td>366,059</td><td>405,426</td><td>483,160</td><td>3398971</td></tr><tr><td>3/51</td><td>500,000</td><td>0</td><td>357,484</td><td>417,894</td><td>495,629</td><td>3398971</td></tr><tr><td>4/52</td><td>500,000</td><td>0</td><td>348,502</td><td>430,925</td><td>508,659</td><td>3398971</td></tr><tr><td>5/53</td><td>500,000</td><td>0</td><td>339,103</td><td>444,555</td><td>522,290</td><td>3398971</td></tr><tr><td>6/54</td><td>500,000</td><td>0</td><td>329,283</td><td>458,831</td><td>536,566</td><td>3398971</td></tr><tr><td>7/55</td><td>500,000</td><td>0</td><td>326,846</td><td>481,609</td><td>551,560</td><td>3398971</td></tr><tr><td>8/56</td><td>500,000</td><td>0</td><td>324,006</td><td>505,161</td><td>567,362</td><td>3398971</td></tr><tr><td>9/57</td><td>500,000</td><td>0</td><td>324,708</td><td>533,491</td><td>584,033</td><td>3398971</td></tr><tr><td>10/58</td><td>500,000</td><td>0</td><td>324,977</td><td>562,694</td><td>601,578</td><td>3398971</td></tr><tr><td>11/59</td><td>500,000</td><td>0</td><td>320,822</td><td>590,929</td><td>622,029</td><td>3398971</td></tr><tr><td>12/60</td><td>500,000</td><td>0</td><td>316,037</td><td>620,195</td><td>643,512</td><td>3398971</td></tr><tr><td>13/61</td><td>500,000</td><td>0</td><td>310,513</td><td>650,481</td><td>666,015</td><td>3398971</td></tr><tr><td>14/62</td><td>500,000</td><td>0</td><td>304,190</td><td>681,825</td><td>689,608</td><td>3398971</td></tr><tr><td>15/63</td><td>500,000</td><td>0</td><td>293,111</td><td>710,384</td><td>714,259</td><td>3398971</td></tr><tr><td>16/64</td><td>500,000</td><td>0</td><td>295,951</td><td>755,243</td><td>755,243</td><td>3398971</td></tr><tr><td>17/65</td><td>500,000</td><td>0</td><td>294,004</td><td>798,253</td><td>798,253</td><td>3398971</td></tr><tr><td>18/66</td><td>500,000</td><td>0</td><td>290,955</td><td>843,307</td><td>843,307</td><td>3398971</td></tr><tr><td>19/67</td><td>500,000</td><td>0</td><td>286,570</td><td>890,406</td><td>890,406</td><td>3398971</td></tr><tr><td>20/68</td><td>500,000</td><td>0</td><td>280,569</td><td>939,527</td><td>939,527</td><td>3398971</td></tr><tr><td>21/69</td><td>500,000</td><td>0</td><td>272,642</td><td>990,645</td><td>990,645</td><td>3398971</td></tr><tr><td>22/70</td><td>500,000</td><td>0</td><td>262,432</td><td>1,043,721</td><td>1,043,721</td><td>3398971</td></tr><tr><td>23/71</td><td>500,000</td><td>0</td><td>249,136</td><td>1,098,403</td><td>1,098,403</td><td>3398971</td></tr><tr><td>24/72</td><td>500,000</td><td>0</td><td>233,348</td><td>1,155,424</td><td>1,155,424</td><td>3398971</td></tr><tr><td>25/73</td><td>500,000</td><td>0</td><td>214,796</td><td>1,214,900</td><td>1,214,900</td><td>3398971</td></tr><tr><td>26/74</td><td>500,000</td><td>0</td><td>192,899</td><td>1,276,761</td><td>1,276,761</td><td>3398971</td></tr><tr><td>27/75</td><td>500,000</td><td>0</td><td>167,070</td><td>1,340,989</td><td>1,340,989</td><td>3398971</td></tr></table>\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nPage 13 of 22\n\nSignature of Applicant\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n*Projected Breakeven (End of Year) = 8\n*Projected surrender value in year 15 = 710384\n*Projected surrender value in year 20 = 939527\n\nInstruction:\nSupplementary Illustration  - >\nNon-Guaranteed Basis ->\nIllustrated Values at Current Fixed Account Crediting Rate, assumed Index\nAccount Crediting Rate & Current Charges -> \nSurrender Value > Year 25\n\nExample of the form of the answer, not the answer:\n1,234,567"
+        }
+      ]
+    },
+    {
+      "name": "Guaranteed cover period",
+      "pages": [
+        13,
+        14
+      ],
+      "instruction": "Supplementary Illustration  ->\nThe year whereby it last pay out death benefit.",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "30"
+      },
+      "value": "30",
+      "number": 30,
+      "foundOnPages": [
+        13,
+        14
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n*Projected Breakeven (End of Year) = 8\n*Projected surrender value in year 15 = 710384\n*Projected surrender value in year 20 = 939527\n*Projected surrender value in year 25 = 1214900",
+      "calls": [
+        {
+          "pages": [
+            13,
+            14
+          ],
+          "thinking": "The user is asking me to find \"The year whereby it last pay out death benefit\" from the Supplementary Illustration.\n\nLooking at the Death Benefit column in the Supplementary Illustration tables:\n\nFrom the first table (years 1-27):\n- Year 1-30: Death Benefit = 3398971 (or 3398971*)\n- Year 31 onwards: Death Benefit = 0\n\nSo the death benefit is paid out from year 1 through year 30. The last year it pays out death benefit is year 30.\n\nThe answer should be in the form of just a number, like the example shows \"10\".\n\nSo the answer is 30.",
+          "startedAt": "2026-09-29T11:28:02.145Z",
+          "seconds": 51,
+          "inputTokens": 6501,
+          "outputTokens": 163,
+          "contextLimit": 32768,
+          "answer": "30",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\nThe Illustrated values in the Supplementary Illustration are determined based on the following rates (per annum):\n\n<table border=1><tr><td rowspan=\"2\"></td><td rowspan=\"2\">Policy Year</td><td colspan=\"2\">Guaranteed Basis</td></tr><tr><td>Fixed Account</td><td>Index Account</td></tr><tr><td rowspan=\"2\">Crediting Rate on Initial Premium</td><td>Year 1-3</td><td>4.30%</td><td>0.00%</td></tr><tr><td>Year 4 onwards</td><td>2.00%</td><td>0.00%</td></tr><tr><td>Crediting Rate on Subsequent Premiums (if any)</td><td>All years</td><td>2.00%</td><td>0.00%</td></tr><tr><td>Charges*</td><td></td><td colspan=\"2\">Maximum Charges</td></tr></table>\n\n* Charges refers to Premium Charge, Administrative Charge, and Insurance Risk Charge.\n\nIn addition to the above crediting rates, the Guaranteed Special Bonus of 0.35% p.a. will be applied to the Fixed Account and Index Account from Policy Year 11 until the policy anniversary following the Life Assured's 100 $^{th}$ birthday.\n\nSUPPLEMENTARY ILLUSTRATION\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-date ($)</td><td rowspan=\"3\">Annual Withdrawal ($)</td><td colspan=\"4\">Guaranteed Basis</td></tr><tr><td colspan=\"4\">Illustrated Values at Minimum Guaranteed Crediting Rate &amp; Maximum Charges</td></tr><tr><td>Minimum Surrender Value ($)1</td><td>Surrender Value ($)2</td><td>Accumulation Value ($)</td><td>Death Benefit ($)</td></tr><tr><td>1/49</td><td>500,000</td><td>0</td><td>374,328</td><td>374,328</td><td>443,043</td><td>3398971</td></tr><tr><td>2/50</td><td>500,000</td><td>0</td><td>366,059</td><td>366,059</td><td>425,908</td><td>3398971</td></tr><tr><td>3/51</td><td>500,000</td><td>0</td><td>357,484</td><td>357,484</td><td>408,625</td><td>3398971</td></tr><tr><td>4/52</td><td>500,000</td><td>0</td><td>348,502</td><td>348,502</td><td>391,099</td><td>3398971</td></tr><tr><td>5/53</td><td>500,000</td><td>0</td><td>339,103</td><td>339,103</td><td>373,329</td><td>3398971</td></tr><tr><td>6/54</td><td>500,000</td><td>0</td><td>329,123</td><td>329,123</td><td>355,156</td><td>3398971</td></tr><tr><td>7/55</td><td>500,000</td><td>0</td><td>326,512</td><td>326,512</td><td>336,757</td><td>3398971</td></tr><tr><td>8/56</td><td>500,000</td><td>0</td><td>323,489</td><td>323,489</td><td>318,178</td><td>3398971</td></tr><tr><td>9/57</td><td>500,000</td><td>0</td><td>323,993</td><td>323,993</td><td>299,421</td><td>3398971</td></tr><tr><td>10/58</td><td>500,000</td><td>0</td><td>324,052</td><td>324,052</td><td>280,428</td><td>3398971</td></tr><tr><td>11/59</td><td>500,000</td><td>0</td><td>319,664</td><td>319,664</td><td>262,032</td><td>3398971</td></tr><tr><td>12/60</td><td>500,000</td><td>0</td><td>314,622</td><td>314,622</td><td>243,144</td><td>3398971</td></tr><tr><td>13/61</td><td>500,000</td><td>0</td><td>308,810</td><td>308,810</td><td>223,656</td><td>3398971</td></tr><tr><td>14/62</td><td>500,000</td><td>0</td><td>302,169</td><td>302,169</td><td>203,555</td><td>3398971</td></tr><tr><td>15/63</td><td>500,000</td><td>0</td><td>290,732</td><td>290,732</td><td>182,689</td><td>3398971</td></tr><tr><td>16/64</td><td>500,000</td><td>0</td><td>293,171</td><td>293,171</td><td>175,798</td><td>3398971</td></tr><tr><td>17/65</td><td>500,000</td><td>0</td><td>290,769</td><td>290,769</td><td>167,906</td><td>3398971</td></tr><tr><td>18/66</td><td>500,000</td><td>0</td><td>287,198</td><td>287,198</td><td>158,817</td><td>3398971</td></tr><tr><td>19/67</td><td>500,000</td><td>0</td><td>282,214</td><td>282,214</td><td>148,296</td><td>3398971</td></tr><tr><td>20/68</td><td>500,000</td><td>0</td><td>275,522</td><td>275,522</td><td>136,055</td><td>3398971</td></tr><tr><td>21/69</td><td>500,000</td><td>0</td><td>266,791</td><td>266,791</td><td>121,778</td><td>3398971</td></tr><tr><td>22/70</td><td>500,000</td><td>0</td><td>255,650</td><td>255,650</td><td>105,108</td><td>3398971</td></tr><tr><td>23/71</td><td>500,000</td><td>0</td><td>241,246</td><td>241,246</td><td>85,195</td><td>3398971</td></tr><tr><td>24/72</td><td>500,000</td><td>0</td><td>224,204</td><td>224,204</td><td>62,739</td><td>3398971</td></tr><tr><td>25/73</td><td>500,000</td><td>0</td><td>204,233</td><td>204,233</td><td>37,477</td><td>3398971</td></tr><tr><td>26/74</td><td>500,000</td><td>0</td><td>180,716</td><td>180,716</td><td>8,814</td><td>3398971</td></tr><tr><td>27/75</td><td>500,000</td><td>0</td><td>153,035</td><td>153,035</td><td>0</td><td>3398971*</td></tr></table>\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nPage 10 of 22\n\nSignature of Applicant\n\nPolicy No\n\n<table border=1><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>\n\n<table border=1><tr><td>Life Insured</td><td>: cl****</td><td>Insured&#x27;s Age Last Birthday (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Insured&#x27;s Occupation</td><td>: Director, Admin Duties only</td><td>Smoker</td><td>: N</td></tr><tr><td>Country of Residence</td><td>: Thailand</td><td></td><td></td></tr><tr><td>Premium Class</td><td>: Standard</td><td>Applicant&#x27;s / Owner&#x27;s Age (ALB) / Gender</td><td>: 48 / Female</td></tr><tr><td>Percentage Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Per Mille Loading</td><td>: -</td><td></td><td></td></tr><tr><td>Applicant / Owner</td><td>: cl****</td><td></td><td></td></tr><tr><td>Currency</td><td>: USD</td><td>Backdate</td><td>: -</td></tr></table>\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-date ($)</td><td rowspan=\"3\">Annual Withdrawal ($)</td><td colspan=\"4\">Guaranteed Basis</td></tr><tr><td colspan=\"4\">Illustrated Values at Minimum Guaranteed Crediting Rate &amp; Maximum Charges</td></tr><tr><td>Minimum Surrender Value ($)1</td><td>Surrender Value ($)2</td><td>Accumulation Value ($)</td><td>Death Benefit ($)</td></tr><tr><td>28/76</td><td>500,000</td><td>0</td><td>120,268</td><td>120,268</td><td>0</td><td>3398971*</td></tr><tr><td>29/77</td><td>500,000</td><td>0</td><td>77,434</td><td>77,434</td><td>0</td><td>3398971*</td></tr><tr><td>30/78</td><td>500,000</td><td>0</td><td>27,582</td><td>27,582</td><td>0</td><td>3398971*</td></tr><tr><td>31/79</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>32/80</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>33/81</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>34/82</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>35/83</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>36/84</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>37/85</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>38/86</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>39/87</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>40/88</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>41/89</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>42/90</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>43/91</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>44/92</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>45/93</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>46/94</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>47/95</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>48/96</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>49/97</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>50/98</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>51/99</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>52/100</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>53/101</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>54/102</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>55/103</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>56/104</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>57/105</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>58/106</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>59/107</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>60/108</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>61/109</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>62/110</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>63/111</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>64/112</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>65/113</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>66/114</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>67/115</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>68/116</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>69/117</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>70/118</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>71/119</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>72/120</td><td>500,000</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr></table>\n\nSignature of Insurance Representative\n\nSQS R-20260202-01\n\nE. & O. E.\n\nAIA Singapore Private Limited (Reg. No. 201106386R)\n\n1 Robinson Road, AIA Tower, Singapore 048542 AIA Customer Care Hotline: 1800 248 8000 AIA.COM.SG\n\nPage 11 of 22\n\nSignature of Applicant\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 3398971\nYearly Premium = 500000\nTotal Premium = 500000\nDay 1 Cash Value = 380853\nMultiples of premium paid = 6.8\n*Projected Breakeven (End of Year) = 8\n*Projected surrender value in year 15 = 710384\n*Projected surrender value in year 20 = 939527\n*Projected surrender value in year 25 = 1214900\n\nInstruction:\nSupplementary Illustration  ->\nThe year whereby it last pay out death benefit.\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    }
+  ]
+}

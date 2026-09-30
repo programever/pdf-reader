@@ -1,0 +1,193 @@
+[
+  {
+    "name": "Currency",
+    "pages": [
+      1
+    ],
+    "instruction": "Policy Currency (Extracted from PDF or Admin panel)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "string",
+      "example": "US Dollars"
+    },
+    "expected": {
+      "type": "string",
+      "value": "US Dollars"
+    }
+  },
+  {
+    "name": "Premium Term",
+    "pages": [
+      3
+    ],
+    "instruction": "Premium Term (Years)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "1"
+    }
+  },
+  {
+    "name": "Cover",
+    "pages": [
+      3
+    ],
+    "instruction": "Minimum Protection Amount",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "12,345,678"
+    },
+    "expected": {
+      "type": "number",
+      "value": "18,385,300"
+    }
+  },
+  {
+    "name": "Yearly Premium",
+    "pages": [
+      3
+    ],
+    "instruction": "Total Premium (Single Pay)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "1,234,567.89"
+    },
+    "expected": {
+      "type": "number",
+      "value": "4,999,992.65"
+    }
+  },
+  {
+    "name": "Total Premium",
+    "instruction": "Yearly Premium * Premium Term",
+    "kind": "WorkedOut",
+    "expecting": {
+      "type": "number",
+      "example": "1,234,567.89"
+    },
+    "expected": {
+      "type": "number",
+      "value": "4,999,992.65"
+    }
+  },
+  {
+    "name": "Day 1 Cash Value",
+    "pages": [
+      7
+    ],
+    "instruction": "Guaranteed Surrender Value on Policy Day 1:",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "$1,234,567.89"
+    },
+    "expected": {
+      "type": "number",
+      "value": "$3,999,994.12"
+    }
+  },
+  {
+    "name": "Multiples of premium paid",
+    "instruction": "Cover / Total Premium",
+    "kind": "WorkedOut",
+    "expecting": {
+      "type": "number",
+      "example": "1.23"
+    },
+    "expected": {
+      "type": "number",
+      "value": "3.68"
+    }
+  },
+  {
+    "name": "*Projected Breakeven (End of Year)",
+    "pages": [
+      6
+    ],
+    "instruction": "SURRENDER VALUE -> \nIllustrated at 5% investment return -> \nUnder total column -> \nTotal column >= Total Premium\n(Year whereby cash value exceeded the total premium amount)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "14"
+    }
+  },
+  {
+    "name": "Guaranteed Breakeven (End of Year)",
+    "pages": [
+      6
+    ],
+    "instruction": "Equivalent year where SURRENDER VALUE -> \nGuaranteed column = Total Premium",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "20"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 15",
+    "pages": [
+      6
+    ],
+    "instruction": "SURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 15",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "1,234,567"
+    },
+    "expected": {
+      "type": "number",
+      "value": "5,124,282"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 20",
+    "pages": [
+      6
+    ],
+    "instruction": "SURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 20",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "1,234,567"
+    },
+    "expected": {
+      "type": "number",
+      "value": "6,477,273"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 25",
+    "pages": [
+      6
+    ],
+    "instruction": "SURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 25",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "1,234,567"
+    },
+    "expected": {
+      "type": "number",
+      "value": "7,690,995"
+    }
+  },
+  {
+    "name": "Guaranteed cover period",
+    "instruction": "99 Years Old",
+    "kind": "HeldByTheFirm"
+  }
+]

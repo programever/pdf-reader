@@ -54,8 +54,9 @@ Rules for a test case:
 - The folder holds nothing else. `pages`, `text-result`, `value-result` and `result.html` appear after the first
   run. No run ever changes `input.pdf` or `template.json`.
 
-`dataset/` is ignored by git (`.gitignore`), so the test data is never committed. It must never be copied into a git
-repo in any other way, and never sent to a cloud service.
+`dataset/` is committed on purpose, so that anyone can open a `result.html` and see the samples, the page texts
+and the answers without installing or running anything. It holds the illustration PDFs, so this repo must stay
+private. It is about 340 MB, most of it the page pictures.
 
 Facts about the samples that are in `dataset/` today are in `dataset/DATASET.md`, not here. This file must stay
 true when the samples change.
@@ -645,6 +646,6 @@ rules for TypeScript do not support TypeScript 7 yet.
 ## 7. Rules for this folder
 
 - It is a git repo on one machine only. Nothing is pushed.
-- Model files, the test data, page pictures and results are never committed. `models/`, `models-hf/` and every
-  `dataset*/` folder are ignored by git.
+- Model files are never committed: `models/` and `models-hf/` are ignored by git. The test data, page pictures
+  and results in `dataset/` are committed, for a quick view of the reports.
 - No page, picture or text is sent to any cloud service.

@@ -1,0 +1,582 @@
+{
+  "run": 1,
+  "ocrSetting": {
+    "name": "mlx-ovisocr2-bf16",
+    "model": "ATH-MaaS/OvisOCR2",
+    "dpi": 200,
+    "prompt": "\nExtract all readable content from the image in natural human reading order and output the result as a single Markdown document. For charts or images, represent them using an HTML image tag: <img src=\"images/bbox_{left}_{top}_{right}_{bottom}.jpg\" />, where left, top, right, bottom are bounding box coordinates scaled to [0, 1000). Format formulas as LaTeX. Format tables as HTML: <table>...</table>. Transcribe all other text as standard Markdown. Preserve the original text without translation or paraphrasing.",
+    "options": {
+      "temperature": 0,
+      "top_p": 1,
+      "top_k": 0,
+      "repetition_penalty": 1,
+      "seed": 1,
+      "max_tokens": 16384
+    }
+  },
+  "ocrRunner": {
+    "name": "mlx-vlm",
+    "version": "0.7.1"
+  },
+  "text": "mlx-ovisocr2-bf16-1",
+  "valueSetting": {
+    "name": "ollama-qwen3.8-27b-thinking-pagefirst-with-example",
+    "model": "qwen3.8:27b",
+    "think": true,
+    "readContext": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.",
+    "workOutContext": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.",
+    "options": {
+      "temperature": 1,
+      "top_p": 0.95,
+      "top_k": 20,
+      "min_p": 0,
+      "seed": 1,
+      "num_ctx": 32768,
+      "num_predict": 8192
+    }
+  },
+  "valueRunner": {
+    "name": "ollama",
+    "version": "0.34.2"
+  },
+  "startedAt": "2026-09-29T11:14:43.101Z",
+  "seconds": 487,
+  "time": {
+    "drawPages": {
+      "pages": 66,
+      "seconds": 12
+    },
+    "readPages": {
+      "pages": [
+        1,
+        5,
+        9,
+        13,
+        16
+      ],
+      "seconds": 97
+    },
+    "readValues": {
+      "questions": 12,
+      "seconds": 393,
+      "perQuestion": [
+        {
+          "figure": "Currency",
+          "pages": [
+            1
+          ],
+          "seconds": 11
+        },
+        {
+          "figure": "Premium Term",
+          "pages": [
+            5
+          ],
+          "seconds": 17
+        },
+        {
+          "figure": "Cover",
+          "pages": [
+            5
+          ],
+          "seconds": 11
+        },
+        {
+          "figure": "Yearly Premium",
+          "pages": [
+            5
+          ],
+          "seconds": 12
+        },
+        {
+          "figure": "Total Premium",
+          "pages": [],
+          "seconds": 6
+        },
+        {
+          "figure": "Day 1 Cash Value",
+          "pages": [
+            9
+          ],
+          "seconds": 20
+        },
+        {
+          "figure": "Multiples of premium paid",
+          "pages": [],
+          "seconds": 42
+        },
+        {
+          "figure": "*Projected Breakeven (End of Year)",
+          "pages": [
+            16
+          ],
+          "seconds": 47
+        },
+        {
+          "figure": "*Projected surrender value in year 15",
+          "pages": [
+            16
+          ],
+          "seconds": 36
+        },
+        {
+          "figure": "*Projected surrender value in year 20",
+          "pages": [
+            16
+          ],
+          "seconds": 61
+        },
+        {
+          "figure": "*Projected surrender value in year 25",
+          "pages": [
+            16
+          ],
+          "seconds": 89
+        },
+        {
+          "figure": "Guaranteed cover period",
+          "pages": [
+            13
+          ],
+          "seconds": 41
+        }
+      ]
+    },
+    "total": 502
+  },
+  "results": [
+    {
+      "name": "Currency",
+      "pages": [
+        1
+      ],
+      "instruction": "Policy Currency (Extracted from PDF or Admin panel)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "string",
+        "example": "US Dollars"
+      },
+      "expected": {
+        "type": "string",
+        "value": "US Dollars"
+      },
+      "value": "US Dollars",
+      "foundOnPages": [
+        1
+      ],
+      "valuesGiven": "",
+      "calls": [
+        {
+          "pages": [
+            1
+          ],
+          "thinking": "The user is asking me to find the \"Policy Currency\" value from the insurance illustration page.\n\nLooking at the text, I can see in the table:\n\"Policy Currency | US Dollars\"\n\nThe example shows the form should be \"US Dollars\" (which happens to also be the actual value).\n\nThe answer is \"US Dollars\".",
+          "startedAt": "2026-09-29T11:14:50.654Z",
+          "seconds": 11,
+          "inputTokens": 1077,
+          "outputTokens": 76,
+          "contextLimit": 32768,
+          "answer": "US Dollars",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nThis Cover Page is an important document.\n\n* It highlights the key features and risks of this product and should be read together with the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable.\n\n* It is important to read the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable, before deciding whether to purchase this product. If you do not have a copy of these documents, please contact us at (65) 6880 4888 or your Financial Advisor Representative to ask for them.\n\n* You should not purchase this product if you do not understand or are not comfortable with the risks of this product.\n\nHSBC Life Diamond Prestige IUL II\n\n<table><tr><td>Product Type</td><td>Universal Life Plan</td></tr><tr><td>Premium Term</td><td>Planned Premium</td></tr><tr><td>Policy Term</td><td>Whole Life</td></tr><tr><td>Current Crediting Rate (General Account)</td><td>4.35% p.a. for General Crediting Rate</td></tr><tr><td>Current Assumed Crediting Rate (Index Account)</td><td>S&amp;P 500 Index: 6.60% p.a.<br>Nasdaq-100 Index: 6.70% p.a.<br>S&amp;P Global Diversified 7.5% TCA 0.75% Decrement Index (USD) ER: 7.30% p.a.<br> (“S&amp;P Global Diversified Index”)<br>S&amp;P U.S. Tactical Multi-Asset 4.5% TCA 0.65% Decrement Index (USD) ER: 7.80% p.a.<br> (“S&amp;P U.S. Tactical Multi-Asset Index”)</td></tr><tr><td>Guaranteed Minimum Crediting Rate</td><td>General Account<br>4.40% p.a. on First Net Premium (for 1 Year)<br>2.00% p.a. on the subsequent Years and Net Premiums<br>Index Account<br>S&amp;P 500 Index: 0.00% p.a.<br>Nasdaq-100 Index: 0.00% p.a.<br>S&amp;P Global Diversified Index: 0.45% p.a.<br>S&amp;P U.S. Tactical Multi-Asset Index: 0.00% p.a.</td></tr><tr><td>Name of Insurer</td><td>HSBC Life (Singapore) Pte. Ltd.</td></tr><tr><td>Policy Currency</td><td>US Dollars</td></tr></table>\n\nWHAT ARE YOU PURCHASING?\n\nThis is a non-participating planned premium universal life plan. It is a product which offers you insurance coverage and also invests part of your premiums in the insurer's Non-participating Fund. It comprises guaranteed and non-guaranteed benefits and may not be suitable for you if you want all benefits to be guaranteed.\n\nWHAT ARE THE KEY RISKS OF A UNIVERSAL LIFE PLAN?\n\nBy purchasing a universal life plan, your premiums will be pooled together and invested with premiums from other policyholders in the Non-participating Fund managed by HSBC Global Asset Management (Singapore) Limited. As a policyholder, the key risks commonly associated with universal life plan are:\n\n<table><tr><td>Investment Risks</td><td>Lower than expected investment returns earned by the fund</td></tr><tr><td>Insurance Risks</td><td>Higher than expected claims made by policyholders (e.g. due to death or other terminations)</td></tr><tr><td>Expense Risks</td><td>Higher than expected expenses incurred for managing the Non-participating Fund</td></tr><tr><td>Currency Risk</td><td>If your home currency is not denominated in the USD, the payments you make or receive may be worth less over time when expressed in your home currency.</td></tr></table>\n\nRepresentative's Signature\n\nDate:\n\nPage 1 of 3\n\nApplicant's Signature\n\nDate:\n\nCOVER PAGE FOR NON-PARTICIPATING UNIVERSAL LIFE PLAN\n\nValues found before:\n\n\nInstruction:\nPolicy Currency (Extracted from PDF or Admin panel)\n\nExample of the form of the answer, not the answer:\nUS Dollars"
+        }
+      ]
+    },
+    {
+      "name": "Premium Term",
+      "pages": [
+        5
+      ],
+      "instruction": "Premium Term (Years) column",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "string",
+        "example": "Multi-pay 10 Pay"
+      },
+      "expected": {
+        "type": "string",
+        "value": "Multi-pay 10 Pay"
+      },
+      "value": "Multi-pay 10 Pay",
+      "foundOnPages": [
+        5
+      ],
+      "valuesGiven": "Currency = US Dollars",
+      "calls": [
+        {
+          "pages": [
+            5
+          ],
+          "thinking": "The user is asking me to find the \"Premium Term (Years) column\" value from the page.\n\nLooking at the page, I can see a table with columns: Basic Plan, Policy Term, Premium Term, Sum Insured (US$), Planned Premium (US$)\n\nThe Premium Term column shows: \"Multi-pay 10 Pay\"\n\nThe example shows the form as \"Multi-pay 10 Pay\" - which is actually the value in the Premium Term column.\n\nWait, the instruction says \"Premium Term (Years) column\" - but looking at the table, the column header is \"Premium Term\" and the value is \"Multi-pay 10 Pay\".\n\nThe example format is \"Multi-pay 10 Pay\" which matches the value in the Premium Term column.\n\nSo the answer should be \"Multi-pay 10 Pay\".",
+          "startedAt": "2026-09-29T11:15:09.242Z",
+          "seconds": 17,
+          "inputTokens": 1116,
+          "outputTokens": 187,
+          "contextLimit": 32768,
+          "answer": "Multi-pay 10 Pay",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\nPolicyholder and Plan Details\n\n<table><tr><td>Proposed Life Insured</td><td>: Client</td></tr><tr><td>Age Last Birthday</td><td>: 30</td></tr><tr><td>Sex</td><td>: Male</td></tr><tr><td>Underwriting Class</td><td>: Standard Non-Smoker</td></tr><tr><td>Residency</td><td>: Singapore (Country A+)</td></tr><tr><td>Plan</td><td>: HSBC Life Diamond Prestige IUL II</td></tr><tr><td>Policy Term</td><td>: Whole Life</td></tr><tr><td>Currency</td><td>: USD</td></tr><tr><td>Minimum Initial Premium</td><td>: 87,131</td></tr><tr><td>Premium Solve</td><td>: Endow Premium</td></tr><tr><td>No-Lapse Guarantee</td><td>: 5 years</td></tr><tr><td>No-Lapse Guarantee Premium</td><td>: 174,262</td></tr><tr><td>Death Benefit Instalment Option</td><td>: Lump sum</td></tr><tr><td>Guaranteed Interest Rate Lock Period</td><td>: 1 year</td></tr><tr><td>Guaranteed Interest Rate Lock % on</td><td>: 4.40%</td></tr><tr><td>General Account only (applies to the First Net Premium only)</td><td></td></tr><tr><td>Benefit Type</td><td>: The Higher of Account Value or Sum Insured</td></tr><tr><td>Loyalty Bonus Rate</td><td>: 0.35% From year 11 to Age 121</td></tr></table>\n\n<table><tr><td>Basic Plan</td><td>Policy Term</td><td>Premium Term</td><td>Sum Insured (US$)</td><td>Planned Premium (US$)</td></tr><tr><td>HSBC Life Diamond Prestige IUL II</td><td>Whole Life</td><td>Multi-pay 10 Pay</td><td>10,000,000</td><td>87,131</td></tr></table>\n\n<table><tr><td>Accounts</td><td>Net Premium Allocation</td><td>Guaranteed Minimum Crediting Rate</td><td>Current General Crediting Rate</td></tr><tr><td>General Account</td><td>0.0%</td><td>2.00% p.a.</td><td>4.35% p.a.</td></tr><tr><td>Index Account</td><td>100.0%</td><td></td><td></td></tr></table>\n\n<table><tr><td></td><td>Index Sub-Account(s) Allocation</td><td>Floor Rate (Guaranteed)</td><td>Cap Rate</td><td>Crediting Rate based on 100% Participation Rate</td><td>Participation Rate</td><td>Current Assumed Crediting Rate</td></tr><tr><td>S&P 500 Index Sub-Account</td><td>100.0%</td><td>0.00%</td><td>10.00%</td><td>6.60% p.a.</td><td>100.00%</td><td>6.60% p.a.</td></tr></table>\n\nPresented by : HSBC\n\nDate : 19/03/2026\n\nPage 2 of 22\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\n\nInstruction:\nPremium Term (Years) column\n\nExample of the form of the answer, not the answer:\nMulti-pay 10 Pay"
+        }
+      ]
+    },
+    {
+      "name": "Cover",
+      "pages": [
+        5
+      ],
+      "instruction": "Sum insured",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "12,345,678"
+      },
+      "expected": {
+        "type": "number",
+        "value": "10,000,000"
+      },
+      "value": "10,000,000",
+      "number": 10000000,
+      "foundOnPages": [
+        5
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay",
+      "calls": [
+        {
+          "pages": [
+            5
+          ],
+          "thinking": "The instruction asks for \"Sum insured\". Looking at the page, I can see in the \"Basic Plan\" table:\n\n\"Sum Insured (US$)\" : 10,000,000\n\nThe example format shows a number with commas: 12,345,678\n\nSo the answer should be: 10,000,000",
+          "startedAt": "2026-09-29T11:15:26.065Z",
+          "seconds": 11,
+          "inputTokens": 1126,
+          "outputTokens": 98,
+          "contextLimit": 32768,
+          "answer": "10,000,000",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\nPolicyholder and Plan Details\n\n<table><tr><td>Proposed Life Insured</td><td>: Client</td></tr><tr><td>Age Last Birthday</td><td>: 30</td></tr><tr><td>Sex</td><td>: Male</td></tr><tr><td>Underwriting Class</td><td>: Standard Non-Smoker</td></tr><tr><td>Residency</td><td>: Singapore (Country A+)</td></tr><tr><td>Plan</td><td>: HSBC Life Diamond Prestige IUL II</td></tr><tr><td>Policy Term</td><td>: Whole Life</td></tr><tr><td>Currency</td><td>: USD</td></tr><tr><td>Minimum Initial Premium</td><td>: 87,131</td></tr><tr><td>Premium Solve</td><td>: Endow Premium</td></tr><tr><td>No-Lapse Guarantee</td><td>: 5 years</td></tr><tr><td>No-Lapse Guarantee Premium</td><td>: 174,262</td></tr><tr><td>Death Benefit Instalment Option</td><td>: Lump sum</td></tr><tr><td>Guaranteed Interest Rate Lock Period</td><td>: 1 year</td></tr><tr><td>Guaranteed Interest Rate Lock % on</td><td>: 4.40%</td></tr><tr><td>General Account only (applies to the First Net Premium only)</td><td></td></tr><tr><td>Benefit Type</td><td>: The Higher of Account Value or Sum Insured</td></tr><tr><td>Loyalty Bonus Rate</td><td>: 0.35% From year 11 to Age 121</td></tr></table>\n\n<table><tr><td>Basic Plan</td><td>Policy Term</td><td>Premium Term</td><td>Sum Insured (US$)</td><td>Planned Premium (US$)</td></tr><tr><td>HSBC Life Diamond Prestige IUL II</td><td>Whole Life</td><td>Multi-pay 10 Pay</td><td>10,000,000</td><td>87,131</td></tr></table>\n\n<table><tr><td>Accounts</td><td>Net Premium Allocation</td><td>Guaranteed Minimum Crediting Rate</td><td>Current General Crediting Rate</td></tr><tr><td>General Account</td><td>0.0%</td><td>2.00% p.a.</td><td>4.35% p.a.</td></tr><tr><td>Index Account</td><td>100.0%</td><td></td><td></td></tr></table>\n\n<table><tr><td></td><td>Index Sub-Account(s) Allocation</td><td>Floor Rate (Guaranteed)</td><td>Cap Rate</td><td>Crediting Rate based on 100% Participation Rate</td><td>Participation Rate</td><td>Current Assumed Crediting Rate</td></tr><tr><td>S&P 500 Index Sub-Account</td><td>100.0%</td><td>0.00%</td><td>10.00%</td><td>6.60% p.a.</td><td>100.00%</td><td>6.60% p.a.</td></tr></table>\n\nPresented by : HSBC\n\nDate : 19/03/2026\n\nPage 2 of 22\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\n\nInstruction:\nSum insured\n\nExample of the form of the answer, not the answer:\n12,345,678"
+        }
+      ]
+    },
+    {
+      "name": "Yearly Premium",
+      "pages": [
+        5
+      ],
+      "instruction": "Planned Premium (Multi Pay)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "12,345"
+      },
+      "expected": {
+        "type": "number",
+        "value": "87,131"
+      },
+      "value": "87,131",
+      "number": 87131,
+      "foundOnPages": [
+        5
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000",
+      "calls": [
+        {
+          "pages": [
+            5
+          ],
+          "thinking": "The user is asking for the \"Planned Premium (Multi Pay)\" value from the insurance illustration page.\n\nLooking at the page, I can see in the Basic Plan table:\n- Planned Premium (US$): 87,131\n- Premium Term: Multi-pay 10 Pay\n\nSo the Planned Premium (Multi Pay) is 87,131.\n\nThe example form shows: 12,345\n\nSo the answer should be: 87,131",
+          "startedAt": "2026-09-29T11:15:36.855Z",
+          "seconds": 12,
+          "inputTokens": 1139,
+          "outputTokens": 117,
+          "contextLimit": 32768,
+          "answer": "87,131",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\nPolicyholder and Plan Details\n\n<table><tr><td>Proposed Life Insured</td><td>: Client</td></tr><tr><td>Age Last Birthday</td><td>: 30</td></tr><tr><td>Sex</td><td>: Male</td></tr><tr><td>Underwriting Class</td><td>: Standard Non-Smoker</td></tr><tr><td>Residency</td><td>: Singapore (Country A+)</td></tr><tr><td>Plan</td><td>: HSBC Life Diamond Prestige IUL II</td></tr><tr><td>Policy Term</td><td>: Whole Life</td></tr><tr><td>Currency</td><td>: USD</td></tr><tr><td>Minimum Initial Premium</td><td>: 87,131</td></tr><tr><td>Premium Solve</td><td>: Endow Premium</td></tr><tr><td>No-Lapse Guarantee</td><td>: 5 years</td></tr><tr><td>No-Lapse Guarantee Premium</td><td>: 174,262</td></tr><tr><td>Death Benefit Instalment Option</td><td>: Lump sum</td></tr><tr><td>Guaranteed Interest Rate Lock Period</td><td>: 1 year</td></tr><tr><td>Guaranteed Interest Rate Lock % on</td><td>: 4.40%</td></tr><tr><td>General Account only (applies to the First Net Premium only)</td><td></td></tr><tr><td>Benefit Type</td><td>: The Higher of Account Value or Sum Insured</td></tr><tr><td>Loyalty Bonus Rate</td><td>: 0.35% From year 11 to Age 121</td></tr></table>\n\n<table><tr><td>Basic Plan</td><td>Policy Term</td><td>Premium Term</td><td>Sum Insured (US$)</td><td>Planned Premium (US$)</td></tr><tr><td>HSBC Life Diamond Prestige IUL II</td><td>Whole Life</td><td>Multi-pay 10 Pay</td><td>10,000,000</td><td>87,131</td></tr></table>\n\n<table><tr><td>Accounts</td><td>Net Premium Allocation</td><td>Guaranteed Minimum Crediting Rate</td><td>Current General Crediting Rate</td></tr><tr><td>General Account</td><td>0.0%</td><td>2.00% p.a.</td><td>4.35% p.a.</td></tr><tr><td>Index Account</td><td>100.0%</td><td></td><td></td></tr></table>\n\n<table><tr><td></td><td>Index Sub-Account(s) Allocation</td><td>Floor Rate (Guaranteed)</td><td>Cap Rate</td><td>Crediting Rate based on 100% Participation Rate</td><td>Participation Rate</td><td>Current Assumed Crediting Rate</td></tr><tr><td>S&P 500 Index Sub-Account</td><td>100.0%</td><td>0.00%</td><td>10.00%</td><td>6.60% p.a.</td><td>100.00%</td><td>6.60% p.a.</td></tr></table>\n\nPresented by : HSBC\n\nDate : 19/03/2026\n\nPage 2 of 22\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\n\nInstruction:\nPlanned Premium (Multi Pay)\n\nExample of the form of the answer, not the answer:\n12,345"
+        }
+      ]
+    },
+    {
+      "name": "Total Premium",
+      "instruction": "Yearly Premium * Premium Term. Premium Term \"Multi-pay 10 Pay\" means 10.",
+      "kind": "WorkedOut",
+      "expecting": {
+        "type": "number",
+        "example": "123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "871,310"
+      },
+      "value": "871,310",
+      "number": 871310,
+      "foundOnPages": null,
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131",
+      "calls": [
+        {
+          "pages": [],
+          "thinking": "Yearly Premium = 87131\nPremium Term = 10\n\nYearly Premium * Premium Term = 87131 * 10 = 871310\n\nFormat: 123,456 (with comma separators)\n871,310",
+          "startedAt": "2026-09-29T11:15:49.106Z",
+          "seconds": 6,
+          "inputTokens": 192,
+          "outputTokens": 78,
+          "contextLimit": 32768,
+          "answer": "871,310",
+          "prompt": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\n\nInstruction:\nYearly Premium * Premium Term. Premium Term \"Multi-pay 10 Pay\" means 10.\n\nExample of the form of the answer, not the answer:\n123,456"
+        }
+      ]
+    },
+    {
+      "name": "Day 1 Cash Value",
+      "pages": [
+        9
+      ],
+      "instruction": "Day 1 Cash Value for this policy is illustrated to be",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "USD 10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "USD 0"
+      },
+      "value": "USD 0",
+      "number": 0,
+      "foundOnPages": [
+        9
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310",
+      "calls": [
+        {
+          "pages": [
+            9
+          ],
+          "thinking": "The instruction asks for the \"Day 1 Cash Value for this policy is illustrated to be\"\n\nLooking at the text, I can find this statement:\n\"Please note that the Day 1 Cash Value for this policy is illustrated to be USD 0.\"\n\nSo the value is USD 0.\n\nThe example format is \"USD 10\", so I should answer \"USD 0\".",
+          "startedAt": "2026-09-29T11:16:13.841Z",
+          "seconds": 20,
+          "inputTokens": 2849,
+          "outputTokens": 89,
+          "contextLimit": 32768,
+          "answer": "USD 0",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\n<table border=1><tr><td colspan=\"5\"></td><td colspan=\"2\">POLICY VALUE</td><td colspan=\"2\">CASH VALUE</td></tr><tr><td>End of Policy Year/Age</td><td>Total Planned Premiums Paid (US$)</td><td>Total Unscheduled Premium Paid (US$)</td><td>Total Partial Surrender (US$)</td><td>Total Premiums Paid To-date (US$)</td><td>Illustrated values at the guaranteed minimum crediting rate and maximum charges (US$)1,3,4</td><td>Illustrated values at the current General Account general crediting rate, current assumed Index Account crediting rate and current charges (US$)4,5</td><td>Illustrated values at the guaranteed minimum crediting rate and maximum charges (US$)1,2,3,4</td><td>Illustrated values at the current General Account general crediting rate, current assumed Index Account crediting rate and current charges (US$)2,4,5</td></tr><tr><td>1/31</td><td>87,131</td><td>0</td><td>0</td><td>87,131</td><td>50,321</td><td>55,256</td><td>0</td><td>0</td></tr><tr><td>2/32</td><td>174,262</td><td>0</td><td>0</td><td>174,262</td><td>101,362</td><td>114,949</td><td>15,746</td><td>17,242</td></tr><tr><td>3/33</td><td>261,393</td><td>0</td><td>0</td><td>261,393</td><td>152,944</td><td>179,207</td><td>31,994</td><td>35,841</td></tr><tr><td>4/34</td><td>348,524</td><td>0</td><td>0</td><td>348,524</td><td>204,816</td><td>248,041</td><td>97,364</td><td>111,618</td></tr><tr><td>5/35</td><td>435,655</td><td>0</td><td>0</td><td>435,655</td><td>256,800</td><td>321,592</td><td>164,405</td><td>192,955</td></tr><tr><td>6/36</td><td>522,786</td><td>0</td><td>0</td><td>522,786</td><td>309,160</td><td>400,480</td><td>233,239</td><td>280,336</td></tr><tr><td>7/37</td><td>609,917</td><td>0</td><td>0</td><td>609,917</td><td>361,205</td><td>484,301</td><td>299,666</td><td>369,037</td></tr><tr><td>8/38</td><td>697,048</td><td>0</td><td>0</td><td>697,048</td><td>412,588</td><td>573,066</td><td>374,440</td><td>472,780</td></tr><tr><td>9/39</td><td>784,179</td><td>0</td><td>0</td><td>784,179</td><td>463,491</td><td>667,279</td><td>453,384</td><td>587,205</td></tr><tr><td>10/40</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>513,744</td><td>767,152</td><td>542,507</td><td>721,123</td></tr><tr><td>15/45</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>341,298</td><td>869,650</td><td>439,659</td><td>852,257</td></tr><tr><td>20/50</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>260,064</td><td>1,130,621</td><td>405,690</td><td>1,130,621</td></tr><tr><td>25/55</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>153,238</td><td>1,476,692</td><td>333,936</td><td>1,476,692</td></tr><tr><td>30/60</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>12</td><td>1,905,682</td><td>184,471</td><td>1,905,682</td></tr><tr><td>35/65</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>0</td><td>2,414,810</td><td>0</td><td>2,414,810</td></tr><tr><td>40/70</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>0</td><td>3,000,367</td><td>0</td><td>3,000,367</td></tr></table>\n\nPlease note that the Day 1 Cash Value for this policy is illustrated to be USD 0.\n\nBased on the current general crediting rate for General Account, current assumed crediting rate for Index Sub-Account(s) and current charges, your total Illustrated Yield upon surrender at age 70 is $3.53\\%$ p.a.\n\nBased on the guaranteed minimum crediting rate for General Account, floored crediting rate for Index Sub-Account(s) and maximum charges, the policy is projected to have lapsed before age 70.\n\nThe total Illustrated Yields upon surrender have not taken into consideration of any additional premiums paid, partial withdrawals made and loans taken. Please refer to the Policy Illustration for assumptions made. The actual benefits payable (if any) and coverage are not guaranteed and are dependent on the actual crediting rates (subject to the guaranteed minimum crediting rate) and charges (subject to the maximum charges) as well as the amounts of any additional premiums paid, partial withdrawals made and loans taken.\n\n$^{1}$ Illustrated values at the higher of (a) or (b), where:\n\n(a) is based on the guaranteed minimum crediting rate for General Account, floored crediting rate for Index Account and maximum charges; and\n\n(b) is the Guaranteed Minimum Surrender Value $^{2}$ based on maximum charges.\n\n$^{2}$We will pay the Guaranteed Minimum Surrender Value at the time of full surrender. It will be paid when the Guaranteed Minimum Surrender Value is higher than the Policy Value less Surrender Charge. Guaranteed Minimum Surrender Value ensures that the Policy Value will grow at a fixed crediting rate of (2.00% p.a.) regardless of the actual crediting rates and loyalty bonus earned by the General Account and Index Account, less applicable charges.\n\n$^{3}$The illustrated values are based on guaranteed minimum crediting rate for General Account of 2.00% p.a., floored crediting rate for S&P 500 Index Sub-Account, Nasdaq-100 Index Sub-Account and S&P U.S. Tactical Multi-Asset Index Sub-Account of 0.00% p.a., floored crediting rate for S&P Global Diversified Index Sub-Account of 0.45% p.a. and maximum charges. The values in the Policy Illustration are illustrated assuming the values in each Index Sub-Account will grow at its respective floored crediting rate. The illustrations include Loyalty Bonus Rate (if applicable) to both General Account and Index Account.\n\n$^{4}$The guaranteed minimum crediting rate for the General Account on the First Net Premium in the first policy year is equal to the Guaranteed Interest Rate Lock Rate.\n\n$^{5}$The illustrated values are based on current General Account general crediting rate of 4.35% p.a. and current assumed crediting rate for S&P 500 Index Sub-Account of 6.60% p.a., Nasdaq-100 Index Sub-Account of 6.70% p.a., S&P Global Diversified Index Sub-Account of 7.30% p.a., S&P U.S. Tactical Multi-Asset Index Sub-Account of 7.80% p.a.. The values in this Policy Illustration are illustrated assuming the values in each Index Sub-Account will grow at its respective current assumed crediting rate. The illustrations include Loyalty Bonus Rate (if applicable) to both General Account and Index Account.\n\nPresented by : HSBC\n\nDate : 19/03/2026\n\nPage 6 of 22\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\n\nInstruction:\nDay 1 Cash Value for this policy is illustrated to be\n\nExample of the form of the answer, not the answer:\nUSD 10"
+        }
+      ]
+    },
+    {
+      "name": "Multiples of premium paid",
+      "instruction": "Cover / Total Premium",
+      "kind": "WorkedOut",
+      "expecting": {
+        "type": "number",
+        "example": "12.34"
+      },
+      "expected": {
+        "type": "number",
+        "value": "11.48"
+      },
+      "value": "11.48",
+      "number": 11.48,
+      "foundOnPages": null,
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0",
+      "calls": [
+        {
+          "pages": [],
+          "thinking": "The user wants me to calculate Cover / Total Premium.\n\nCover = 10000000\nTotal Premium = 871310\n\n10000000 / 871310 = 11.4769...\n\nLet me calculate more precisely:\n10000000 / 871310 = 11.4768...\n\nLet me do this division:\n871310 × 11 = 9584410\n10000000 - 9584410 = 415590\n415590 / 871310 = 0.4769...\n\nSo 11.4769...\n\nLet me be more precise:\n871310 × 0.47 = 409515.7\n415590 - 409515.7 = 6074.3\n6074.3 / 871310 = 0.00697...\n\nSo approximately 11.4770\n\nLet me recalculate:\n10000000 / 871310\n\n= 10000000 / 871310\n= 11.4769...\n\nLet me do long division more carefully:\n10000000 / 871310\n\n871310 goes into 10000000:\n871310 × 11 = 9584410\nRemainder: 10000000 - 9584410 = 415590\n\n415590 / 871310 = 0.4769...\n\n871310 × 0.4 = 348524\n415590 - 348524 = 67066\n67066 / 871310 = 0.0769...\n\n871310 × 0.07 = 60991.7\n67066 - 60991.7 = 6074.3\n6074.3 / 871310 = 0.00697...\n\nSo 11.4770 approximately.\n\nThe example format shows \"12.34\" - two decimal places.\n\nSo the answer would be 11.48 (rounded to 2 decimal places).\n\nWait, let me check: 11.4769... rounds to 11.48.\n\nThe example shows 2 decimal places, so I'll format to 2 decimal places.",
+          "startedAt": "2026-09-29T11:16:33.480Z",
+          "seconds": 42,
+          "inputTokens": 192,
+          "outputTokens": 684,
+          "contextLimit": 32768,
+          "answer": "11.48",
+          "prompt": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\n\nInstruction:\nCover / Total Premium\n\nExample of the form of the answer, not the answer:\n12.34"
+        }
+      ]
+    },
+    {
+      "name": "*Projected Breakeven (End of Year)",
+      "pages": [
+        16
+      ],
+      "instruction": "Supplementary Policy Illustration  - >\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium Only): 4.40% -> \n(Year whereby cash value exceeded the total premium amount)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "16"
+      },
+      "value": "16",
+      "number": 16,
+      "foundOnPages": [
+        16
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48",
+      "calls": [
+        {
+          "pages": [
+            16
+          ],
+          "thinking": "The instruction asks me to find the year whereby cash value exceeded the total premium amount.\n\nFrom the page:\n- Total Premium = 871,310\n- I need to find the first year where Cash Value exceeds 871,310\n\nLet me look at the Cash Value column:\n- Year 1: 0\n- Year 2: 17,242\n- Year 3: 35,841\n- Year 4: 111,618\n- Year 5: 192,955\n- Year 6: 280,336\n- Year 7: 369,037\n- Year 8: 472,780\n- Year 9: 587,205\n- Year 10: 721,123\n- Year 11: 745,566\n- Year 12: 770,859\n- Year 13: 797,057\n- Year 14: 824,220\n- Year 15: 852,257\n- Year 16: 916,711\n\nYear 16 Cash Value = 916,711 > 871,310 (Total Premium)\n\nSo the year whereby cash value exceeded the total premium amount is 16.",
+          "startedAt": "2026-09-29T11:17:47.269Z",
+          "seconds": 47,
+          "inputTokens": 4909,
+          "outputTokens": 341,
+          "contextLimit": 32768,
+          "answer": "16",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\n## Supplementary Policy Illustration – Must be read in conjunction with the Main Illustration\n\n## Current crediting rate illustration\n\nThis is an illustration of the illustrated Policy Values, Cash Values and Death Benefits under the current illustrated basis. The illustrations are based on the assumption that the Planned Premiums will be paid on time. It is important for you to understand that the actual figures, values and benefits could be more or less favorable depending on the actual charges and crediting rates applied to your policy as compared to the charges and crediting rates illustrated in this document.\n\n<table border=1><tr><td colspan=\"5\"></td><td colspan=\"5\">Interest Rate for the Guaranteed Interest Rate Lock (Apply to the General Account &amp; First Net Premium Only): 4.40%</td></tr><tr><td rowspan=\"2\">End of Policy Year/Age</td><td rowspan=\"2\">Total Planned Premiums Paid (US$)</td><td rowspan=\"2\">Total Unscheduled Premium Paid (US$)</td><td rowspan=\"2\">Total Partial Surrender (US$)</td><td rowspan=\"2\">Total Premiums Paid To-date (US$)</td><td colspan=\"5\">Illustrated values at the current General Account general crediting rate, current assumed Index Account crediting rate and current charges$^{1,2,3,4}$</td></tr><tr><td>Policy Value (US$)</td><td>Policy Value less Surrender Charge (US$)</td><td>Guaranteed Minimum Surrender Value$^{2}$ (US$)</td><td>Cash Value$^{1,2}$ (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/31</td><td>87,131</td><td>0</td><td>0</td><td>87,131</td><td>55,256</td><td>0</td><td>0</td><td>0</td><td>10,000,000</td></tr><tr><td>2/32</td><td>174,262</td><td>0</td><td>0</td><td>174,262</td><td>114,949</td><td>17,242</td><td>15,911</td><td>17,242</td><td>10,000,000</td></tr><tr><td>3/33</td><td>261,393</td><td>0</td><td>0</td><td>261,393</td><td>179,207</td><td>35,841</td><td>32,334</td><td>35,841</td><td>10,000,000</td></tr><tr><td>4/34</td><td>348,524</td><td>0</td><td>0</td><td>348,524</td><td>248,041</td><td>111,618</td><td>98,413</td><td>111,618</td><td>10,000,000</td></tr><tr><td>5/35</td><td>435,655</td><td>0</td><td>0</td><td>435,655</td><td>321,592</td><td>192,955</td><td>166,206</td><td>192,955</td><td>10,000,000</td></tr><tr><td>6/36</td><td>522,786</td><td>0</td><td>0</td><td>522,786</td><td>400,480</td><td>280,336</td><td>235,852</td><td>280,336</td><td>10,000,000</td></tr><tr><td>7/37</td><td>609,917</td><td>0</td><td>0</td><td>609,917</td><td>484,301</td><td>369,037</td><td>303,100</td><td>369,037</td><td>10,000,000</td></tr><tr><td>8/38</td><td>697,048</td><td>0</td><td>0</td><td>697,048</td><td>573,066</td><td>472,780</td><td>378,859</td><td>472,780</td><td>10,000,000</td></tr><tr><td>9/39</td><td>784,179</td><td>0</td><td>0</td><td>784,179</td><td>667,279</td><td>587,205</td><td>458,899</td><td>587,205</td><td>10,000,000</td></tr><tr><td>10/40</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>767,152</td><td>721,123</td><td>549,329</td><td>721,123</td><td>10,000,000</td></tr><tr><td>11/41</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>786,462</td><td>745,566</td><td>533,338</td><td>745,566</td><td>10,000,000</td></tr><tr><td>12/42</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>806,338</td><td>770,859</td><td>515,799</td><td>770,859</td><td>10,000,000</td></tr><tr><td>13/43</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>826,822</td><td>797,057</td><td>496,651</td><td>797,057</td><td>10,000,000</td></tr><tr><td>14/44</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>847,962</td><td>824,220</td><td>475,833</td><td>824,220</td><td>10,000,000</td></tr><tr><td>15/45</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>869,650</td><td>852,257</td><td>453,125</td><td>852,257</td><td>10,000,000</td></tr><tr><td>16/46</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>916,711</td><td>916,711</td><td>457,935</td><td>916,711</td><td>10,000,000</td></tr><tr><td>17/47</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>966,016</td><td>966,016</td><td>452,274</td><td>966,016</td><td>10,000,000</td></tr><tr><td>18/48</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,017,734</td><td>1,017,734</td><td>445,362</td><td>1,017,734</td><td>10,000,000</td></tr><tr><td>19/49</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,072,597</td><td>1,072,597</td><td>437,740</td><td>1,072,597</td><td>10,000,000</td></tr><tr><td>20/50</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,130,621</td><td>1,130,621</td><td>429,166</td><td>1,130,621</td><td>10,000,000</td></tr><tr><td>21/51</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,192,632</td><td>1,192,632</td><td>420,243</td><td>1,192,632</td><td>10,000,000</td></tr><tr><td>22/52</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,258,308</td><td>1,258,308</td><td>410,316</td><td>1,258,308</td><td>10,000,000</td></tr><tr><td>23/53</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,327,912</td><td>1,327,912</td><td>399,350</td><td>1,327,912</td><td>10,000,000</td></tr><tr><td>24/54</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,400,701</td><td>1,400,701</td><td>386,195</td><td>1,400,701</td><td>10,000,000</td></tr><tr><td>25/55</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,476,692</td><td>1,476,692</td><td>370,538</td><td>1,476,692</td><td>10,000,000</td></tr><tr><td>26/56</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,555,916</td><td>1,555,916</td><td>352,053</td><td>1,555,916</td><td>10,000,000</td></tr><tr><td>27/57</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,638,414</td><td>1,638,414</td><td>330,407</td><td>1,638,414</td><td>10,000,000</td></tr><tr><td>28/58</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,724,238</td><td>1,724,238</td><td>305,253</td><td>1,724,238</td><td>10,000,000</td></tr><tr><td>29/59</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,813,340</td><td>1,813,340</td><td>276,100</td><td>1,813,340</td><td>10,000,000</td></tr><tr><td>30/60</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,905,682</td><td>1,905,682</td><td>242,436</td><td>1,905,682</td><td>10,000,000</td></tr><tr><td>31/61</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,001,237</td><td>2,001,237</td><td>203,732</td><td>2,001,237</td><td>10,000,000</td></tr><tr><td>32/62</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,099,995</td><td>2,099,995</td><td>159,431</td><td>2,099,995</td><td>10,000,000</td></tr><tr><td>33/63</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,201,848</td><td>2,201,848</td><td>108,817</td><td>2,201,848</td><td>10,000,000</td></tr><tr><td>34/64</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,306,811</td><td>2,306,811</td><td>51,274</td><td>2,306,811</td><td>10,000,000</td></tr><tr><td>35/65</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,414,810</td><td>2,414,810</td><td>0</td><td>2,414,810</td><td>10,000,000</td></tr><tr><td>36/66</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,525,895</td><td>2,525,895</td><td>0</td><td>2,525,895</td><td>10,000,000</td></tr></table>\n\nPresented by : HSBC\n\nPage 13 of 22\n\nDate : 19/03/2026\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n\nInstruction:\nSupplementary Policy Illustration  - >\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium Only): 4.40% -> \n(Year whereby cash value exceeded the total premium amount)\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    },
+    {
+      "name": "Guaranteed Breakeven (End of Year)",
+      "instruction": "NA",
+      "kind": "NotApplicable"
+    },
+    {
+      "name": "*Projected surrender value in year 15",
+      "pages": [
+        16
+      ],
+      "instruction": "Supplementary Policy Illustration  - >\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium Only): 4.40% -> \nSurrender Value column -> Year 15",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "453,125"
+      },
+      "value": "453,125",
+      "number": 453125,
+      "foundOnPages": [
+        16
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n*Projected Breakeven (End of Year) = 16",
+      "calls": [
+        {
+          "pages": [
+            16
+          ],
+          "thinking": "The instruction asks me to find the value in the \"Surrender Value\" column for Year 15.\n\nLooking at the table, I need to find the column that corresponds to \"Surrender Value\". The columns are:\n- Policy Value (US$)\n- Policy Value less Surrender Charge (US$)\n- Guaranteed Minimum Surrender Value (US$)\n- Cash Value (US$)\n- Death Benefit (US$)\n\nThe instruction mentions \"Surrender Value column\" - this likely refers to \"Guaranteed Minimum Surrender Value\" or \"Policy Value less Surrender Charge\". Let me re-read the instruction.\n\n\"Supplementary Policy Illustration - -> Interest Rate for the Guaranteed Interest Rate Lock (Apply to the General Account & First Net Premium Only): 4.40% -> Surrender Value column -> Year 15\"\n\nThe \"Surrender Value\" column most likely refers to \"Guaranteed Minimum Surrender Value (US$)\" since that's the column with \"Surrender Value\" in its name.\n\nLooking at Year 15 (row 15/45):\n- Policy Value: 869,650\n- Policy Value less Surrender Charge: 852,257\n- Guaranteed Minimum Surrender Value: 453,125\n- Cash Value: 852,257\n- Death Benefit: 10,000,000\n\nThe \"Guaranteed Minimum Surrender Value\" for Year 15 is 453,125.\n\nWait, let me reconsider. \"Surrender Value\" could also refer to \"Policy Value less Surrender Charge\" which is 852,257. But the column specifically named with \"Surrender Value\" in it is \"Guaranteed Minimum Surrender Value\".\n\nI'll go with 453,125 as the \"Surrender Value\" column for Year 15.",
+          "startedAt": "2026-09-29T11:18:34.087Z",
+          "seconds": 36,
+          "inputTokens": 4928,
+          "outputTokens": 439,
+          "contextLimit": 32768,
+          "answer": "453,125",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\n## Supplementary Policy Illustration – Must be read in conjunction with the Main Illustration\n\n## Current crediting rate illustration\n\nThis is an illustration of the illustrated Policy Values, Cash Values and Death Benefits under the current illustrated basis. The illustrations are based on the assumption that the Planned Premiums will be paid on time. It is important for you to understand that the actual figures, values and benefits could be more or less favorable depending on the actual charges and crediting rates applied to your policy as compared to the charges and crediting rates illustrated in this document.\n\n<table border=1><tr><td colspan=\"5\"></td><td colspan=\"5\">Interest Rate for the Guaranteed Interest Rate Lock (Apply to the General Account &amp; First Net Premium Only): 4.40%</td></tr><tr><td rowspan=\"2\">End of Policy Year/Age</td><td rowspan=\"2\">Total Planned Premiums Paid (US$)</td><td rowspan=\"2\">Total Unscheduled Premium Paid (US$)</td><td rowspan=\"2\">Total Partial Surrender (US$)</td><td rowspan=\"2\">Total Premiums Paid To-date (US$)</td><td colspan=\"5\">Illustrated values at the current General Account general crediting rate, current assumed Index Account crediting rate and current charges$^{1,2,3,4}$</td></tr><tr><td>Policy Value (US$)</td><td>Policy Value less Surrender Charge (US$)</td><td>Guaranteed Minimum Surrender Value$^{2}$ (US$)</td><td>Cash Value$^{1,2}$ (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/31</td><td>87,131</td><td>0</td><td>0</td><td>87,131</td><td>55,256</td><td>0</td><td>0</td><td>0</td><td>10,000,000</td></tr><tr><td>2/32</td><td>174,262</td><td>0</td><td>0</td><td>174,262</td><td>114,949</td><td>17,242</td><td>15,911</td><td>17,242</td><td>10,000,000</td></tr><tr><td>3/33</td><td>261,393</td><td>0</td><td>0</td><td>261,393</td><td>179,207</td><td>35,841</td><td>32,334</td><td>35,841</td><td>10,000,000</td></tr><tr><td>4/34</td><td>348,524</td><td>0</td><td>0</td><td>348,524</td><td>248,041</td><td>111,618</td><td>98,413</td><td>111,618</td><td>10,000,000</td></tr><tr><td>5/35</td><td>435,655</td><td>0</td><td>0</td><td>435,655</td><td>321,592</td><td>192,955</td><td>166,206</td><td>192,955</td><td>10,000,000</td></tr><tr><td>6/36</td><td>522,786</td><td>0</td><td>0</td><td>522,786</td><td>400,480</td><td>280,336</td><td>235,852</td><td>280,336</td><td>10,000,000</td></tr><tr><td>7/37</td><td>609,917</td><td>0</td><td>0</td><td>609,917</td><td>484,301</td><td>369,037</td><td>303,100</td><td>369,037</td><td>10,000,000</td></tr><tr><td>8/38</td><td>697,048</td><td>0</td><td>0</td><td>697,048</td><td>573,066</td><td>472,780</td><td>378,859</td><td>472,780</td><td>10,000,000</td></tr><tr><td>9/39</td><td>784,179</td><td>0</td><td>0</td><td>784,179</td><td>667,279</td><td>587,205</td><td>458,899</td><td>587,205</td><td>10,000,000</td></tr><tr><td>10/40</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>767,152</td><td>721,123</td><td>549,329</td><td>721,123</td><td>10,000,000</td></tr><tr><td>11/41</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>786,462</td><td>745,566</td><td>533,338</td><td>745,566</td><td>10,000,000</td></tr><tr><td>12/42</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>806,338</td><td>770,859</td><td>515,799</td><td>770,859</td><td>10,000,000</td></tr><tr><td>13/43</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>826,822</td><td>797,057</td><td>496,651</td><td>797,057</td><td>10,000,000</td></tr><tr><td>14/44</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>847,962</td><td>824,220</td><td>475,833</td><td>824,220</td><td>10,000,000</td></tr><tr><td>15/45</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>869,650</td><td>852,257</td><td>453,125</td><td>852,257</td><td>10,000,000</td></tr><tr><td>16/46</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>916,711</td><td>916,711</td><td>457,935</td><td>916,711</td><td>10,000,000</td></tr><tr><td>17/47</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>966,016</td><td>966,016</td><td>452,274</td><td>966,016</td><td>10,000,000</td></tr><tr><td>18/48</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,017,734</td><td>1,017,734</td><td>445,362</td><td>1,017,734</td><td>10,000,000</td></tr><tr><td>19/49</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,072,597</td><td>1,072,597</td><td>437,740</td><td>1,072,597</td><td>10,000,000</td></tr><tr><td>20/50</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,130,621</td><td>1,130,621</td><td>429,166</td><td>1,130,621</td><td>10,000,000</td></tr><tr><td>21/51</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,192,632</td><td>1,192,632</td><td>420,243</td><td>1,192,632</td><td>10,000,000</td></tr><tr><td>22/52</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,258,308</td><td>1,258,308</td><td>410,316</td><td>1,258,308</td><td>10,000,000</td></tr><tr><td>23/53</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,327,912</td><td>1,327,912</td><td>399,350</td><td>1,327,912</td><td>10,000,000</td></tr><tr><td>24/54</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,400,701</td><td>1,400,701</td><td>386,195</td><td>1,400,701</td><td>10,000,000</td></tr><tr><td>25/55</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,476,692</td><td>1,476,692</td><td>370,538</td><td>1,476,692</td><td>10,000,000</td></tr><tr><td>26/56</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,555,916</td><td>1,555,916</td><td>352,053</td><td>1,555,916</td><td>10,000,000</td></tr><tr><td>27/57</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,638,414</td><td>1,638,414</td><td>330,407</td><td>1,638,414</td><td>10,000,000</td></tr><tr><td>28/58</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,724,238</td><td>1,724,238</td><td>305,253</td><td>1,724,238</td><td>10,000,000</td></tr><tr><td>29/59</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,813,340</td><td>1,813,340</td><td>276,100</td><td>1,813,340</td><td>10,000,000</td></tr><tr><td>30/60</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,905,682</td><td>1,905,682</td><td>242,436</td><td>1,905,682</td><td>10,000,000</td></tr><tr><td>31/61</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,001,237</td><td>2,001,237</td><td>203,732</td><td>2,001,237</td><td>10,000,000</td></tr><tr><td>32/62</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,099,995</td><td>2,099,995</td><td>159,431</td><td>2,099,995</td><td>10,000,000</td></tr><tr><td>33/63</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,201,848</td><td>2,201,848</td><td>108,817</td><td>2,201,848</td><td>10,000,000</td></tr><tr><td>34/64</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,306,811</td><td>2,306,811</td><td>51,274</td><td>2,306,811</td><td>10,000,000</td></tr><tr><td>35/65</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,414,810</td><td>2,414,810</td><td>0</td><td>2,414,810</td><td>10,000,000</td></tr><tr><td>36/66</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,525,895</td><td>2,525,895</td><td>0</td><td>2,525,895</td><td>10,000,000</td></tr></table>\n\nPresented by : HSBC\n\nPage 13 of 22\n\nDate : 19/03/2026\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n*Projected Breakeven (End of Year) = 16\n\nInstruction:\nSupplementary Policy Illustration  - >\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium Only): 4.40% -> \nSurrender Value column -> Year 15\n\nExample of the form of the answer, not the answer:\n123,456"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 20",
+      "pages": [
+        16
+      ],
+      "instruction": "Supplementary Policy Illustration  - >\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium Only): 4.40% -> \nSurrender Value column -> Year 20",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "429,166"
+      },
+      "value": "1,130,621",
+      "number": 1130621,
+      "foundOnPages": [
+        16
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n*Projected Breakeven (End of Year) = 16\n*Projected surrender value in year 15 = 453125",
+      "calls": [
+        {
+          "pages": [
+            16
+          ],
+          "thinking": "The instruction asks me to find the Surrender Value column value for Year 20.\n\nLooking at the table, I need to find the row for Year 20 (20/50) and look at the \"Policy Value less Surrender Charge (US$)\" column, which represents the Surrender Value.\n\nRow 20/50:\n- Policy Value (US$): 1,130,621\n- Policy Value less Surrender Charge (US$): 1,130,621\n- Guaranteed Minimum Surrender Value (US$): 429,166\n- Cash Value (US$): 1,130,621\n- Death Benefit (US$): 10,000,000\n\nThe \"Surrender Value column\" - this could refer to \"Policy Value less Surrender Charge\" or \"Guaranteed Minimum Surrender Value\" or \"Cash Value\".\n\nLooking at the instruction more carefully: \"Interest Rate for the Guaranteed Interest Rate Lock (Apply to the General Account & First Net Premium Only): 4.40% -> Surrender Value column -> Year 20\"\n\nThe \"Surrender Value column\" - in the table, the columns are:\n1. Policy Value (US$)\n2. Policy Value less Surrender Charge (US$)\n3. Guaranteed Minimum Surrender Value (US$)\n4. Cash Value (US$)\n5. Death Benefit (US$)\n\nThe \"Surrender Value\" column would most likely be \"Policy Value less Surrender Charge (US$)\" or \"Cash Value (US$)\" since those are the values you actually receive on surrender.\n\nWait, let me re-read. The instruction says \"Surrender Value column\". Looking at the columns, \"Policy Value less Surrender Charge\" is the surrender value. But \"Cash Value\" is also a surrender value.\n\nActually, looking more carefully at the column headers:\n- \"Policy Value less Surrender Charge (US$)\" - this is the surrender value after charge\n- \"Guaranteed Minimum Surrender Value\" - this is the guaranteed minimum\n- \"Cash Value\" - this is the cash value\n\nThe \"Surrender Value\" most naturally maps to \"Policy Value less Surrender Charge\" or \"Cash Value\". In many insurance illustrations, \"Surrender Value\" = \"Cash Value\" or \"Policy Value less Surrender Charge\".\n\nLooking at Year 20 (20/50):\n- Policy Value less Surrender Charge: 1,130,621\n- Guaranteed Minimum Surrender Value: 429,166\n- Cash Value: 1,130,621\n\nThe \"Surrender Value column\" - I think this refers to \"Policy Value less Surrender Charge (US$)\" which is the surrender value. For Year 20, that's 1,130,621.\n\nBut wait, it could also be \"Cash Value\" which is also 1,130,621 for Year 20.\n\nActually, I think \"Surrender Value\" most directly maps to \"Policy Value less Surrender Charge\" since that's literally the value you get on surrender. For Year 20, it's 1,130,621.\n\nThe format example is \"123,456\" so I should write it with comma separators.\n\nAnswer: 1,130,621",
+          "startedAt": "2026-09-29T11:19:09.732Z",
+          "seconds": 61,
+          "inputTokens": 4946,
+          "outputTokens": 773,
+          "contextLimit": 32768,
+          "answer": "1,130,621",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\n## Supplementary Policy Illustration – Must be read in conjunction with the Main Illustration\n\n## Current crediting rate illustration\n\nThis is an illustration of the illustrated Policy Values, Cash Values and Death Benefits under the current illustrated basis. The illustrations are based on the assumption that the Planned Premiums will be paid on time. It is important for you to understand that the actual figures, values and benefits could be more or less favorable depending on the actual charges and crediting rates applied to your policy as compared to the charges and crediting rates illustrated in this document.\n\n<table border=1><tr><td colspan=\"5\"></td><td colspan=\"5\">Interest Rate for the Guaranteed Interest Rate Lock (Apply to the General Account &amp; First Net Premium Only): 4.40%</td></tr><tr><td rowspan=\"2\">End of Policy Year/Age</td><td rowspan=\"2\">Total Planned Premiums Paid (US$)</td><td rowspan=\"2\">Total Unscheduled Premium Paid (US$)</td><td rowspan=\"2\">Total Partial Surrender (US$)</td><td rowspan=\"2\">Total Premiums Paid To-date (US$)</td><td colspan=\"5\">Illustrated values at the current General Account general crediting rate, current assumed Index Account crediting rate and current charges$^{1,2,3,4}$</td></tr><tr><td>Policy Value (US$)</td><td>Policy Value less Surrender Charge (US$)</td><td>Guaranteed Minimum Surrender Value$^{2}$ (US$)</td><td>Cash Value$^{1,2}$ (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/31</td><td>87,131</td><td>0</td><td>0</td><td>87,131</td><td>55,256</td><td>0</td><td>0</td><td>0</td><td>10,000,000</td></tr><tr><td>2/32</td><td>174,262</td><td>0</td><td>0</td><td>174,262</td><td>114,949</td><td>17,242</td><td>15,911</td><td>17,242</td><td>10,000,000</td></tr><tr><td>3/33</td><td>261,393</td><td>0</td><td>0</td><td>261,393</td><td>179,207</td><td>35,841</td><td>32,334</td><td>35,841</td><td>10,000,000</td></tr><tr><td>4/34</td><td>348,524</td><td>0</td><td>0</td><td>348,524</td><td>248,041</td><td>111,618</td><td>98,413</td><td>111,618</td><td>10,000,000</td></tr><tr><td>5/35</td><td>435,655</td><td>0</td><td>0</td><td>435,655</td><td>321,592</td><td>192,955</td><td>166,206</td><td>192,955</td><td>10,000,000</td></tr><tr><td>6/36</td><td>522,786</td><td>0</td><td>0</td><td>522,786</td><td>400,480</td><td>280,336</td><td>235,852</td><td>280,336</td><td>10,000,000</td></tr><tr><td>7/37</td><td>609,917</td><td>0</td><td>0</td><td>609,917</td><td>484,301</td><td>369,037</td><td>303,100</td><td>369,037</td><td>10,000,000</td></tr><tr><td>8/38</td><td>697,048</td><td>0</td><td>0</td><td>697,048</td><td>573,066</td><td>472,780</td><td>378,859</td><td>472,780</td><td>10,000,000</td></tr><tr><td>9/39</td><td>784,179</td><td>0</td><td>0</td><td>784,179</td><td>667,279</td><td>587,205</td><td>458,899</td><td>587,205</td><td>10,000,000</td></tr><tr><td>10/40</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>767,152</td><td>721,123</td><td>549,329</td><td>721,123</td><td>10,000,000</td></tr><tr><td>11/41</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>786,462</td><td>745,566</td><td>533,338</td><td>745,566</td><td>10,000,000</td></tr><tr><td>12/42</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>806,338</td><td>770,859</td><td>515,799</td><td>770,859</td><td>10,000,000</td></tr><tr><td>13/43</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>826,822</td><td>797,057</td><td>496,651</td><td>797,057</td><td>10,000,000</td></tr><tr><td>14/44</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>847,962</td><td>824,220</td><td>475,833</td><td>824,220</td><td>10,000,000</td></tr><tr><td>15/45</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>869,650</td><td>852,257</td><td>453,125</td><td>852,257</td><td>10,000,000</td></tr><tr><td>16/46</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>916,711</td><td>916,711</td><td>457,935</td><td>916,711</td><td>10,000,000</td></tr><tr><td>17/47</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>966,016</td><td>966,016</td><td>452,274</td><td>966,016</td><td>10,000,000</td></tr><tr><td>18/48</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,017,734</td><td>1,017,734</td><td>445,362</td><td>1,017,734</td><td>10,000,000</td></tr><tr><td>19/49</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,072,597</td><td>1,072,597</td><td>437,740</td><td>1,072,597</td><td>10,000,000</td></tr><tr><td>20/50</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,130,621</td><td>1,130,621</td><td>429,166</td><td>1,130,621</td><td>10,000,000</td></tr><tr><td>21/51</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,192,632</td><td>1,192,632</td><td>420,243</td><td>1,192,632</td><td>10,000,000</td></tr><tr><td>22/52</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,258,308</td><td>1,258,308</td><td>410,316</td><td>1,258,308</td><td>10,000,000</td></tr><tr><td>23/53</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,327,912</td><td>1,327,912</td><td>399,350</td><td>1,327,912</td><td>10,000,000</td></tr><tr><td>24/54</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,400,701</td><td>1,400,701</td><td>386,195</td><td>1,400,701</td><td>10,000,000</td></tr><tr><td>25/55</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,476,692</td><td>1,476,692</td><td>370,538</td><td>1,476,692</td><td>10,000,000</td></tr><tr><td>26/56</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,555,916</td><td>1,555,916</td><td>352,053</td><td>1,555,916</td><td>10,000,000</td></tr><tr><td>27/57</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,638,414</td><td>1,638,414</td><td>330,407</td><td>1,638,414</td><td>10,000,000</td></tr><tr><td>28/58</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,724,238</td><td>1,724,238</td><td>305,253</td><td>1,724,238</td><td>10,000,000</td></tr><tr><td>29/59</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,813,340</td><td>1,813,340</td><td>276,100</td><td>1,813,340</td><td>10,000,000</td></tr><tr><td>30/60</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,905,682</td><td>1,905,682</td><td>242,436</td><td>1,905,682</td><td>10,000,000</td></tr><tr><td>31/61</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,001,237</td><td>2,001,237</td><td>203,732</td><td>2,001,237</td><td>10,000,000</td></tr><tr><td>32/62</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,099,995</td><td>2,099,995</td><td>159,431</td><td>2,099,995</td><td>10,000,000</td></tr><tr><td>33/63</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,201,848</td><td>2,201,848</td><td>108,817</td><td>2,201,848</td><td>10,000,000</td></tr><tr><td>34/64</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,306,811</td><td>2,306,811</td><td>51,274</td><td>2,306,811</td><td>10,000,000</td></tr><tr><td>35/65</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,414,810</td><td>2,414,810</td><td>0</td><td>2,414,810</td><td>10,000,000</td></tr><tr><td>36/66</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,525,895</td><td>2,525,895</td><td>0</td><td>2,525,895</td><td>10,000,000</td></tr></table>\n\nPresented by : HSBC\n\nPage 13 of 22\n\nDate : 19/03/2026\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n*Projected Breakeven (End of Year) = 16\n*Projected surrender value in year 15 = 453125\n\nInstruction:\nSupplementary Policy Illustration  - >\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium Only): 4.40% -> \nSurrender Value column -> Year 20\n\nExample of the form of the answer, not the answer:\n123,456"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 25",
+      "pages": [
+        16
+      ],
+      "instruction": "Supplementary Policy Illustration  - >\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium Only): 4.40% -> \nSurrender Value column -> Year 25",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "370,538"
+      },
+      "value": "1,476,692",
+      "number": 1476692,
+      "foundOnPages": [
+        16
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n*Projected Breakeven (End of Year) = 16\n*Projected surrender value in year 15 = 453125\n*Projected surrender value in year 20 = 1130621",
+      "calls": [
+        {
+          "pages": [
+            16
+          ],
+          "thinking": "The instruction asks me to find the Surrender Value column value for Year 25.\n\nLooking at the table, I need to find the row for Year 25 (End of Policy Year 25/55) and look at the \"Policy Value less Surrender Charge (US$)\" column.\n\nWait, let me re-read the instruction. It says \"Surrender Value column -> Year 25\". Looking at the columns:\n- Policy Value (US$)\n- Policy Value less Surrender Charge (US$)\n- Guaranteed Minimum Surrender Value (US$)\n- Cash Value (US$)\n- Death Benefit (US$)\n\nThe \"Surrender Value\" could refer to \"Policy Value less Surrender Charge\" or \"Guaranteed Minimum Surrender Value\" or \"Cash Value\". \n\nActually, looking at the values found before, \"Projected surrender value in year 15 = 453125\" which corresponds to the \"Guaranteed Minimum Surrender Value\" column for year 15 (453,125). And \"Projected surrender value in year 20 = 1130621\" - let me check year 20. The Cash Value for year 20 is 1,130,621. The Guaranteed Minimum Surrender Value for year 20 is 429,166. So \"Projected surrender value\" seems to correspond to Cash Value.\n\nWait, let me re-check. Year 15: Cash Value = 852,257, Guaranteed Minimum Surrender Value = 453,125. The found value is 453,125 which is the Guaranteed Minimum Surrender Value.\n\nYear 20: Cash Value = 1,130,621, Guaranteed Minimum Surrender Value = 429,166. The found value is 1,130,621 which is the Cash Value.\n\nSo \"surrender value\" is ambiguous - it could be either. Let me look at the instruction more carefully.\n\nThe instruction says: \"Supplementary Policy Illustration -> Interest Rate for the Guaranteed Interest Rate Lock (Apply to the General Account & First Net Premium Only): 4.40% -> Surrender Value column -> Year 25\"\n\nThis is a bit confusing. It seems to be navigating: first finding the section with the interest rate, then looking at the \"Surrender Value column\" for Year 25.\n\nLooking at the columns, \"Policy Value less Surrender Charge\" seems like the most likely \"Surrender Value\" column. But wait, \"Guaranteed Minimum Surrender Value\" also has \"Surrender Value\" in the name.\n\nActually, re-reading: \"Surrender Value column\" - this likely refers to \"Policy Value less Surrender Charge (US$)\" since it's the primary surrender value column. But it could also be \"Guaranteed Minimum Surrender Value.\"\n\nHmm, but looking at the found values again:\n- Year 15 surrender value = 453,125 (which is Guaranteed Minimum Surrender Value)\n- Year 20 surrender value = 1,130,621 (which is Cash Value)\n\nThis is inconsistent. Let me re-examine.\n\nActually wait - in insurance, \"surrender value\" typically means the Cash Value. The \"Policy Value less Surrender Charge\" is sometimes called the surrender value too.\n\nLet me look at the table structure again. The columns are:\n1. Policy Value (US$)\n2. Policy Value less Surrender Charge (US$)\n3. Guaranteed Minimum Surrender Value (US$)\n4. Cash Value (US$)\n5. Death Benefit (US$)\n\nFor Year 25 (25/55):\n- Policy Value: 1,476,692\n- Policy Value less Surrender Charge: 1,476,692\n- Guaranteed Minimum Surrender Value: 370,538\n- Cash Value: 1,476,692\n- Death Benefit: 10,000,000\n\nThe instruction says \"Surrender Value column\" - I think this refers to \"Policy Value less Surrender Charge (US$)\" as it's the most directly named \"surrender\" column that isn't \"Guaranteed Minimum.\"\n\nActually, I think \"Surrender Value\" most likely refers to the \"Policy Value less Surrender Charge\" column, as that's the value you actually receive when you surrender the policy.\n\nFor Year 25, that value is 1,476,692.\n\nThe format should be like the example: 1,476,692",
+          "startedAt": "2026-09-29T11:20:10.652Z",
+          "seconds": 89,
+          "inputTokens": 4965,
+          "outputTokens": 1058,
+          "contextLimit": 32768,
+          "answer": "1,476,692",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\n## Supplementary Policy Illustration – Must be read in conjunction with the Main Illustration\n\n## Current crediting rate illustration\n\nThis is an illustration of the illustrated Policy Values, Cash Values and Death Benefits under the current illustrated basis. The illustrations are based on the assumption that the Planned Premiums will be paid on time. It is important for you to understand that the actual figures, values and benefits could be more or less favorable depending on the actual charges and crediting rates applied to your policy as compared to the charges and crediting rates illustrated in this document.\n\n<table border=1><tr><td colspan=\"5\"></td><td colspan=\"5\">Interest Rate for the Guaranteed Interest Rate Lock (Apply to the General Account &amp; First Net Premium Only): 4.40%</td></tr><tr><td rowspan=\"2\">End of Policy Year/Age</td><td rowspan=\"2\">Total Planned Premiums Paid (US$)</td><td rowspan=\"2\">Total Unscheduled Premium Paid (US$)</td><td rowspan=\"2\">Total Partial Surrender (US$)</td><td rowspan=\"2\">Total Premiums Paid To-date (US$)</td><td colspan=\"5\">Illustrated values at the current General Account general crediting rate, current assumed Index Account crediting rate and current charges$^{1,2,3,4}$</td></tr><tr><td>Policy Value (US$)</td><td>Policy Value less Surrender Charge (US$)</td><td>Guaranteed Minimum Surrender Value$^{2}$ (US$)</td><td>Cash Value$^{1,2}$ (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/31</td><td>87,131</td><td>0</td><td>0</td><td>87,131</td><td>55,256</td><td>0</td><td>0</td><td>0</td><td>10,000,000</td></tr><tr><td>2/32</td><td>174,262</td><td>0</td><td>0</td><td>174,262</td><td>114,949</td><td>17,242</td><td>15,911</td><td>17,242</td><td>10,000,000</td></tr><tr><td>3/33</td><td>261,393</td><td>0</td><td>0</td><td>261,393</td><td>179,207</td><td>35,841</td><td>32,334</td><td>35,841</td><td>10,000,000</td></tr><tr><td>4/34</td><td>348,524</td><td>0</td><td>0</td><td>348,524</td><td>248,041</td><td>111,618</td><td>98,413</td><td>111,618</td><td>10,000,000</td></tr><tr><td>5/35</td><td>435,655</td><td>0</td><td>0</td><td>435,655</td><td>321,592</td><td>192,955</td><td>166,206</td><td>192,955</td><td>10,000,000</td></tr><tr><td>6/36</td><td>522,786</td><td>0</td><td>0</td><td>522,786</td><td>400,480</td><td>280,336</td><td>235,852</td><td>280,336</td><td>10,000,000</td></tr><tr><td>7/37</td><td>609,917</td><td>0</td><td>0</td><td>609,917</td><td>484,301</td><td>369,037</td><td>303,100</td><td>369,037</td><td>10,000,000</td></tr><tr><td>8/38</td><td>697,048</td><td>0</td><td>0</td><td>697,048</td><td>573,066</td><td>472,780</td><td>378,859</td><td>472,780</td><td>10,000,000</td></tr><tr><td>9/39</td><td>784,179</td><td>0</td><td>0</td><td>784,179</td><td>667,279</td><td>587,205</td><td>458,899</td><td>587,205</td><td>10,000,000</td></tr><tr><td>10/40</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>767,152</td><td>721,123</td><td>549,329</td><td>721,123</td><td>10,000,000</td></tr><tr><td>11/41</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>786,462</td><td>745,566</td><td>533,338</td><td>745,566</td><td>10,000,000</td></tr><tr><td>12/42</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>806,338</td><td>770,859</td><td>515,799</td><td>770,859</td><td>10,000,000</td></tr><tr><td>13/43</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>826,822</td><td>797,057</td><td>496,651</td><td>797,057</td><td>10,000,000</td></tr><tr><td>14/44</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>847,962</td><td>824,220</td><td>475,833</td><td>824,220</td><td>10,000,000</td></tr><tr><td>15/45</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>869,650</td><td>852,257</td><td>453,125</td><td>852,257</td><td>10,000,000</td></tr><tr><td>16/46</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>916,711</td><td>916,711</td><td>457,935</td><td>916,711</td><td>10,000,000</td></tr><tr><td>17/47</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>966,016</td><td>966,016</td><td>452,274</td><td>966,016</td><td>10,000,000</td></tr><tr><td>18/48</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,017,734</td><td>1,017,734</td><td>445,362</td><td>1,017,734</td><td>10,000,000</td></tr><tr><td>19/49</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,072,597</td><td>1,072,597</td><td>437,740</td><td>1,072,597</td><td>10,000,000</td></tr><tr><td>20/50</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,130,621</td><td>1,130,621</td><td>429,166</td><td>1,130,621</td><td>10,000,000</td></tr><tr><td>21/51</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,192,632</td><td>1,192,632</td><td>420,243</td><td>1,192,632</td><td>10,000,000</td></tr><tr><td>22/52</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,258,308</td><td>1,258,308</td><td>410,316</td><td>1,258,308</td><td>10,000,000</td></tr><tr><td>23/53</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,327,912</td><td>1,327,912</td><td>399,350</td><td>1,327,912</td><td>10,000,000</td></tr><tr><td>24/54</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,400,701</td><td>1,400,701</td><td>386,195</td><td>1,400,701</td><td>10,000,000</td></tr><tr><td>25/55</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,476,692</td><td>1,476,692</td><td>370,538</td><td>1,476,692</td><td>10,000,000</td></tr><tr><td>26/56</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,555,916</td><td>1,555,916</td><td>352,053</td><td>1,555,916</td><td>10,000,000</td></tr><tr><td>27/57</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,638,414</td><td>1,638,414</td><td>330,407</td><td>1,638,414</td><td>10,000,000</td></tr><tr><td>28/58</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,724,238</td><td>1,724,238</td><td>305,253</td><td>1,724,238</td><td>10,000,000</td></tr><tr><td>29/59</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,813,340</td><td>1,813,340</td><td>276,100</td><td>1,813,340</td><td>10,000,000</td></tr><tr><td>30/60</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>1,905,682</td><td>1,905,682</td><td>242,436</td><td>1,905,682</td><td>10,000,000</td></tr><tr><td>31/61</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,001,237</td><td>2,001,237</td><td>203,732</td><td>2,001,237</td><td>10,000,000</td></tr><tr><td>32/62</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,099,995</td><td>2,099,995</td><td>159,431</td><td>2,099,995</td><td>10,000,000</td></tr><tr><td>33/63</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,201,848</td><td>2,201,848</td><td>108,817</td><td>2,201,848</td><td>10,000,000</td></tr><tr><td>34/64</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,306,811</td><td>2,306,811</td><td>51,274</td><td>2,306,811</td><td>10,000,000</td></tr><tr><td>35/65</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,414,810</td><td>2,414,810</td><td>0</td><td>2,414,810</td><td>10,000,000</td></tr><tr><td>36/66</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>2,525,895</td><td>2,525,895</td><td>0</td><td>2,525,895</td><td>10,000,000</td></tr></table>\n\nPresented by : HSBC\n\nPage 13 of 22\n\nDate : 19/03/2026\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n*Projected Breakeven (End of Year) = 16\n*Projected surrender value in year 15 = 453125\n*Projected surrender value in year 20 = 1130621\n\nInstruction:\nSupplementary Policy Illustration  - >\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium Only): 4.40% -> \nSurrender Value column -> Year 25\n\nExample of the form of the answer, not the answer:\n123,456"
+        }
+      ]
+    },
+    {
+      "name": "Guaranteed cover period",
+      "pages": [
+        13
+      ],
+      "instruction": "Supplementary Policy Illustration  ->\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium only): 4.40%   ->\nThe year whereby it last pay out death benefit.",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "33"
+      },
+      "value": "33",
+      "number": 33,
+      "foundOnPages": [
+        13
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n*Projected Breakeven (End of Year) = 16\n*Projected surrender value in year 15 = 453125\n*Projected surrender value in year 20 = 1130621\n*Projected surrender value in year 25 = 1476692",
+      "calls": [
+        {
+          "pages": [
+            13
+          ],
+          "thinking": "The instruction asks me to find \"The year whereby it last pay out death benefit.\"\n\nLooking at the Death Benefit column in the table:\n- Year 1/31: 10,000,000\n- Year 2/32: 10,000,000\n- ...\n- Year 33/63: 10,000,000\n- Year 34/64: 0\n- Year 35/65: 0\n- Year 36/66: 0\n\nThe last year where the death benefit is paid out (non-zero) is year 33/63.\n\nThe instruction says to find \"The year whereby it last pay out death benefit.\" The last year with a non-zero death benefit is year 33 (age 63).\n\nThe example shows the form as just a number: \"10\"\n\nSo the answer should be 33.",
+          "startedAt": "2026-09-29T11:22:09.323Z",
+          "seconds": 41,
+          "inputTokens": 4722,
+          "outputTokens": 220,
+          "contextLimit": 32768,
+          "answer": "33",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nHSBC Life (Singapore) Pte. Ltd. (Reg. No. 199903512M)\n\n10 Marina Boulevard, Marina Bay Financial Centre Tower 2 Level 48-01, Singapore 018983. www.hsbclife.com.sg\n\nCustomer Care Hotline: +65 6880 4888 Email: e-surance@hsbc.com.sg\n\nPrepared for\n\nP26.01\n\nApplicant : Client\n\nRepresentative : HSBC\n\nSignature :\n\nSignature :\n\n## Supplementary Policy Illustration – Must be read in conjunction with the Main Illustration\n\n## Guaranteed crediting rate illustration\n\nThis is an illustration of the illustrated Policy Values, Cash Values and Death Benefits under the guaranteed basis. The illustrations are based on the assumption that the Planned Premiums will be paid on time. It is important for you to understand that the actual figures, values and benefits could be more or less favorable depending on the actual charges and crediting rates applied to your policy as compared to the charges and crediting rates illustrated in this document.\n\n<table border=1><tr><td colspan=\"5\"></td><td colspan=\"5\">Interest Rate for the Guaranteed Interest Rate Lock (Apply to the General Account &amp; First Net Premium only): 4.40%</td></tr><tr><td rowspan=\"2\">End of Policy Year/Age</td><td rowspan=\"2\">Total Planned Premiums Paid (US$)</td><td rowspan=\"2\">Total Unscheduled Premium Paid (US$)</td><td rowspan=\"2\">Total Partial Surrender (US$)</td><td rowspan=\"2\">Total Premiums Paid To-date (US$)</td><td colspan=\"5\">Illustrated values at the guaranteed minimum crediting rate for General Account, floored crediting rate for Index Account and maximum charges$^{1,2,3,4}$</td></tr><tr><td>Policy Value (US$)</td><td>Policy Value less Surrender Charge (US$)</td><td>Guaranteed Minimum Surrender Value$^{2}$(US$)</td><td>Cash Value$^{1,2}$(US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/31</td><td>87,131</td><td>0</td><td>0</td><td>87,131</td><td>50,321</td><td>0</td><td>0</td><td>0</td><td>10,000,000</td></tr><tr><td>2/32</td><td>174,262</td><td>0</td><td>0</td><td>174,262</td><td>101,362</td><td>15,204</td><td>15,746</td><td>15,746</td><td>10,000,000</td></tr><tr><td>3/33</td><td>261,393</td><td>0</td><td>0</td><td>261,393</td><td>152,944</td><td>30,589</td><td>31,994</td><td>31,994</td><td>10,000,000</td></tr><tr><td>4/34</td><td>348,524</td><td>0</td><td>0</td><td>348,524</td><td>204,816</td><td>92,167</td><td>97,364</td><td>97,364</td><td>10,000,000</td></tr><tr><td>5/35</td><td>435,655</td><td>0</td><td>0</td><td>435,655</td><td>256,800</td><td>154,080</td><td>164,405</td><td>164,405</td><td>10,000,000</td></tr><tr><td>6/36</td><td>522,786</td><td>0</td><td>0</td><td>522,786</td><td>309,160</td><td>216,412</td><td>233,239</td><td>233,239</td><td>10,000,000</td></tr><tr><td>7/37</td><td>609,917</td><td>0</td><td>0</td><td>609,917</td><td>361,205</td><td>275,238</td><td>299,666</td><td>299,666</td><td>10,000,000</td></tr><tr><td>8/38</td><td>697,048</td><td>0</td><td>0</td><td>697,048</td><td>412,588</td><td>340,385</td><td>374,440</td><td>374,440</td><td>10,000,000</td></tr><tr><td>9/39</td><td>784,179</td><td>0</td><td>0</td><td>784,179</td><td>463,491</td><td>407,872</td><td>453,384</td><td>453,384</td><td>10,000,000</td></tr><tr><td>10/40</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>513,744</td><td>482,919</td><td>542,507</td><td>542,507</td><td>10,000,000</td></tr><tr><td>11/41</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>481,363</td><td>456,332</td><td>525,438</td><td>525,438</td><td>10,000,000</td></tr><tr><td>12/42</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>447,957</td><td>428,247</td><td>506,702</td><td>506,702</td><td>10,000,000</td></tr><tr><td>13/43</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>413,515</td><td>398,628</td><td>486,234</td><td>486,234</td><td>10,000,000</td></tr><tr><td>14/44</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>378,025</td><td>367,440</td><td>463,967</td><td>463,967</td><td>10,000,000</td></tr><tr><td>15/45</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>341,298</td><td>334,472</td><td>439,659</td><td>439,659</td><td>10,000,000</td></tr><tr><td>16/46</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>327,379</td><td>327,379</td><td>442,528</td><td>442,528</td><td>10,000,000</td></tr><tr><td>17/47</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>312,142</td><td>312,142</td><td>435,049</td><td>435,049</td><td>10,000,000</td></tr><tr><td>18/48</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>295,576</td><td>295,576</td><td>426,164</td><td>426,164</td><td>10,000,000</td></tr><tr><td>19/49</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>278,303</td><td>278,303</td><td>416,467</td><td>416,467</td><td>10,000,000</td></tr><tr><td>20/50</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>260,064</td><td>260,064</td><td>405,690</td><td>405,690</td><td>10,000,000</td></tr><tr><td>21/51</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>241,546</td><td>241,546</td><td>394,498</td><td>394,498</td><td>10,000,000</td></tr><tr><td>22/52</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>222,028</td><td>222,028</td><td>382,166</td><td>382,166</td><td>10,000,000</td></tr><tr><td>23/53</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>201,486</td><td>201,486</td><td>368,655</td><td>368,655</td><td>10,000,000</td></tr><tr><td>24/54</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>178,661</td><td>178,661</td><td>352,695</td><td>352,695</td><td>10,000,000</td></tr><tr><td>25/55</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>153,238</td><td>153,238</td><td>333,936</td><td>333,936</td><td>10,000,000</td></tr><tr><td>26/56</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>124,899</td><td>124,899</td><td>312,017</td><td>312,017</td><td>10,000,000</td></tr><tr><td>27/57</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>93,317</td><td>93,317</td><td>286,566</td><td>286,566</td><td>10,000,000</td></tr><tr><td>28/58</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>58,158</td><td>58,158</td><td>257,193</td><td>257,193</td><td>10,000,000</td></tr><tr><td>29/59</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>18,932</td><td>18,932</td><td>223,352</td><td>223,352</td><td>10,000,000</td></tr><tr><td>30/60</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>12</td><td>12</td><td>184,471</td><td>184,471</td><td>10,000,000</td></tr><tr><td>31/61</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>0</td><td>0</td><td>139,955</td><td>139,955</td><td>10,000,000</td></tr><tr><td>32/62</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>0</td><td>0</td><td>89,179</td><td>89,179</td><td>10,000,000</td></tr><tr><td>33/63</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>0</td><td>0</td><td>31,339</td><td>31,339</td><td>10,000,000</td></tr><tr><td>34/64</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>35/65</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>36/66</td><td>871,310</td><td>0</td><td>0</td><td>871,310</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr></table>\n\nPresented by : HSBC\n\nPage 10 of 22\n\nDate : 19/03/2026\n\nE. & OE\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Multi-pay 10 Pay\nCover = 10000000\nYearly Premium = 87131\nTotal Premium = 871310\nDay 1 Cash Value = 0\nMultiples of premium paid = 11.48\n*Projected Breakeven (End of Year) = 16\n*Projected surrender value in year 15 = 453125\n*Projected surrender value in year 20 = 1130621\n*Projected surrender value in year 25 = 1476692\n\nInstruction:\nSupplementary Policy Illustration  ->\nInterest Rate for the Guaranteed Interest Rate Lock\n(Apply to the General Account & First Net Premium only): 4.40%   ->\nThe year whereby it last pay out death benefit.\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    }
+  ]
+}

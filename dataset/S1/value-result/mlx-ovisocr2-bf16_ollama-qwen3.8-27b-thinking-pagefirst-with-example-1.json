@@ -1,0 +1,581 @@
+{
+  "run": 1,
+  "ocrSetting": {
+    "name": "mlx-ovisocr2-bf16",
+    "model": "ATH-MaaS/OvisOCR2",
+    "dpi": 200,
+    "prompt": "\nExtract all readable content from the image in natural human reading order and output the result as a single Markdown document. For charts or images, represent them using an HTML image tag: <img src=\"images/bbox_{left}_{top}_{right}_{bottom}.jpg\" />, where left, top, right, bottom are bounding box coordinates scaled to [0, 1000). Format formulas as LaTeX. Format tables as HTML: <table>...</table>. Transcribe all other text as standard Markdown. Preserve the original text without translation or paraphrasing.",
+    "options": {
+      "temperature": 0,
+      "top_p": 1,
+      "top_k": 0,
+      "repetition_penalty": 1,
+      "seed": 1,
+      "max_tokens": 16384
+    }
+  },
+  "ocrRunner": {
+    "name": "mlx-vlm",
+    "version": "0.7.1"
+  },
+  "text": "mlx-ovisocr2-bf16-1",
+  "valueSetting": {
+    "name": "ollama-qwen3.8-27b-thinking-pagefirst-with-example",
+    "model": "qwen3.8:27b",
+    "think": true,
+    "readContext": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.",
+    "workOutContext": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.",
+    "options": {
+      "temperature": 1,
+      "top_p": 0.95,
+      "top_k": 20,
+      "min_p": 0,
+      "seed": 1,
+      "num_ctx": 32768,
+      "num_predict": 8192
+    }
+  },
+  "valueRunner": {
+    "name": "ollama",
+    "version": "0.34.2"
+  },
+  "startedAt": "2026-09-29T11:08:56.184Z",
+  "seconds": 284,
+  "time": {
+    "drawPages": {
+      "pages": 65,
+      "seconds": 12
+    },
+    "readPages": {
+      "pages": [
+        1,
+        5,
+        8,
+        10
+      ],
+      "seconds": 58
+    },
+    "readValues": {
+      "questions": 12,
+      "seconds": 227,
+      "perQuestion": [
+        {
+          "figure": "Currency",
+          "pages": [
+            1
+          ],
+          "seconds": 10
+        },
+        {
+          "figure": "Premium Term",
+          "pages": [
+            1
+          ],
+          "seconds": 10
+        },
+        {
+          "figure": "Cover",
+          "pages": [
+            5
+          ],
+          "seconds": 15
+        },
+        {
+          "figure": "Yearly Premium",
+          "pages": [
+            5
+          ],
+          "seconds": 11
+        },
+        {
+          "figure": "Total Premium",
+          "pages": [],
+          "seconds": 9
+        },
+        {
+          "figure": "Day 1 Cash Value",
+          "pages": [
+            10
+          ],
+          "seconds": 22
+        },
+        {
+          "figure": "Multiples of premium paid",
+          "pages": [],
+          "seconds": 30
+        },
+        {
+          "figure": "*Projected Breakeven (End of Year)",
+          "pages": [
+            8
+          ],
+          "seconds": 41
+        },
+        {
+          "figure": "*Projected surrender value in year 15",
+          "pages": [
+            8
+          ],
+          "seconds": 16
+        },
+        {
+          "figure": "*Projected surrender value in year 20",
+          "pages": [
+            8
+          ],
+          "seconds": 22
+        },
+        {
+          "figure": "*Projected surrender value in year 25",
+          "pages": [
+            8
+          ],
+          "seconds": 23
+        },
+        {
+          "figure": "Guaranteed cover period",
+          "pages": [
+            8
+          ],
+          "seconds": 18
+        }
+      ]
+    },
+    "total": 297
+  },
+  "results": [
+    {
+      "name": "Currency",
+      "pages": [
+        1
+      ],
+      "instruction": "Policy Currency  (Extracted from PDF or Admin panel)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "string",
+        "example": "US Dollars"
+      },
+      "expected": {
+        "type": "string",
+        "value": "US Dollars"
+      },
+      "value": "US Dollars",
+      "foundOnPages": [
+        1
+      ],
+      "valuesGiven": "",
+      "calls": [
+        {
+          "pages": [
+            1
+          ],
+          "thinking": "The user wants me to find the \"Policy Currency\" value from the page text.\n\nLooking at the table in the text, I can see:\n\"Policy Currency\" | \"US Dollars\"\n\nThe example shows the form should be \"US Dollars\" style.\n\nThe value found is \"US Dollars\".",
+          "startedAt": "2026-09-29T11:09:03.185Z",
+          "seconds": 10,
+          "inputTokens": 997,
+          "outputTokens": 69,
+          "contextLimit": 32768,
+          "answer": "US Dollars",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nThis Cover Page is an important document.\n\n- It highlights the key features and risks of this product and should be read together with the Policy Illustration, Product Summary and Bundled Product Disclosure Document, if it applies.\n- It is important to read the Policy Illustration, Product Summary and Bundled Product Disclosure Document, if it applies, before deciding whether to purchase this product. If you do not have any of these documents, please do not hesitate to ask your representative of either Prudential Singapore or a distributor duly appointed by Prudential Singapore for a copy.\n- You should not purchase this product if you do not understand or are not comfortable with the risks of this product.\n\nPRUApex Legacy Index\n\n<table border=\"1\"><tr><td>Product Type</td><td>Indexed Universal Life Plan</td></tr><tr><td>Premium Payment Term</td><td>Single Premium</td></tr><tr><td>Policy Term</td><td>Whole Life</td></tr><tr><td>New Money Crediting Rate (Fixed Account)</td><td>4.20%</td></tr><tr><td>Current Crediting Rate (Fixed Account)</td><td>4.10%</td></tr><tr><td>Current Assumed Crediting Rate (Index Account)</td><td>6.60% for S&amp;P 500 Index</td></tr><tr><td>Guaranteed Minimum Crediting Rate</td><td>2.00% for Fixed Account0.00% for Index Account</td></tr><tr><td>Name of Insurer</td><td>Prudential Assurance Company Singapore (Pte) Limited</td></tr><tr><td>Policy Currency</td><td>US Dollars</td></tr></table>\n\nWHAT ARE YOU PURCHASING?\n\nThis is a non-participating single premium universal life plan. It is a product which offers you insurance coverage and also invests part of your premiums in the insurer's Non-participating Fund. It comprises guaranteed and non-guaranteed benefits and may not be suitable for you if you want all benefits to be guaranteed.\n\nWHAT ARE THE KEY RISKS OF A UNIVERSAL LIFE PLAN?\n\nBy purchasing a universal life plan, your premiums will be pooled together and invested with premiums from other policyholders in the Non-participating Fund managed by Prudential Assurance Company Singapore (Pte) Limited. As a policyholder, the key risks commonly associated with universal life plan are:\n\n<table border=\"1\"><tr><td>Investment Risks</td><td>Lower than expected investment returns earned by the fund</td></tr><tr><td>Insurance Risks</td><td>Higher than expected claims made by policyholders (e.g. due to death or other terminations)</td></tr><tr><td>Expense Risks</td><td>Higher than expected expenses paid for managing the Non-participating Fund</td></tr><tr><td>Currency Risks</td><td>If your home currency is not denominated in US Dollars, the payments you make or receive may be worth less over time when expressed in your home currency</td></tr></table>\n\nThese risks can affect the crediting rate to be declared to and the charges to be taken off from the policy, which in turn affect the account value.\n\nYour policy will lapse if the account value is insufficient to pay for the charges. In order to keep your policy in force, you may need to pay additional premium(s).\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 1 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nCOVER PAGE FOR NON-PARTICIPATING UNIVERSAL LIFE PLAN\n\nValues found before:\n\n\nInstruction:\nPolicy Currency  (Extracted from PDF or Admin panel)\n\nExample of the form of the answer, not the answer:\nUS Dollars"
+        }
+      ]
+    },
+    {
+      "name": "Premium Term",
+      "pages": [
+        1
+      ],
+      "instruction": "Premium Payment Term",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "string",
+        "example": "Single Premium"
+      },
+      "expected": {
+        "type": "string",
+        "value": "Single Premium"
+      },
+      "value": "Single Premium",
+      "foundOnPages": [
+        1
+      ],
+      "valuesGiven": "Currency = US Dollars",
+      "calls": [
+        {
+          "pages": [
+            1
+          ],
+          "thinking": "The instruction asks for the \"Premium Payment Term\" value from the page. Looking at the table in the text, I can see:\n\n<tr><td>Premium Payment Term</td><td>Single Premium</td></tr>\n\nSo the value is \"Single Premium\". The example shows the form \"Single Premium\" which matches what I found.",
+          "startedAt": "2026-09-29T11:09:12.775Z",
+          "seconds": 10,
+          "inputTokens": 993,
+          "outputTokens": 77,
+          "contextLimit": 32768,
+          "answer": "Single Premium",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nThis Cover Page is an important document.\n\n- It highlights the key features and risks of this product and should be read together with the Policy Illustration, Product Summary and Bundled Product Disclosure Document, if it applies.\n- It is important to read the Policy Illustration, Product Summary and Bundled Product Disclosure Document, if it applies, before deciding whether to purchase this product. If you do not have any of these documents, please do not hesitate to ask your representative of either Prudential Singapore or a distributor duly appointed by Prudential Singapore for a copy.\n- You should not purchase this product if you do not understand or are not comfortable with the risks of this product.\n\nPRUApex Legacy Index\n\n<table border=\"1\"><tr><td>Product Type</td><td>Indexed Universal Life Plan</td></tr><tr><td>Premium Payment Term</td><td>Single Premium</td></tr><tr><td>Policy Term</td><td>Whole Life</td></tr><tr><td>New Money Crediting Rate (Fixed Account)</td><td>4.20%</td></tr><tr><td>Current Crediting Rate (Fixed Account)</td><td>4.10%</td></tr><tr><td>Current Assumed Crediting Rate (Index Account)</td><td>6.60% for S&amp;P 500 Index</td></tr><tr><td>Guaranteed Minimum Crediting Rate</td><td>2.00% for Fixed Account0.00% for Index Account</td></tr><tr><td>Name of Insurer</td><td>Prudential Assurance Company Singapore (Pte) Limited</td></tr><tr><td>Policy Currency</td><td>US Dollars</td></tr></table>\n\nWHAT ARE YOU PURCHASING?\n\nThis is a non-participating single premium universal life plan. It is a product which offers you insurance coverage and also invests part of your premiums in the insurer's Non-participating Fund. It comprises guaranteed and non-guaranteed benefits and may not be suitable for you if you want all benefits to be guaranteed.\n\nWHAT ARE THE KEY RISKS OF A UNIVERSAL LIFE PLAN?\n\nBy purchasing a universal life plan, your premiums will be pooled together and invested with premiums from other policyholders in the Non-participating Fund managed by Prudential Assurance Company Singapore (Pte) Limited. As a policyholder, the key risks commonly associated with universal life plan are:\n\n<table border=\"1\"><tr><td>Investment Risks</td><td>Lower than expected investment returns earned by the fund</td></tr><tr><td>Insurance Risks</td><td>Higher than expected claims made by policyholders (e.g. due to death or other terminations)</td></tr><tr><td>Expense Risks</td><td>Higher than expected expenses paid for managing the Non-participating Fund</td></tr><tr><td>Currency Risks</td><td>If your home currency is not denominated in US Dollars, the payments you make or receive may be worth less over time when expressed in your home currency</td></tr></table>\n\nThese risks can affect the crediting rate to be declared to and the charges to be taken off from the policy, which in turn affect the account value.\n\nYour policy will lapse if the account value is insufficient to pay for the charges. In order to keep your policy in force, you may need to pay additional premium(s).\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 1 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nCOVER PAGE FOR NON-PARTICIPATING UNIVERSAL LIFE PLAN\n\nValues found before:\nCurrency = US Dollars\n\nInstruction:\nPremium Payment Term\n\nExample of the form of the answer, not the answer:\nSingle Premium"
+        }
+      ]
+    },
+    {
+      "name": "Cover",
+      "pages": [
+        5
+      ],
+      "instruction": "Sum Assured",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "12,345,678"
+      },
+      "expected": {
+        "type": "number",
+        "value": "10,000,000"
+      },
+      "value": "10,000,000",
+      "number": 10000000,
+      "foundOnPages": [
+        5
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium",
+      "calls": [
+        {
+          "pages": [
+            5
+          ],
+          "thinking": "The user wants me to find the \"Sum Assured\" value from the page text.\n\nLooking at the table:\n- PRUApex Legacy Index: Sum Assured (US$) = 10,000,000\n- Accelerated Terminal Illness: Sum Assured (US$) = 5,500,000\n\nThe main Sum Assured for the product is 10,000,000. The example format shows \"12,345,678\" which is a number with commas.\n\nThe instruction asks for \"Sum Assured\" - the primary one is 10,000,000.",
+          "startedAt": "2026-09-29T11:09:29.244Z",
+          "seconds": 15,
+          "inputTokens": 974,
+          "outputTokens": 164,
+          "contextLimit": 32768,
+          "answer": "10,000,000",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nPRUApex Legacy Index\n\nSpecially prepared for : Client\n\nAge next birthday : 31 Male / Non Smoker\n\nOccupation : Director (admin only)\n\n(Class 1)\n\nCountry of Residence: Singapore\n\n(Region A)\n\nLife Status: Standard\n\nAutomatic Premium Spread: Yes\n\nNet Premium Allocation: Option 1: 0% Fixed Account; 100% Index Account\n\nIndex Account Allocation: S&P 500 Index = 100%\n\nPremium Option: Minimum Premium Option\n\nSeries: 1\n\n<table border=1><tr><td></td><td>Sum Assured (US$)</td><td>Policy Term (Years)</td><td>Single Premium (US$)</td></tr><tr><td>PRUApex Legacy Index</td><td>10,000,000</td><td>Whole Life</td><td>708,740.00</td></tr><tr><td>Accelerated Terminal Illness</td><td>5,500,000</td><td>Whole Life</td><td></td></tr></table>\n\nTotal Single Premium : US$708,740.00\n\n<table border=1><tr><td></td><td>Net Premium Allocation</td><td>Guaranteed Minimum Crediting Rate</td><td>Current Crediting Rate</td></tr><tr><td>Fixed Account</td><td>0%</td><td>2.00%</td><td>4.10%</td></tr><tr><td>Index Account</td><td>100%</td><td></td><td></td></tr><tr><td>Index Account</td><td>Index Account Allocation</td><td>Average Cap Rate</td><td>Guaranteed Minimum Crediting Rate</td><td>Current Assumed Crediting Rate</td></tr><tr><td>S&amp;P 500 Index</td><td>100%</td><td>9.00%</td><td>0.00%</td><td>6.60%</td></tr><tr><td colspan=\"4\">Current Assumed Index Account Crediting Rate</td><td>6.60%</td></tr></table>\n\nThe premium payment received after deducting for charges (Net Premium) goes into the Fixed Account and Index Account according to the selected Net Premium Allocation above.\n\n## Premium Option\n\nMinimum Premium Option is the Single Premium required such that the Account Value is projected to equal the sum assured at the life assured's age 100, based on the Current Crediting Rate for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a., and current charges prevailing at the date of this illustration.\n\nHigher Premium Option is the Single Premium amount greater than the Minimum Premium Option amount such that the Account Value is projected to equal the sum assured earlier than the life assured's age of 100 years, based on the Current Crediting Rate for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a., and the current charges prevailing at the date of this illustration; thereby improving projected sustainability of the policy.\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 5 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\n\nInstruction:\nSum Assured\n\nExample of the form of the answer, not the answer:\n12,345,678"
+        }
+      ]
+    },
+    {
+      "name": "Yearly Premium",
+      "pages": [
+        5
+      ],
+      "instruction": "Total Single Premium (Single Pay)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "US$123,456.78"
+      },
+      "expected": {
+        "type": "number",
+        "value": "US$708,740.00"
+      },
+      "value": "US$708,740.00",
+      "number": 708740,
+      "foundOnPages": [
+        5
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000",
+      "calls": [
+        {
+          "pages": [
+            5
+          ],
+          "thinking": "The instruction asks for \"Total Single Premium (Single Pay)\". Looking at the text, I can see:\n\n\"Total Single Premium : US$708,740.00\"\n\nThe example format is: US$123,456.78\n\nSo the answer should be: US$708,740.00",
+          "startedAt": "2026-09-29T11:09:43.955Z",
+          "seconds": 11,
+          "inputTokens": 992,
+          "outputTokens": 93,
+          "contextLimit": 32768,
+          "answer": "US$708,740.00",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nPRUApex Legacy Index\n\nSpecially prepared for : Client\n\nAge next birthday : 31 Male / Non Smoker\n\nOccupation : Director (admin only)\n\n(Class 1)\n\nCountry of Residence: Singapore\n\n(Region A)\n\nLife Status: Standard\n\nAutomatic Premium Spread: Yes\n\nNet Premium Allocation: Option 1: 0% Fixed Account; 100% Index Account\n\nIndex Account Allocation: S&P 500 Index = 100%\n\nPremium Option: Minimum Premium Option\n\nSeries: 1\n\n<table border=1><tr><td></td><td>Sum Assured (US$)</td><td>Policy Term (Years)</td><td>Single Premium (US$)</td></tr><tr><td>PRUApex Legacy Index</td><td>10,000,000</td><td>Whole Life</td><td>708,740.00</td></tr><tr><td>Accelerated Terminal Illness</td><td>5,500,000</td><td>Whole Life</td><td></td></tr></table>\n\nTotal Single Premium : US$708,740.00\n\n<table border=1><tr><td></td><td>Net Premium Allocation</td><td>Guaranteed Minimum Crediting Rate</td><td>Current Crediting Rate</td></tr><tr><td>Fixed Account</td><td>0%</td><td>2.00%</td><td>4.10%</td></tr><tr><td>Index Account</td><td>100%</td><td></td><td></td></tr><tr><td>Index Account</td><td>Index Account Allocation</td><td>Average Cap Rate</td><td>Guaranteed Minimum Crediting Rate</td><td>Current Assumed Crediting Rate</td></tr><tr><td>S&amp;P 500 Index</td><td>100%</td><td>9.00%</td><td>0.00%</td><td>6.60%</td></tr><tr><td colspan=\"4\">Current Assumed Index Account Crediting Rate</td><td>6.60%</td></tr></table>\n\nThe premium payment received after deducting for charges (Net Premium) goes into the Fixed Account and Index Account according to the selected Net Premium Allocation above.\n\n## Premium Option\n\nMinimum Premium Option is the Single Premium required such that the Account Value is projected to equal the sum assured at the life assured's age 100, based on the Current Crediting Rate for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a., and current charges prevailing at the date of this illustration.\n\nHigher Premium Option is the Single Premium amount greater than the Minimum Premium Option amount such that the Account Value is projected to equal the sum assured earlier than the life assured's age of 100 years, based on the Current Crediting Rate for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a., and the current charges prevailing at the date of this illustration; thereby improving projected sustainability of the policy.\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 5 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\n\nInstruction:\nTotal Single Premium (Single Pay)\n\nExample of the form of the answer, not the answer:\nUS$123,456.78"
+        }
+      ]
+    },
+    {
+      "name": "Total Premium",
+      "instruction": "Yearly Premium * Premium Term. Premium Term \"Single Premium\" means 1, anything else means 0.",
+      "kind": "WorkedOut",
+      "expecting": {
+        "type": "number",
+        "example": "123,456.78"
+      },
+      "expected": {
+        "type": "number",
+        "value": "708,740.00"
+      },
+      "value": "708,740.00",
+      "number": 708740,
+      "foundOnPages": null,
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740",
+      "calls": [
+        {
+          "pages": [],
+          "thinking": "The instruction says to calculate: Yearly Premium * Premium Term.\n\nPremium Term = \"Single Premium\" means 1, anything else means 0.\n\nSo Premium Term = 1.\n\nYearly Premium = 708740.\n\nCalculation: 708740 * 1 = 708740.\n\nThe example form shows: 123,456.78 (comma separated, two decimal places)\n\nSo the answer should be: 708,740.00",
+          "startedAt": "2026-09-29T11:09:55.052Z",
+          "seconds": 9,
+          "inputTokens": 193,
+          "outputTokens": 132,
+          "contextLimit": 32768,
+          "answer": "708,740.00",
+          "prompt": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\n\nInstruction:\nYearly Premium * Premium Term. Premium Term \"Single Premium\" means 1, anything else means 0.\n\nExample of the form of the answer, not the answer:\n123,456.78"
+        }
+      ]
+    },
+    {
+      "name": "Day 1 Cash Value",
+      "pages": [
+        10
+      ],
+      "instruction": "Day 1 Surrender Value based on Illustration B is",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "US$123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "US$547,716"
+      },
+      "value": "US$547,716",
+      "number": 547716,
+      "foundOnPages": [
+        10
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740",
+      "calls": [
+        {
+          "pages": [
+            10
+          ],
+          "thinking": "The user is asking for the \"Day 1 Surrender Value based on Illustration B\" from the page.\n\nLooking at the text, I can find:\n\"Day 1 Surrender Value based on Illustration B is US$547,716.\"\n\nThe example format shows: US$123,456\n\nSo the answer should be: US$547,716",
+          "startedAt": "2026-09-29T11:10:24.784Z",
+          "seconds": 22,
+          "inputTokens": 3027,
+          "outputTokens": 101,
+          "contextLimit": 32768,
+          "answer": "US$547,716",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\"></td><td colspan=\"3\">ILLUSTRATION A</td><td colspan=\"3\">ILLUSTRATION B</td></tr><tr><td colspan=\"3\">Illustrated values at the Guaranteed Minimum Crediting Rate* [2.00% p.a. for Fixed Account and 0.00% p.a. for Index Account] and maximum charges</td><td colspan=\"3\">Illustrated values at Current Crediting Rate* for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a. and current charges</td></tr><tr><td>End of Policy Year / Age</td><td>Total Premiums Paid To-date (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>63/94</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>7,725,149</td><td>7,725,149</td><td>10,000,000</td></tr><tr><td>64/95</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>7,983,327</td><td>7,983,327</td><td>10,000,000</td></tr><tr><td>65/96</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>8,272,353</td><td>8,272,353</td><td>10,000,000</td></tr><tr><td>66/97</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>8,603,446</td><td>8,603,446</td><td>10,000,000</td></tr><tr><td>67/98</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>8,980,734</td><td>8,980,734</td><td>10,000,000</td></tr><tr><td>68/99</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>9,437,485</td><td>9,437,485</td><td>10,000,000</td></tr><tr><td>69/100</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>10,004,316</td><td>10,004,316</td><td>10,004,316</td></tr><tr><td>70/101</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>10,664,599</td><td>10,664,599</td><td>10,664,599</td></tr><tr><td>71/102</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>11,368,460</td><td>11,368,460</td><td>11,368,460</td></tr><tr><td>72/103</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>12,118,775</td><td>12,118,775</td><td>12,118,775</td></tr><tr><td>73/104</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>12,918,611</td><td>12,918,611</td><td>12,918,611</td></tr><tr><td>74/105</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>13,771,236</td><td>13,771,236</td><td>13,771,236</td></tr><tr><td>75/106</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>14,680,135</td><td>14,680,135</td><td>14,680,135</td></tr><tr><td>76/107</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>15,649,020</td><td>15,649,020</td><td>15,649,020</td></tr><tr><td>77/108</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>16,681,851</td><td>16,681,851</td><td>16,681,851</td></tr><tr><td>78/109</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>17,782,849</td><td>17,782,849</td><td>17,782,849</td></tr><tr><td>79/110</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>18,956,513</td><td>18,956,513</td><td>18,956,513</td></tr><tr><td>80/111</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>20,207,638</td><td>20,207,638</td><td>20,207,638</td></tr><tr><td>81/112</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>21,541,337</td><td>21,541,337</td><td>21,541,337</td></tr><tr><td>82/113</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>22,963,060</td><td>22,963,060</td><td>22,963,060</td></tr><tr><td>83/114</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>24,478,617</td><td>24,478,617</td><td>24,478,617</td></tr><tr><td>84/115</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>26,094,199</td><td>26,094,199</td><td>26,094,199</td></tr><tr><td>85/116</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>27,816,410</td><td>27,816,410</td><td>27,816,410</td></tr><tr><td>86/117</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>29,652,286</td><td>29,652,286</td><td>29,652,286</td></tr><tr><td>87/118</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>31,609,330</td><td>31,609,330</td><td>31,609,330</td></tr><tr><td>88/119</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>33,695,538</td><td>33,695,538</td><td>33,695,538</td></tr><tr><td>89/120</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>35,919,435</td><td>35,919,435</td><td>35,919,435</td></tr></table>\n\n*Loyalty Crediting Rate of 0.35% p.a. is applicable from the 11th Policy Year onwards, only for Fixed Account.\n\nDay 1 Account Value based on Illustration B is US$644,371.\n\nDay 1 Surrender Value based on Illustration B is US$547,716.\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 10 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\n\nInstruction:\nDay 1 Surrender Value based on Illustration B is\n\nExample of the form of the answer, not the answer:\nUS$123,456"
+        }
+      ]
+    },
+    {
+      "name": "Multiples of premium paid",
+      "instruction": "Cover / Total Premium",
+      "kind": "WorkedOut",
+      "expecting": {
+        "type": "number",
+        "example": "12.34"
+      },
+      "expected": {
+        "type": "number",
+        "value": "14.11"
+      },
+      "value": "14.11",
+      "number": 14.11,
+      "foundOnPages": null,
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716",
+      "calls": [
+        {
+          "pages": [],
+          "thinking": "The user wants me to calculate Cover / Total Premium.\n\nCover = 10000000\nTotal Premium = 708740\n\n10000000 / 708740 = 14.1100...\n\nLet me calculate more precisely:\n10000000 / 708740 = 14.1101...\n\nLet me do this division:\n708740 × 14 = 9922360\n10000000 - 9922360 = 77640\n77640 / 708740 = 0.10955...\n\nSo 14.10955...\n\nLet me be more precise:\n708740 × 14.11 = 708740 × 14 + 708740 × 0.11 = 9922360 + 77961.4 = 10000321.4\n\nThat's very close to 10000000. So it's approximately 14.11.\n\nLet me check: 708740 × 14.1096 = ?\n708740 × 14 = 9922360\n708740 × 0.1 = 70874\n708740 × 0.009 = 6378.66\n708740 × 0.0006 = 425.244\nTotal: 9922360 + 70874 + 6378.66 + 425.244 = 10000037.904\n\nSo 10000000 / 708740 ≈ 14.1096\n\nRounding to 2 decimal places: 14.11\n\nThe example shows 12.34, which is 2 decimal places. So I'll answer 14.11.",
+          "startedAt": "2026-09-29T11:10:46.919Z",
+          "seconds": 30,
+          "inputTokens": 194,
+          "outputTokens": 527,
+          "contextLimit": 32768,
+          "answer": "14.11",
+          "prompt": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\n\nInstruction:\nCover / Total Premium\n\nExample of the form of the answer, not the answer:\n12.34"
+        }
+      ]
+    },
+    {
+      "name": "*Projected Breakeven (End of Year)",
+      "pages": [
+        8
+      ],
+      "instruction": "Main Illustration\nIllustration B -> Illustrated values at Current Crediting Rate* for\nFixed Account of 4.10% p.a., Current Assumed\nCrediting Rate for Index Account of 6.60% p.a. and\ncurrent charges -> Surrender Value >= Total Premium \n(Year whereby cash value exceeded the total premium amount)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "12"
+      },
+      "value": "12",
+      "number": 12,
+      "foundOnPages": [
+        8
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11",
+      "calls": [
+        {
+          "pages": [
+            8
+          ],
+          "thinking": "The instruction asks for the year whereby the Surrender Value in Illustration B >= Total Premium.\n\nTotal Premium = 708,740\n\nLooking at Illustration B Surrender Values:\nYear 1: 544,031\nYear 2: 553,925\nYear 3: 564,336\nYear 4: 575,339\nYear 5: 587,047\nYear 6: 602,960\nYear 7: 619,420\nYear 8: 636,795\nYear 9: 655,015\nYear 10: 673,956\nYear 11: 706,552\nYear 12: 740,580\nYear 13: 776,349\nYear 14: 813,649\n...\n\nSo in Year 11, the Surrender Value is 706,552, which is still less than 708,740.\nIn Year 12, the Surrender Value is 740,580, which is >= 708,740.\n\nSo the answer is 12.",
+          "startedAt": "2026-09-29T11:11:40.865Z",
+          "seconds": 41,
+          "inputTokens": 3697,
+          "outputTokens": 314,
+          "contextLimit": 32768,
+          "answer": "12",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nMAIN POLICY ILLUSTRATION\n\nSpecially prepared for: Client\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\"></td><td colspan=\"3\">ILLUSTRATION A</td><td colspan=\"3\">ILLUSTRATION B</td></tr><tr><td colspan=\"3\">Illustrated values at the Guaranteed Minimum Crediting Rate* [2.00% p.a. for Fixed Account and 0.00% p.a. for Index Account] and maximum charges</td><td colspan=\"3\">Illustrated values at Current Crediting Rate* for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a. and current charges</td></tr><tr><td>End of Policy Year / Age</td><td>Total Premiums Paid To-date (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/32</td><td>708,740</td><td>598,560</td><td>508,776</td><td>10,000,000</td><td>640,036</td><td>544,031</td><td>10,000,000</td></tr><tr><td>2/33</td><td>708,740</td><td>568,553</td><td>483,270</td><td>10,000,000</td><td>651,677</td><td>553,925</td><td>10,000,000</td></tr><tr><td>3/34</td><td>708,740</td><td>538,355</td><td>457,602</td><td>10,000,000</td><td>663,925</td><td>564,336</td><td>10,000,000</td></tr><tr><td>4/35</td><td>708,740</td><td>508,014</td><td>431,812</td><td>10,000,000</td><td>676,869</td><td>575,339</td><td>10,000,000</td></tr><tr><td>5/36</td><td>708,740</td><td>477,623</td><td>405,979</td><td>10,000,000</td><td>690,643</td><td>587,047</td><td>10,000,000</td></tr><tr><td>6/37</td><td>708,740</td><td>447,095</td><td>382,267</td><td>10,000,000</td><td>705,216</td><td>602,960</td><td>10,000,000</td></tr><tr><td>7/38</td><td>708,740</td><td>415,981</td><td>357,744</td><td>10,000,000</td><td>720,256</td><td>619,420</td><td>10,000,000</td></tr><tr><td>8/39</td><td>708,740</td><td>384,719</td><td>332,782</td><td>10,000,000</td><td>736,179</td><td>636,795</td><td>10,000,000</td></tr><tr><td>9/40</td><td>708,740</td><td>353,132</td><td>307,225</td><td>10,000,000</td><td>752,891</td><td>655,015</td><td>10,000,000</td></tr><tr><td>10/41</td><td>708,740</td><td>320,969</td><td>280,848</td><td>10,000,000</td><td>770,236</td><td>673,956</td><td>10,000,000</td></tr><tr><td>11/42</td><td>708,740</td><td>288,594</td><td>258,580</td><td>10,000,000</td><td>788,562</td><td>706,552</td><td>10,000,000</td></tr><tr><td>12/43</td><td>708,740</td><td>255,615</td><td>234,399</td><td>10,000,000</td><td>807,612</td><td>740,580</td><td>10,000,000</td></tr><tr><td>13/44</td><td>708,740</td><td>222,303</td><td>208,520</td><td>10,000,000</td><td>827,664</td><td>776,349</td><td>10,000,000</td></tr><tr><td>14/45</td><td>708,740</td><td>188,232</td><td>180,515</td><td>10,000,000</td><td>848,435</td><td>813,649</td><td>10,000,000</td></tr><tr><td>15/46</td><td>708,740</td><td>153,664</td><td>150,590</td><td>10,000,000</td><td>870,193</td><td>852,789</td><td>10,000,000</td></tr><tr><td>16/47</td><td>708,740</td><td>144,811</td><td>144,811</td><td>10,000,000</td><td>920,255</td><td>920,255</td><td>10,000,000</td></tr><tr><td>17/48</td><td>708,740</td><td>135,289</td><td>135,289</td><td>10,000,000</td><td>973,118</td><td>973,118</td><td>10,000,000</td></tr><tr><td>18/49</td><td>708,740</td><td>124,443</td><td>124,443</td><td>10,000,000</td><td>1,028,435</td><td>1,028,435</td><td>10,000,000</td></tr><tr><td>19/50</td><td>708,740</td><td>112,893</td><td>112,893</td><td>10,000,000</td><td>1,086,894</td><td>1,086,894</td><td>10,000,000</td></tr><tr><td>20/51</td><td>708,740</td><td>100,478</td><td>100,478</td><td>10,000,000</td><td>1,148,592</td><td>1,148,592</td><td>10,000,000</td></tr><tr><td>21/52</td><td>708,740</td><td>87,918</td><td>87,918</td><td>10,000,000</td><td>1,214,325</td><td>1,214,325</td><td>10,000,000</td></tr><tr><td>22/53</td><td>708,740</td><td>73,961</td><td>73,961</td><td>10,000,000</td><td>1,283,375</td><td>1,283,375</td><td>10,000,000</td></tr><tr><td>23/54</td><td>708,740</td><td>58,771</td><td>58,771</td><td>10,000,000</td><td>1,356,119</td><td>1,356,119</td><td>10,000,000</td></tr><tr><td>24/55</td><td>708,740</td><td>41,815</td><td>41,815</td><td>10,000,000</td><td>1,432,409</td><td>1,432,409</td><td>10,000,000</td></tr><tr><td>25/56</td><td>708,740</td><td>23,262</td><td>23,262</td><td>10,000,000</td><td>1,512,652</td><td>1,512,652</td><td>10,000,000</td></tr><tr><td>26/57</td><td>708,740</td><td>4,134</td><td>4,134</td><td>10,000,000</td><td>1,597,918</td><td>1,597,918</td><td>10,000,000</td></tr><tr><td>27/58</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,687,680</td><td>1,687,680</td><td>10,000,000</td></tr><tr><td>28/59</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,781,764</td><td>1,781,764</td><td>10,000,000</td></tr><tr><td>29/60</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,880,624</td><td>1,880,624</td><td>10,000,000</td></tr><tr><td>30/61</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,983,579</td><td>1,983,579</td><td>10,000,000</td></tr></table>\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 8 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n\nInstruction:\nMain Illustration\nIllustration B -> Illustrated values at Current Crediting Rate* for\nFixed Account of 4.10% p.a., Current Assumed\nCrediting Rate for Index Account of 6.60% p.a. and\ncurrent charges -> Surrender Value >= Total Premium \n(Year whereby cash value exceeded the total premium amount)\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    },
+    {
+      "name": "Guaranteed Breakeven (End of Year)",
+      "instruction": "NA",
+      "kind": "NotApplicable"
+    },
+    {
+      "name": "*Projected surrender value in year 15",
+      "pages": [
+        8
+      ],
+      "instruction": "Main Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 15",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "123,456"
+      },
+      "expected": {
+        "type": "number",
+        "value": "852,789"
+      },
+      "value": "852,789",
+      "number": 852789,
+      "foundOnPages": [
+        8
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n*Projected Breakeven (End of Year) = 12",
+      "calls": [
+        {
+          "pages": [
+            8
+          ],
+          "thinking": "The user wants me to find the Surrender Value for Year 15 in ILLUSTRATION B.\n\nLooking at the table, I need to find the row for Year 15 (15/46) and the column for ILLUSTRATION B -> Surrender Value (US$).\n\nFrom the table:\n- Row: 15/46\n- ILLUSTRATION B Surrender Value (US$): 852,789\n\nThe format should be like the example: 123,456 (with comma separator, no dollar sign)",
+          "startedAt": "2026-09-29T11:12:21.439Z",
+          "seconds": 16,
+          "inputTokens": 3669,
+          "outputTokens": 137,
+          "contextLimit": 32768,
+          "answer": "852,789",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nMAIN POLICY ILLUSTRATION\n\nSpecially prepared for: Client\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\"></td><td colspan=\"3\">ILLUSTRATION A</td><td colspan=\"3\">ILLUSTRATION B</td></tr><tr><td colspan=\"3\">Illustrated values at the Guaranteed Minimum Crediting Rate* [2.00% p.a. for Fixed Account and 0.00% p.a. for Index Account] and maximum charges</td><td colspan=\"3\">Illustrated values at Current Crediting Rate* for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a. and current charges</td></tr><tr><td>End of Policy Year / Age</td><td>Total Premiums Paid To-date (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/32</td><td>708,740</td><td>598,560</td><td>508,776</td><td>10,000,000</td><td>640,036</td><td>544,031</td><td>10,000,000</td></tr><tr><td>2/33</td><td>708,740</td><td>568,553</td><td>483,270</td><td>10,000,000</td><td>651,677</td><td>553,925</td><td>10,000,000</td></tr><tr><td>3/34</td><td>708,740</td><td>538,355</td><td>457,602</td><td>10,000,000</td><td>663,925</td><td>564,336</td><td>10,000,000</td></tr><tr><td>4/35</td><td>708,740</td><td>508,014</td><td>431,812</td><td>10,000,000</td><td>676,869</td><td>575,339</td><td>10,000,000</td></tr><tr><td>5/36</td><td>708,740</td><td>477,623</td><td>405,979</td><td>10,000,000</td><td>690,643</td><td>587,047</td><td>10,000,000</td></tr><tr><td>6/37</td><td>708,740</td><td>447,095</td><td>382,267</td><td>10,000,000</td><td>705,216</td><td>602,960</td><td>10,000,000</td></tr><tr><td>7/38</td><td>708,740</td><td>415,981</td><td>357,744</td><td>10,000,000</td><td>720,256</td><td>619,420</td><td>10,000,000</td></tr><tr><td>8/39</td><td>708,740</td><td>384,719</td><td>332,782</td><td>10,000,000</td><td>736,179</td><td>636,795</td><td>10,000,000</td></tr><tr><td>9/40</td><td>708,740</td><td>353,132</td><td>307,225</td><td>10,000,000</td><td>752,891</td><td>655,015</td><td>10,000,000</td></tr><tr><td>10/41</td><td>708,740</td><td>320,969</td><td>280,848</td><td>10,000,000</td><td>770,236</td><td>673,956</td><td>10,000,000</td></tr><tr><td>11/42</td><td>708,740</td><td>288,594</td><td>258,580</td><td>10,000,000</td><td>788,562</td><td>706,552</td><td>10,000,000</td></tr><tr><td>12/43</td><td>708,740</td><td>255,615</td><td>234,399</td><td>10,000,000</td><td>807,612</td><td>740,580</td><td>10,000,000</td></tr><tr><td>13/44</td><td>708,740</td><td>222,303</td><td>208,520</td><td>10,000,000</td><td>827,664</td><td>776,349</td><td>10,000,000</td></tr><tr><td>14/45</td><td>708,740</td><td>188,232</td><td>180,515</td><td>10,000,000</td><td>848,435</td><td>813,649</td><td>10,000,000</td></tr><tr><td>15/46</td><td>708,740</td><td>153,664</td><td>150,590</td><td>10,000,000</td><td>870,193</td><td>852,789</td><td>10,000,000</td></tr><tr><td>16/47</td><td>708,740</td><td>144,811</td><td>144,811</td><td>10,000,000</td><td>920,255</td><td>920,255</td><td>10,000,000</td></tr><tr><td>17/48</td><td>708,740</td><td>135,289</td><td>135,289</td><td>10,000,000</td><td>973,118</td><td>973,118</td><td>10,000,000</td></tr><tr><td>18/49</td><td>708,740</td><td>124,443</td><td>124,443</td><td>10,000,000</td><td>1,028,435</td><td>1,028,435</td><td>10,000,000</td></tr><tr><td>19/50</td><td>708,740</td><td>112,893</td><td>112,893</td><td>10,000,000</td><td>1,086,894</td><td>1,086,894</td><td>10,000,000</td></tr><tr><td>20/51</td><td>708,740</td><td>100,478</td><td>100,478</td><td>10,000,000</td><td>1,148,592</td><td>1,148,592</td><td>10,000,000</td></tr><tr><td>21/52</td><td>708,740</td><td>87,918</td><td>87,918</td><td>10,000,000</td><td>1,214,325</td><td>1,214,325</td><td>10,000,000</td></tr><tr><td>22/53</td><td>708,740</td><td>73,961</td><td>73,961</td><td>10,000,000</td><td>1,283,375</td><td>1,283,375</td><td>10,000,000</td></tr><tr><td>23/54</td><td>708,740</td><td>58,771</td><td>58,771</td><td>10,000,000</td><td>1,356,119</td><td>1,356,119</td><td>10,000,000</td></tr><tr><td>24/55</td><td>708,740</td><td>41,815</td><td>41,815</td><td>10,000,000</td><td>1,432,409</td><td>1,432,409</td><td>10,000,000</td></tr><tr><td>25/56</td><td>708,740</td><td>23,262</td><td>23,262</td><td>10,000,000</td><td>1,512,652</td><td>1,512,652</td><td>10,000,000</td></tr><tr><td>26/57</td><td>708,740</td><td>4,134</td><td>4,134</td><td>10,000,000</td><td>1,597,918</td><td>1,597,918</td><td>10,000,000</td></tr><tr><td>27/58</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,687,680</td><td>1,687,680</td><td>10,000,000</td></tr><tr><td>28/59</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,781,764</td><td>1,781,764</td><td>10,000,000</td></tr><tr><td>29/60</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,880,624</td><td>1,880,624</td><td>10,000,000</td></tr><tr><td>30/61</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,983,579</td><td>1,983,579</td><td>10,000,000</td></tr></table>\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 8 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n*Projected Breakeven (End of Year) = 12\n\nInstruction:\nMain Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 15\n\nExample of the form of the answer, not the answer:\n123,456"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 20",
+      "pages": [
+        8
+      ],
+      "instruction": "Main Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 20",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567"
+      },
+      "expected": {
+        "type": "number",
+        "value": "1,148,592"
+      },
+      "value": "1,148,592",
+      "number": 1148592,
+      "foundOnPages": [
+        8
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n*Projected Breakeven (End of Year) = 12\n*Projected surrender value in year 15 = 852789",
+      "calls": [
+        {
+          "pages": [
+            8
+          ],
+          "thinking": "The user wants me to find the Surrender Value in ILLUSTRATION B for Year 20.\n\nLooking at the table, I need to find the row for Year 20 (20/51) and look at the ILLUSTRATION B Surrender Value column.\n\nThe columns are:\n- End of Policy Year / Age\n- Total Premiums Paid To-date (US$)\n- ILLUSTRATION A: Account Value (US$), Surrender Value (US$), Death Benefit (US$)\n- ILLUSTRATION B: Account Value (US$), Surrender Value (US$), Death Benefit (US$)\n\nFor Year 20 (20/51):\n- ILLUSTRATION B Surrender Value = 1,148,592\n\nThe example format shows numbers with commas, so the answer should be 1,148,592.",
+          "startedAt": "2026-09-29T11:12:37.574Z",
+          "seconds": 22,
+          "inputTokens": 3689,
+          "outputTokens": 211,
+          "contextLimit": 32768,
+          "answer": "1,148,592",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nMAIN POLICY ILLUSTRATION\n\nSpecially prepared for: Client\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\"></td><td colspan=\"3\">ILLUSTRATION A</td><td colspan=\"3\">ILLUSTRATION B</td></tr><tr><td colspan=\"3\">Illustrated values at the Guaranteed Minimum Crediting Rate* [2.00% p.a. for Fixed Account and 0.00% p.a. for Index Account] and maximum charges</td><td colspan=\"3\">Illustrated values at Current Crediting Rate* for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a. and current charges</td></tr><tr><td>End of Policy Year / Age</td><td>Total Premiums Paid To-date (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/32</td><td>708,740</td><td>598,560</td><td>508,776</td><td>10,000,000</td><td>640,036</td><td>544,031</td><td>10,000,000</td></tr><tr><td>2/33</td><td>708,740</td><td>568,553</td><td>483,270</td><td>10,000,000</td><td>651,677</td><td>553,925</td><td>10,000,000</td></tr><tr><td>3/34</td><td>708,740</td><td>538,355</td><td>457,602</td><td>10,000,000</td><td>663,925</td><td>564,336</td><td>10,000,000</td></tr><tr><td>4/35</td><td>708,740</td><td>508,014</td><td>431,812</td><td>10,000,000</td><td>676,869</td><td>575,339</td><td>10,000,000</td></tr><tr><td>5/36</td><td>708,740</td><td>477,623</td><td>405,979</td><td>10,000,000</td><td>690,643</td><td>587,047</td><td>10,000,000</td></tr><tr><td>6/37</td><td>708,740</td><td>447,095</td><td>382,267</td><td>10,000,000</td><td>705,216</td><td>602,960</td><td>10,000,000</td></tr><tr><td>7/38</td><td>708,740</td><td>415,981</td><td>357,744</td><td>10,000,000</td><td>720,256</td><td>619,420</td><td>10,000,000</td></tr><tr><td>8/39</td><td>708,740</td><td>384,719</td><td>332,782</td><td>10,000,000</td><td>736,179</td><td>636,795</td><td>10,000,000</td></tr><tr><td>9/40</td><td>708,740</td><td>353,132</td><td>307,225</td><td>10,000,000</td><td>752,891</td><td>655,015</td><td>10,000,000</td></tr><tr><td>10/41</td><td>708,740</td><td>320,969</td><td>280,848</td><td>10,000,000</td><td>770,236</td><td>673,956</td><td>10,000,000</td></tr><tr><td>11/42</td><td>708,740</td><td>288,594</td><td>258,580</td><td>10,000,000</td><td>788,562</td><td>706,552</td><td>10,000,000</td></tr><tr><td>12/43</td><td>708,740</td><td>255,615</td><td>234,399</td><td>10,000,000</td><td>807,612</td><td>740,580</td><td>10,000,000</td></tr><tr><td>13/44</td><td>708,740</td><td>222,303</td><td>208,520</td><td>10,000,000</td><td>827,664</td><td>776,349</td><td>10,000,000</td></tr><tr><td>14/45</td><td>708,740</td><td>188,232</td><td>180,515</td><td>10,000,000</td><td>848,435</td><td>813,649</td><td>10,000,000</td></tr><tr><td>15/46</td><td>708,740</td><td>153,664</td><td>150,590</td><td>10,000,000</td><td>870,193</td><td>852,789</td><td>10,000,000</td></tr><tr><td>16/47</td><td>708,740</td><td>144,811</td><td>144,811</td><td>10,000,000</td><td>920,255</td><td>920,255</td><td>10,000,000</td></tr><tr><td>17/48</td><td>708,740</td><td>135,289</td><td>135,289</td><td>10,000,000</td><td>973,118</td><td>973,118</td><td>10,000,000</td></tr><tr><td>18/49</td><td>708,740</td><td>124,443</td><td>124,443</td><td>10,000,000</td><td>1,028,435</td><td>1,028,435</td><td>10,000,000</td></tr><tr><td>19/50</td><td>708,740</td><td>112,893</td><td>112,893</td><td>10,000,000</td><td>1,086,894</td><td>1,086,894</td><td>10,000,000</td></tr><tr><td>20/51</td><td>708,740</td><td>100,478</td><td>100,478</td><td>10,000,000</td><td>1,148,592</td><td>1,148,592</td><td>10,000,000</td></tr><tr><td>21/52</td><td>708,740</td><td>87,918</td><td>87,918</td><td>10,000,000</td><td>1,214,325</td><td>1,214,325</td><td>10,000,000</td></tr><tr><td>22/53</td><td>708,740</td><td>73,961</td><td>73,961</td><td>10,000,000</td><td>1,283,375</td><td>1,283,375</td><td>10,000,000</td></tr><tr><td>23/54</td><td>708,740</td><td>58,771</td><td>58,771</td><td>10,000,000</td><td>1,356,119</td><td>1,356,119</td><td>10,000,000</td></tr><tr><td>24/55</td><td>708,740</td><td>41,815</td><td>41,815</td><td>10,000,000</td><td>1,432,409</td><td>1,432,409</td><td>10,000,000</td></tr><tr><td>25/56</td><td>708,740</td><td>23,262</td><td>23,262</td><td>10,000,000</td><td>1,512,652</td><td>1,512,652</td><td>10,000,000</td></tr><tr><td>26/57</td><td>708,740</td><td>4,134</td><td>4,134</td><td>10,000,000</td><td>1,597,918</td><td>1,597,918</td><td>10,000,000</td></tr><tr><td>27/58</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,687,680</td><td>1,687,680</td><td>10,000,000</td></tr><tr><td>28/59</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,781,764</td><td>1,781,764</td><td>10,000,000</td></tr><tr><td>29/60</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,880,624</td><td>1,880,624</td><td>10,000,000</td></tr><tr><td>30/61</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,983,579</td><td>1,983,579</td><td>10,000,000</td></tr></table>\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 8 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n*Projected Breakeven (End of Year) = 12\n*Projected surrender value in year 15 = 852789\n\nInstruction:\nMain Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 20\n\nExample of the form of the answer, not the answer:\n1,234,567"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 25",
+      "pages": [
+        8
+      ],
+      "instruction": "Main Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 25",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567"
+      },
+      "expected": {
+        "type": "number",
+        "value": "1,512,652"
+      },
+      "value": "1,512,652",
+      "number": 1512652,
+      "foundOnPages": [
+        8
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n*Projected Breakeven (End of Year) = 12\n*Projected surrender value in year 15 = 852789\n*Projected surrender value in year 20 = 1148592",
+      "calls": [
+        {
+          "pages": [
+            8
+          ],
+          "thinking": "The user wants me to find the Surrender Value in ILLUSTRATION B for Year 25.\n\nLooking at the table, I need to find the row for Year 25 (25/56) and look at the ILLUSTRATION B Surrender Value column.\n\nThe columns are:\n- End of Policy Year / Age\n- Total Premiums Paid To-date (US$)\n- ILLUSTRATION A: Account Value (US$), Surrender Value (US$), Death Benefit (US$)\n- ILLUSTRATION B: Account Value (US$), Surrender Value (US$), Death Benefit (US$)\n\nFor Year 25 (25/56):\n- ILLUSTRATION B Account Value: 1,512,652\n- ILLUSTRATION B Surrender Value: 1,512,652\n- ILLUSTRATION B Death Benefit: 10,000,000\n\nSo the Surrender Value in ILLUSTRATION B for Year 25 is 1,512,652.",
+          "startedAt": "2026-09-29T11:12:59.158Z",
+          "seconds": 23,
+          "inputTokens": 3708,
+          "outputTokens": 256,
+          "contextLimit": 32768,
+          "answer": "1,512,652",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nMAIN POLICY ILLUSTRATION\n\nSpecially prepared for: Client\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\"></td><td colspan=\"3\">ILLUSTRATION A</td><td colspan=\"3\">ILLUSTRATION B</td></tr><tr><td colspan=\"3\">Illustrated values at the Guaranteed Minimum Crediting Rate* [2.00% p.a. for Fixed Account and 0.00% p.a. for Index Account] and maximum charges</td><td colspan=\"3\">Illustrated values at Current Crediting Rate* for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a. and current charges</td></tr><tr><td>End of Policy Year / Age</td><td>Total Premiums Paid To-date (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/32</td><td>708,740</td><td>598,560</td><td>508,776</td><td>10,000,000</td><td>640,036</td><td>544,031</td><td>10,000,000</td></tr><tr><td>2/33</td><td>708,740</td><td>568,553</td><td>483,270</td><td>10,000,000</td><td>651,677</td><td>553,925</td><td>10,000,000</td></tr><tr><td>3/34</td><td>708,740</td><td>538,355</td><td>457,602</td><td>10,000,000</td><td>663,925</td><td>564,336</td><td>10,000,000</td></tr><tr><td>4/35</td><td>708,740</td><td>508,014</td><td>431,812</td><td>10,000,000</td><td>676,869</td><td>575,339</td><td>10,000,000</td></tr><tr><td>5/36</td><td>708,740</td><td>477,623</td><td>405,979</td><td>10,000,000</td><td>690,643</td><td>587,047</td><td>10,000,000</td></tr><tr><td>6/37</td><td>708,740</td><td>447,095</td><td>382,267</td><td>10,000,000</td><td>705,216</td><td>602,960</td><td>10,000,000</td></tr><tr><td>7/38</td><td>708,740</td><td>415,981</td><td>357,744</td><td>10,000,000</td><td>720,256</td><td>619,420</td><td>10,000,000</td></tr><tr><td>8/39</td><td>708,740</td><td>384,719</td><td>332,782</td><td>10,000,000</td><td>736,179</td><td>636,795</td><td>10,000,000</td></tr><tr><td>9/40</td><td>708,740</td><td>353,132</td><td>307,225</td><td>10,000,000</td><td>752,891</td><td>655,015</td><td>10,000,000</td></tr><tr><td>10/41</td><td>708,740</td><td>320,969</td><td>280,848</td><td>10,000,000</td><td>770,236</td><td>673,956</td><td>10,000,000</td></tr><tr><td>11/42</td><td>708,740</td><td>288,594</td><td>258,580</td><td>10,000,000</td><td>788,562</td><td>706,552</td><td>10,000,000</td></tr><tr><td>12/43</td><td>708,740</td><td>255,615</td><td>234,399</td><td>10,000,000</td><td>807,612</td><td>740,580</td><td>10,000,000</td></tr><tr><td>13/44</td><td>708,740</td><td>222,303</td><td>208,520</td><td>10,000,000</td><td>827,664</td><td>776,349</td><td>10,000,000</td></tr><tr><td>14/45</td><td>708,740</td><td>188,232</td><td>180,515</td><td>10,000,000</td><td>848,435</td><td>813,649</td><td>10,000,000</td></tr><tr><td>15/46</td><td>708,740</td><td>153,664</td><td>150,590</td><td>10,000,000</td><td>870,193</td><td>852,789</td><td>10,000,000</td></tr><tr><td>16/47</td><td>708,740</td><td>144,811</td><td>144,811</td><td>10,000,000</td><td>920,255</td><td>920,255</td><td>10,000,000</td></tr><tr><td>17/48</td><td>708,740</td><td>135,289</td><td>135,289</td><td>10,000,000</td><td>973,118</td><td>973,118</td><td>10,000,000</td></tr><tr><td>18/49</td><td>708,740</td><td>124,443</td><td>124,443</td><td>10,000,000</td><td>1,028,435</td><td>1,028,435</td><td>10,000,000</td></tr><tr><td>19/50</td><td>708,740</td><td>112,893</td><td>112,893</td><td>10,000,000</td><td>1,086,894</td><td>1,086,894</td><td>10,000,000</td></tr><tr><td>20/51</td><td>708,740</td><td>100,478</td><td>100,478</td><td>10,000,000</td><td>1,148,592</td><td>1,148,592</td><td>10,000,000</td></tr><tr><td>21/52</td><td>708,740</td><td>87,918</td><td>87,918</td><td>10,000,000</td><td>1,214,325</td><td>1,214,325</td><td>10,000,000</td></tr><tr><td>22/53</td><td>708,740</td><td>73,961</td><td>73,961</td><td>10,000,000</td><td>1,283,375</td><td>1,283,375</td><td>10,000,000</td></tr><tr><td>23/54</td><td>708,740</td><td>58,771</td><td>58,771</td><td>10,000,000</td><td>1,356,119</td><td>1,356,119</td><td>10,000,000</td></tr><tr><td>24/55</td><td>708,740</td><td>41,815</td><td>41,815</td><td>10,000,000</td><td>1,432,409</td><td>1,432,409</td><td>10,000,000</td></tr><tr><td>25/56</td><td>708,740</td><td>23,262</td><td>23,262</td><td>10,000,000</td><td>1,512,652</td><td>1,512,652</td><td>10,000,000</td></tr><tr><td>26/57</td><td>708,740</td><td>4,134</td><td>4,134</td><td>10,000,000</td><td>1,597,918</td><td>1,597,918</td><td>10,000,000</td></tr><tr><td>27/58</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,687,680</td><td>1,687,680</td><td>10,000,000</td></tr><tr><td>28/59</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,781,764</td><td>1,781,764</td><td>10,000,000</td></tr><tr><td>29/60</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,880,624</td><td>1,880,624</td><td>10,000,000</td></tr><tr><td>30/61</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,983,579</td><td>1,983,579</td><td>10,000,000</td></tr></table>\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 8 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n*Projected Breakeven (End of Year) = 12\n*Projected surrender value in year 15 = 852789\n*Projected surrender value in year 20 = 1148592\n\nInstruction:\nMain Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 25\n\nExample of the form of the answer, not the answer:\n1,234,567"
+        }
+      ]
+    },
+    {
+      "name": "Guaranteed cover period",
+      "pages": [
+        8
+      ],
+      "instruction": "Main Illustration \nIllustration A -> Illustrated values at the Guaranteed Minimum\nCrediting Rate* [2.00% p.a. for Fixed Account\nand 0.00% p.a. for Index Account] and\nmaximum charges -> The year whereby it last pay out death benefit.",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "26"
+      },
+      "value": "26",
+      "number": 26,
+      "foundOnPages": [
+        8
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n*Projected Breakeven (End of Year) = 12\n*Projected surrender value in year 15 = 852789\n*Projected surrender value in year 20 = 1148592\n*Projected surrender value in year 25 = 1512652",
+      "calls": [
+        {
+          "pages": [
+            8
+          ],
+          "thinking": "The instruction asks for the year whereby Illustration A last pays out death benefit.\n\nLooking at Illustration A's Death Benefit column:\n- Years 1-26: 10,000,000\n- Year 27/58: 0\n- Year 28/59: 0\n- Year 29/60: 0\n- Year 30/61: 0\n\nSo the death benefit is last paid out (i.e., is non-zero) in year 26. After that, it becomes 0.\n\nThe answer should be 26.",
+          "startedAt": "2026-09-29T11:13:22.387Z",
+          "seconds": 18,
+          "inputTokens": 3756,
+          "outputTokens": 141,
+          "contextLimit": 32768,
+          "answer": "26",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nPRUDENTIAL\n\nMAIN POLICY ILLUSTRATION\n\nSpecially prepared for: Client\n\n<table border=1><tr><td rowspan=\"2\" colspan=\"2\"></td><td colspan=\"3\">ILLUSTRATION A</td><td colspan=\"3\">ILLUSTRATION B</td></tr><tr><td colspan=\"3\">Illustrated values at the Guaranteed Minimum Crediting Rate* [2.00% p.a. for Fixed Account and 0.00% p.a. for Index Account] and maximum charges</td><td colspan=\"3\">Illustrated values at Current Crediting Rate* for Fixed Account of 4.10% p.a., Current Assumed Crediting Rate for Index Account of 6.60% p.a. and current charges</td></tr><tr><td>End of Policy Year / Age</td><td>Total Premiums Paid To-date (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td><td>Account Value (US$)</td><td>Surrender Value (US$)</td><td>Death Benefit (US$)</td></tr><tr><td>1/32</td><td>708,740</td><td>598,560</td><td>508,776</td><td>10,000,000</td><td>640,036</td><td>544,031</td><td>10,000,000</td></tr><tr><td>2/33</td><td>708,740</td><td>568,553</td><td>483,270</td><td>10,000,000</td><td>651,677</td><td>553,925</td><td>10,000,000</td></tr><tr><td>3/34</td><td>708,740</td><td>538,355</td><td>457,602</td><td>10,000,000</td><td>663,925</td><td>564,336</td><td>10,000,000</td></tr><tr><td>4/35</td><td>708,740</td><td>508,014</td><td>431,812</td><td>10,000,000</td><td>676,869</td><td>575,339</td><td>10,000,000</td></tr><tr><td>5/36</td><td>708,740</td><td>477,623</td><td>405,979</td><td>10,000,000</td><td>690,643</td><td>587,047</td><td>10,000,000</td></tr><tr><td>6/37</td><td>708,740</td><td>447,095</td><td>382,267</td><td>10,000,000</td><td>705,216</td><td>602,960</td><td>10,000,000</td></tr><tr><td>7/38</td><td>708,740</td><td>415,981</td><td>357,744</td><td>10,000,000</td><td>720,256</td><td>619,420</td><td>10,000,000</td></tr><tr><td>8/39</td><td>708,740</td><td>384,719</td><td>332,782</td><td>10,000,000</td><td>736,179</td><td>636,795</td><td>10,000,000</td></tr><tr><td>9/40</td><td>708,740</td><td>353,132</td><td>307,225</td><td>10,000,000</td><td>752,891</td><td>655,015</td><td>10,000,000</td></tr><tr><td>10/41</td><td>708,740</td><td>320,969</td><td>280,848</td><td>10,000,000</td><td>770,236</td><td>673,956</td><td>10,000,000</td></tr><tr><td>11/42</td><td>708,740</td><td>288,594</td><td>258,580</td><td>10,000,000</td><td>788,562</td><td>706,552</td><td>10,000,000</td></tr><tr><td>12/43</td><td>708,740</td><td>255,615</td><td>234,399</td><td>10,000,000</td><td>807,612</td><td>740,580</td><td>10,000,000</td></tr><tr><td>13/44</td><td>708,740</td><td>222,303</td><td>208,520</td><td>10,000,000</td><td>827,664</td><td>776,349</td><td>10,000,000</td></tr><tr><td>14/45</td><td>708,740</td><td>188,232</td><td>180,515</td><td>10,000,000</td><td>848,435</td><td>813,649</td><td>10,000,000</td></tr><tr><td>15/46</td><td>708,740</td><td>153,664</td><td>150,590</td><td>10,000,000</td><td>870,193</td><td>852,789</td><td>10,000,000</td></tr><tr><td>16/47</td><td>708,740</td><td>144,811</td><td>144,811</td><td>10,000,000</td><td>920,255</td><td>920,255</td><td>10,000,000</td></tr><tr><td>17/48</td><td>708,740</td><td>135,289</td><td>135,289</td><td>10,000,000</td><td>973,118</td><td>973,118</td><td>10,000,000</td></tr><tr><td>18/49</td><td>708,740</td><td>124,443</td><td>124,443</td><td>10,000,000</td><td>1,028,435</td><td>1,028,435</td><td>10,000,000</td></tr><tr><td>19/50</td><td>708,740</td><td>112,893</td><td>112,893</td><td>10,000,000</td><td>1,086,894</td><td>1,086,894</td><td>10,000,000</td></tr><tr><td>20/51</td><td>708,740</td><td>100,478</td><td>100,478</td><td>10,000,000</td><td>1,148,592</td><td>1,148,592</td><td>10,000,000</td></tr><tr><td>21/52</td><td>708,740</td><td>87,918</td><td>87,918</td><td>10,000,000</td><td>1,214,325</td><td>1,214,325</td><td>10,000,000</td></tr><tr><td>22/53</td><td>708,740</td><td>73,961</td><td>73,961</td><td>10,000,000</td><td>1,283,375</td><td>1,283,375</td><td>10,000,000</td></tr><tr><td>23/54</td><td>708,740</td><td>58,771</td><td>58,771</td><td>10,000,000</td><td>1,356,119</td><td>1,356,119</td><td>10,000,000</td></tr><tr><td>24/55</td><td>708,740</td><td>41,815</td><td>41,815</td><td>10,000,000</td><td>1,432,409</td><td>1,432,409</td><td>10,000,000</td></tr><tr><td>25/56</td><td>708,740</td><td>23,262</td><td>23,262</td><td>10,000,000</td><td>1,512,652</td><td>1,512,652</td><td>10,000,000</td></tr><tr><td>26/57</td><td>708,740</td><td>4,134</td><td>4,134</td><td>10,000,000</td><td>1,597,918</td><td>1,597,918</td><td>10,000,000</td></tr><tr><td>27/58</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,687,680</td><td>1,687,680</td><td>10,000,000</td></tr><tr><td>28/59</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,781,764</td><td>1,781,764</td><td>10,000,000</td></tr><tr><td>29/60</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,880,624</td><td>1,880,624</td><td>10,000,000</td></tr><tr><td>30/61</td><td>708,740</td><td>0</td><td>0</td><td>0</td><td>1,983,579</td><td>1,983,579</td><td>10,000,000</td></tr></table>\n\nFinancial Consultant's Signature\n\nProposer's Signature\n\nPrepared by ____ on 19 Mar 2026\n\nPage 8 of 65\n\nOPOE (VPM V11.1.0) E. & O.E PD\n\nUnderwritten by Prudential Assurance Company Singapore (Pte) Limited (Reg. No 199002477Z)\n\nValues found before:\nCurrency = US Dollars\nPremium Term = Single Premium\nCover = 10000000\nYearly Premium = 708740\nTotal Premium = 708740\nDay 1 Cash Value = 547716\nMultiples of premium paid = 14.11\n*Projected Breakeven (End of Year) = 12\n*Projected surrender value in year 15 = 852789\n*Projected surrender value in year 20 = 1148592\n*Projected surrender value in year 25 = 1512652\n\nInstruction:\nMain Illustration \nIllustration A -> Illustrated values at the Guaranteed Minimum\nCrediting Rate* [2.00% p.a. for Fixed Account\nand 0.00% p.a. for Index Account] and\nmaximum charges -> The year whereby it last pay out death benefit.\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    }
+  ]
+}

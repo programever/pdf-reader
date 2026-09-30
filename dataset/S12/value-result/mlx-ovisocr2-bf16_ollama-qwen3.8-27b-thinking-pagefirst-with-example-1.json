@@ -1,0 +1,582 @@
+{
+  "run": 1,
+  "ocrSetting": {
+    "name": "mlx-ovisocr2-bf16",
+    "model": "ATH-MaaS/OvisOCR2",
+    "dpi": 200,
+    "prompt": "\nExtract all readable content from the image in natural human reading order and output the result as a single Markdown document. For charts or images, represent them using an HTML image tag: <img src=\"images/bbox_{left}_{top}_{right}_{bottom}.jpg\" />, where left, top, right, bottom are bounding box coordinates scaled to [0, 1000). Format formulas as LaTeX. Format tables as HTML: <table>...</table>. Transcribe all other text as standard Markdown. Preserve the original text without translation or paraphrasing.",
+    "options": {
+      "temperature": 0,
+      "top_p": 1,
+      "top_k": 0,
+      "repetition_penalty": 1,
+      "seed": 1,
+      "max_tokens": 16384
+    }
+  },
+  "ocrRunner": {
+    "name": "mlx-vlm",
+    "version": "0.7.1"
+  },
+  "text": "mlx-ovisocr2-bf16-1",
+  "valueSetting": {
+    "name": "ollama-qwen3.8-27b-thinking-pagefirst-with-example",
+    "model": "qwen3.8:27b",
+    "think": true,
+    "readContext": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.",
+    "workOutContext": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.",
+    "options": {
+      "temperature": 1,
+      "top_p": 0.95,
+      "top_k": 20,
+      "min_p": 0,
+      "seed": 1,
+      "num_ctx": 32768,
+      "num_predict": 8192
+    }
+  },
+  "valueRunner": {
+    "name": "ollama",
+    "version": "0.34.2"
+  },
+  "startedAt": "2026-09-29T12:36:40.279Z",
+  "seconds": 342,
+  "time": {
+    "drawPages": {
+      "pages": 19,
+      "seconds": 4
+    },
+    "readPages": {
+      "pages": [
+        1,
+        3,
+        6,
+        7
+      ],
+      "seconds": 54
+    },
+    "readValues": {
+      "questions": 12,
+      "seconds": 286,
+      "perQuestion": [
+        {
+          "figure": "Currency",
+          "pages": [
+            1
+          ],
+          "seconds": 13
+        },
+        {
+          "figure": "Premium Term",
+          "pages": [
+            3
+          ],
+          "seconds": 8
+        },
+        {
+          "figure": "Cover",
+          "pages": [
+            3
+          ],
+          "seconds": 13
+        },
+        {
+          "figure": "Yearly Premium",
+          "pages": [
+            3
+          ],
+          "seconds": 13
+        },
+        {
+          "figure": "Total Premium",
+          "pages": [],
+          "seconds": 10
+        },
+        {
+          "figure": "Day 1 Cash Value",
+          "pages": [
+            7
+          ],
+          "seconds": 15
+        },
+        {
+          "figure": "Multiples of premium paid",
+          "pages": [],
+          "seconds": 49
+        },
+        {
+          "figure": "*Projected Breakeven (End of Year)",
+          "pages": [
+            6
+          ],
+          "seconds": 59
+        },
+        {
+          "figure": "Guaranteed Breakeven (End of Year)",
+          "pages": [
+            6
+          ],
+          "seconds": 37
+        },
+        {
+          "figure": "*Projected surrender value in year 15",
+          "pages": [
+            6
+          ],
+          "seconds": 27
+        },
+        {
+          "figure": "*Projected surrender value in year 20",
+          "pages": [
+            6
+          ],
+          "seconds": 22
+        },
+        {
+          "figure": "*Projected surrender value in year 25",
+          "pages": [
+            6
+          ],
+          "seconds": 20
+        }
+      ]
+    },
+    "total": 344
+  },
+  "results": [
+    {
+      "name": "Currency",
+      "pages": [
+        1
+      ],
+      "instruction": "Policy Currency (Extracted from PDF or Admin panel)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "string",
+        "example": "US Dollars"
+      },
+      "expected": {
+        "type": "string",
+        "value": "US Dollars"
+      },
+      "value": "US Dollars",
+      "foundOnPages": [
+        1
+      ],
+      "valuesGiven": "",
+      "calls": [
+        {
+          "pages": [
+            1
+          ],
+          "thinking": "The instruction asks for \"Policy Currency (Extracted from PDF or Admin panel)\". Looking at the text of the page, in the table under \"Signature Life\", I can see:\n\nPolicy Currency: US Dollars\n\nThe example form shows \"US Dollars\" as the format. The value on this page is indeed \"US Dollars\".",
+          "startedAt": "2026-09-29T12:36:48.558Z",
+          "seconds": 13,
+          "inputTokens": 1125,
+          "outputTokens": 72,
+          "contextLimit": 32768,
+          "answer": "US Dollars",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\nThis Cover Page is an important document.\n\n- It highlights the key features and risks of this product and should be read together with the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable.\n\n- It is important to read the Policy Illustration, Product Summary and Bundled Product Disclosure Document, where applicable, before deciding whether to purchase this product. If you do not have a copy of these documents, please contact us at 6737 1221 or your Financial Adviser Representative to ask for them.\n\n- You should not purchase this product if you do not understand or are not comfortable with the risks of this product.\n\nSignature Life\n\n<table border=1><tr><td>Product Type</td><td>Participating Whole Life Plan</td></tr><tr><td>Premium Term</td><td>Single Premium</td></tr><tr><td>Policy Term</td><td>Until the life insured is 99 years old</td></tr><tr><td>Name of Insurer</td><td>Manulife (Singapore) Pte. Ltd.</td></tr><tr><td>Policy Currency</td><td>US Dollars</td></tr></table>\n\nWHAT ARE YOU PURCHASING?\n\nThis is a participating whole life plan which offers you insurance coverage and also invests part of your premiums in the insurer's Participating Fund. It comprises guaranteed and non-guaranteed benefits and may not be suitable for you if you want all benefits to be guaranteed.\n\nWHAT ARE THE KEY RISKS OF A PARTICIPATING PLAN?\n\nBy purchasing a participating plan, your premiums will be pooled together and invested with premiums from other policyholders in the Participating Fund partly managed by Manulife (Singapore) Pte. Ltd. and partly managed by external fund managers appointed by Manulife (Singapore) Pte. Ltd.. As a policyholder, you will share in the risks of the Participating Fund, including:\n\n<table border=1><tr><td>Investment Risks</td><td>Lower than expected investment returns earned by the fund</td></tr><tr><td>Insurance Risks</td><td>Higher than expected claims made by policyholders (e.g. due to death, disability or other terminations)</td></tr><tr><td>Expense Risks</td><td>Higher than expected expenses incurred for managing the Participating Fund</td></tr></table>\n\nThese risks can affect the performance of the Participating Fund which in turn affects the bonuses or dividends paid to you. Such bonuses or dividends are not guaranteed until declared.\n\nARE THE PARTICIPATING FUND'S ILLUSTRATED INVESTMENT RATES OF RETURN GUARANTEED?\n\nThe Policy Illustration shows two Illustrated Investment Rates of Return (after deducting investment expenses) of 5.00% per annum (p.a.) and 3.50% p.a..\n\nThey are not guaranteed and do not represent the upper and lower limits on the investment performance of the Participating Fund. They also do not represent the expected or actual returns of your participating plan.\n\nWHAT RETURNS CAN YOU EXPECT FROM THIS POLICY BASED ON THE ILLUSTRATED INVESTMENT RATES OF RETURN?\n\nBased on the Illustrated Investment Rate of Return of 5.00% p.a., your total Illustrated Yield upon surrender at age 88 is 2.64% p.a..\n\nBased on the Illustrated Investment Rate of Return of 3.50% p.a., your total Illustrated Yield upon surrender at age 88 is 1.43% p.a..\n\nThese returns are not guaranteed and do not represent the upper and lower limits of the returns you may receive.\n\nPlease note that the guaranteed surrender benefit of your policy may be less than the total premiums paid.\n\nYou can compare 2.64% and 1.43% Illustrated Yields upon surrender with the returns of Singapore Savings Bonds and Singapore Government Securities. You may refer to www.mas.gov.sg/bonds-and-bills/singapore-savings-bonds and www.mas.gov.sg/bonds-and-bills/singapore-government-bonds-information-for-individuals for more information on the returns of Singapore Savings Bonds and Singapore Government Securities. Please note that the Illustrated Yields upon surrender have taken into account the cost of insurance and expenses incurred.\n\nMr Customer\n\nDate\n\nUOB\n\nDate\n\nThis illustration is only valid when all pages are included.\n\nCONFIDENTIAL\n\nPage 1 of 2\n\nAWS / Version 96.3 / P E.&O.E.\n\nCOVER PAGE FOR PARTICIPATING WHOLE LIFE PLAN\n\nValues found before:\n\n\nInstruction:\nPolicy Currency (Extracted from PDF or Admin panel)\n\nExample of the form of the answer, not the answer:\nUS Dollars"
+        }
+      ]
+    },
+    {
+      "name": "Premium Term",
+      "pages": [
+        3
+      ],
+      "instruction": "Premium Term (Years)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "1"
+      },
+      "value": "1",
+      "number": 1,
+      "foundOnPages": [
+        3
+      ],
+      "valuesGiven": "Currency = US Dollars",
+      "calls": [
+        {
+          "pages": [
+            3
+          ],
+          "thinking": "The instruction asks for \"Premium Term (Years)\" from the page.\n\nLooking at the Premium Summary table, I can see:\n- Policy Term (years): 51\n- Premium Term (years): 1\n\nSo the Premium Term (Years) is 1.",
+          "startedAt": "2026-09-29T12:37:07.242Z",
+          "seconds": 8,
+          "inputTokens": 689,
+          "outputTokens": 62,
+          "contextLimit": 32768,
+          "answer": "1",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\n<table border=1><tr><td>Specially prepared for</td><td>: Mr Customer</td><td>Date Generated</td><td>: 19 Mar 2026</td></tr><tr><td>Plan</td><td>: Signature Life</td><td>Male</td><td></td></tr><tr><td>Country of Residence</td><td>: THAILAND</td><td>Age Last Birthday</td><td>: 48</td></tr><tr><td>Residency Code</td><td>: A</td><td>Premium Frequency</td><td>: Single Premium</td></tr><tr><td>Risk Classification of Life Insured</td><td>: Non-Smoker Standard</td><td>Currency</td><td>: USD</td></tr><tr><td>Ratings</td><td>: -</td><td></td><td></td></tr></table>\n\nPremium Summary\n\n<table border=1><tr><td></td><td>Policy Term (years)</td><td>Premium Term (years)</td><td>Face Amount ($)</td><td>Minimum Protection Amount ($)</td><td>Premium ($)</td></tr><tr><td>Signature Life - USD (WSPU1)</td><td>51</td><td>1</td><td>7,354,120</td><td>18,385,300</td><td>4,999,992.65</td></tr><tr><td colspan=\"5\">Total Premium ($)</td><td>4,999,992.65</td></tr></table>\n\nThis policy is protected under the Policy Owners' Protection Scheme which is administered by the Singapore Deposit Insurance Corporation (SDIC). Coverage for your policy is automatic and no further action is required from you. For more information on the types of benefits that are covered under the scheme as well as the limits of coverage, where applicable, please contact us or visit the Life Insurance Association (LIA) or SDIC websites (www.lia.org.sg or www.sdic.org.sg).\n\nThis Policy Illustration is intended for illustrative purposes only. The terms and conditions are specified in the Policy Contract. The above quotation is valid for one month from the date generated.\n\nMr Customer\n\nDate\n\nPage 1 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\n\nInstruction:\nPremium Term (Years)\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    },
+    {
+      "name": "Cover",
+      "pages": [
+        3
+      ],
+      "instruction": "Minimum Protection Amount",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "12,345,678"
+      },
+      "expected": {
+        "type": "number",
+        "value": "18,385,300"
+      },
+      "value": "18,385,300",
+      "number": 18385300,
+      "foundOnPages": [
+        3
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1",
+      "calls": [
+        {
+          "pages": [
+            3
+          ],
+          "thinking": "The user wants me to find the \"Minimum Protection Amount\" from the page text.\n\nLooking at the Premium Summary table, I can see:\n- Face Amount ($): 7,354,120\n- Minimum Protection Amount ($): 18,385,300\n\nThe value for Minimum Protection Amount is 18,385,300.\n\nThe example shows the form as a number with comma separators, so I'll format it the same way.",
+          "startedAt": "2026-09-29T12:37:15.591Z",
+          "seconds": 13,
+          "inputTokens": 701,
+          "outputTokens": 119,
+          "contextLimit": 32768,
+          "answer": "18,385,300",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\n<table border=1><tr><td>Specially prepared for</td><td>: Mr Customer</td><td>Date Generated</td><td>: 19 Mar 2026</td></tr><tr><td>Plan</td><td>: Signature Life</td><td>Male</td><td></td></tr><tr><td>Country of Residence</td><td>: THAILAND</td><td>Age Last Birthday</td><td>: 48</td></tr><tr><td>Residency Code</td><td>: A</td><td>Premium Frequency</td><td>: Single Premium</td></tr><tr><td>Risk Classification of Life Insured</td><td>: Non-Smoker Standard</td><td>Currency</td><td>: USD</td></tr><tr><td>Ratings</td><td>: -</td><td></td><td></td></tr></table>\n\nPremium Summary\n\n<table border=1><tr><td></td><td>Policy Term (years)</td><td>Premium Term (years)</td><td>Face Amount ($)</td><td>Minimum Protection Amount ($)</td><td>Premium ($)</td></tr><tr><td>Signature Life - USD (WSPU1)</td><td>51</td><td>1</td><td>7,354,120</td><td>18,385,300</td><td>4,999,992.65</td></tr><tr><td colspan=\"5\">Total Premium ($)</td><td>4,999,992.65</td></tr></table>\n\nThis policy is protected under the Policy Owners' Protection Scheme which is administered by the Singapore Deposit Insurance Corporation (SDIC). Coverage for your policy is automatic and no further action is required from you. For more information on the types of benefits that are covered under the scheme as well as the limits of coverage, where applicable, please contact us or visit the Life Insurance Association (LIA) or SDIC websites (www.lia.org.sg or www.sdic.org.sg).\n\nThis Policy Illustration is intended for illustrative purposes only. The terms and conditions are specified in the Policy Contract. The above quotation is valid for one month from the date generated.\n\nMr Customer\n\nDate\n\nPage 1 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\n\nInstruction:\nMinimum Protection Amount\n\nExample of the form of the answer, not the answer:\n12,345,678"
+        }
+      ]
+    },
+    {
+      "name": "Yearly Premium",
+      "pages": [
+        3
+      ],
+      "instruction": "Total Premium (Single Pay)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567.89"
+      },
+      "expected": {
+        "type": "number",
+        "value": "4,999,992.65"
+      },
+      "value": "4,999,992.65",
+      "number": 4999992.65,
+      "foundOnPages": [
+        3
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300",
+      "calls": [
+        {
+          "pages": [
+            3
+          ],
+          "thinking": "The instruction asks for \"Total Premium (Single Pay)\". Looking at the page, I can see in the Premium Summary table there is a row that says \"Total Premium ($)\" with a value of \"4,999,992.65\". The premium frequency is listed as \"Single Premium\" which aligns with \"Single Pay\".\n\nThe example format shows: 1,234,567.89\n\nSo the answer should be: 4,999,992.65",
+          "startedAt": "2026-09-29T12:37:28.643Z",
+          "seconds": 13,
+          "inputTokens": 718,
+          "outputTokens": 126,
+          "contextLimit": 32768,
+          "answer": "4,999,992.65",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\n<table border=1><tr><td>Specially prepared for</td><td>: Mr Customer</td><td>Date Generated</td><td>: 19 Mar 2026</td></tr><tr><td>Plan</td><td>: Signature Life</td><td>Male</td><td></td></tr><tr><td>Country of Residence</td><td>: THAILAND</td><td>Age Last Birthday</td><td>: 48</td></tr><tr><td>Residency Code</td><td>: A</td><td>Premium Frequency</td><td>: Single Premium</td></tr><tr><td>Risk Classification of Life Insured</td><td>: Non-Smoker Standard</td><td>Currency</td><td>: USD</td></tr><tr><td>Ratings</td><td>: -</td><td></td><td></td></tr></table>\n\nPremium Summary\n\n<table border=1><tr><td></td><td>Policy Term (years)</td><td>Premium Term (years)</td><td>Face Amount ($)</td><td>Minimum Protection Amount ($)</td><td>Premium ($)</td></tr><tr><td>Signature Life - USD (WSPU1)</td><td>51</td><td>1</td><td>7,354,120</td><td>18,385,300</td><td>4,999,992.65</td></tr><tr><td colspan=\"5\">Total Premium ($)</td><td>4,999,992.65</td></tr></table>\n\nThis policy is protected under the Policy Owners' Protection Scheme which is administered by the Singapore Deposit Insurance Corporation (SDIC). Coverage for your policy is automatic and no further action is required from you. For more information on the types of benefits that are covered under the scheme as well as the limits of coverage, where applicable, please contact us or visit the Life Insurance Association (LIA) or SDIC websites (www.lia.org.sg or www.sdic.org.sg).\n\nThis Policy Illustration is intended for illustrative purposes only. The terms and conditions are specified in the Policy Contract. The above quotation is valid for one month from the date generated.\n\nMr Customer\n\nDate\n\nPage 1 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\n\nInstruction:\nTotal Premium (Single Pay)\n\nExample of the form of the answer, not the answer:\n1,234,567.89"
+        }
+      ]
+    },
+    {
+      "name": "Total Premium",
+      "instruction": "Yearly Premium * Premium Term",
+      "kind": "WorkedOut",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567.89"
+      },
+      "expected": {
+        "type": "number",
+        "value": "4,999,992.65"
+      },
+      "value": "4,999,992.65",
+      "number": 4999992.65,
+      "foundOnPages": null,
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65",
+      "calls": [
+        {
+          "pages": [],
+          "thinking": "The formula is: Yearly Premium * Premium Term\n\nValues:\nYearly Premium = 4999992.65\nPremium Term = 1\n\nCalculation: 4999992.65 * 1 = 4999992.65\n\nThe example format shows: 1,234,567.89 (comma-separated with 2 decimal places)\n\nSo the answer should be: 4,999,992.65",
+          "startedAt": "2026-09-29T12:37:41.506Z",
+          "seconds": 10,
+          "inputTokens": 182,
+          "outputTokens": 129,
+          "contextLimit": 32768,
+          "answer": "4,999,992.65",
+          "prompt": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\n\nInstruction:\nYearly Premium * Premium Term\n\nExample of the form of the answer, not the answer:\n1,234,567.89"
+        }
+      ]
+    },
+    {
+      "name": "Day 1 Cash Value",
+      "pages": [
+        7
+      ],
+      "instruction": "Guaranteed Surrender Value on Policy Day 1:",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "$1,234,567.89"
+      },
+      "expected": {
+        "type": "number",
+        "value": "$3,999,994.12"
+      },
+      "value": "$3,999,994.12",
+      "number": 3999994.12,
+      "foundOnPages": [
+        7
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65",
+      "calls": [
+        {
+          "pages": [
+            7
+          ],
+          "thinking": "The user is asking for the \"Guaranteed Surrender Value on Policy Day 1\" from the page.\n\nLooking at the text, I can find:\n\"Policy Day 1 Guaranteed Surrender Value: $3,999,994.12.\"\n\nThe example form shows: $1,234,567.89\n\nSo the answer should be: $3,999,994.12",
+          "startedAt": "2026-09-29T12:37:59.652Z",
+          "seconds": 15,
+          "inputTokens": 1136,
+          "outputTokens": 114,
+          "contextLimit": 32768,
+          "answer": "$3,999,994.12",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\nSpecially prepared for\n\n: Mr Customer\n\nDate Generated\n\n: 19 Mar 2026\n\nPlan\n\n: Signature Life\n\nMale\n\nCountry of Residence\n\n: THAILAND\n\nAge Last Birthday\n\n: 48\n\nResidency Code\n\n: A\n\nPremium Frequency\n\n: Single Premium\n\nRisk Classification of Life Insured\n\n: Non-Smoker Standard\n\nCurrency\n\n: USD\n\nRatings\n\n:-\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-Date ($)</td><td colspan=\"5\">SURRENDER VALUE</td></tr><tr><td rowspan=\"2\">Guaranteed ($)</td><td colspan=\"2\">Illustrated at 3.50% investment return</td><td colspan=\"2\">Illustrated at 5.00% investment return</td></tr><tr><td>Non-Guaranteed ($)</td><td>Total ($)</td><td>Non-Guaranteed ($)</td><td>Total ($)</td></tr><tr><td>47/95</td><td>4,999,993</td><td>6,541,035</td><td>4,063,005</td><td>10,604,040</td><td>12,252,539</td><td>18,793,574</td></tr><tr><td>48/96</td><td>4,999,993</td><td>6,606,445</td><td>4,270,323</td><td>10,876,768</td><td>12,899,182</td><td>19,505,627</td></tr><tr><td>49/97</td><td>4,999,993</td><td>6,672,510</td><td>4,480,175</td><td>11,152,685</td><td>13,555,664</td><td>20,228,174</td></tr><tr><td>50/98</td><td>4,999,993</td><td>6,739,235</td><td>4,692,138</td><td>11,431,373</td><td>14,220,750</td><td>20,959,985</td></tr><tr><td rowspan=\"2\">51/99</td><td rowspan=\"2\">4,999,993</td><td colspan=\"5\">MATURITY VALUE</td></tr><tr><td>6,806,625</td><td>6,241,349</td><td>13,047,974</td><td>18,947,752</td><td>25,754,377</td></tr></table>\n\nPlease refer to the IMPORTANT NOTES pages for explanation on the Illustrated Investment Rate of Return and the Illustrated Yield upon surrender.\n\nPolicy Day 1 Guaranteed Surrender Value: $3,999,994.12.\n\nBased on the Illustrated Investment Rate of Return of the Participating Fund:\n\nAt 5.00% p.a., your total Illustrated Yield upon surrender at age 88 is\n\n2.64% p.a.\n\nAt 3.50% p.a., your total Illustrated Yield upon surrender at age 88 is\n\n1.43% p.a.\n\nMr Customer\n\nDate\n\nPage 5 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\n\nInstruction:\nGuaranteed Surrender Value on Policy Day 1:\n\nExample of the form of the answer, not the answer:\n$1,234,567.89"
+        }
+      ]
+    },
+    {
+      "name": "Multiples of premium paid",
+      "instruction": "Cover / Total Premium",
+      "kind": "WorkedOut",
+      "expecting": {
+        "type": "number",
+        "example": "1.23"
+      },
+      "expected": {
+        "type": "number",
+        "value": "3.68"
+      },
+      "value": "3.68",
+      "number": 3.68,
+      "foundOnPages": null,
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12",
+      "calls": [
+        {
+          "pages": [],
+          "thinking": "The user wants me to calculate Cover / Total Premium.\n\nCover = 18385300\nTotal Premium = 4999992.65\n\n18385300 / 4999992.65 = 3.67700...\n\nLet me calculate more precisely:\n18385300 / 4999992.65\n\n= 18385300 / 4999992.65\n\nLet me do this division:\n4999992.65 × 3 = 14999977.95\n18385300 - 14999977.95 = 3385322.05\n3385322.05 / 4999992.65 = 0.67706...\n\nSo approximately 3.6771\n\nLet me be more precise:\n3385322.05 / 4999992.65\n= 3385322.05 / 4999992.65\n≈ 0.67706...\n\nSo 3.67706...\n\nRounding to 2 decimal places: 3.68\n\nThe example shows \"1.23\" which is 2 decimal places.\n\nLet me recalculate:\n18385300 / 4999992.65\n\n= 18385300 / 4999992.65\n\nLet me try: 4999992.65 × 3.68 = 4999992.65 × 3 + 4999992.65 × 0.68\n= 14999977.95 + 3399995.002\n= 18399972.952\n\nThat's slightly more than 18385300.\n\n4999992.65 × 3.67 = 14999977.95 + 4999992.65 × 0.67\n= 14999977.95 + 3349995.0755\n= 18349973.0255\n\n18385300 - 18349973.0255 = 35326.9745\n35326.9745 / 4999992.65 = 0.007065...\n\nSo 3.677065...\n\nRounded to 2 decimal places: 3.68\n\nThe example format is \"1.23\" - two decimal places.",
+          "startedAt": "2026-09-29T12:38:14.369Z",
+          "seconds": 49,
+          "inputTokens": 205,
+          "outputTokens": 714,
+          "contextLimit": 32768,
+          "answer": "3.68",
+          "prompt": "Below is an instruction with a formula, the values that were found before, and an example of the form of the answer.\nWork out the value of the formula from these values.\nAnswer with the result only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf a value that the formula needs is missing or null, answer null. Do not guess.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\n\nInstruction:\nCover / Total Premium\n\nExample of the form of the answer, not the answer:\n1.23"
+        }
+      ]
+    },
+    {
+      "name": "*Projected Breakeven (End of Year)",
+      "pages": [
+        6
+      ],
+      "instruction": "SURRENDER VALUE -> \nIllustrated at 5% investment return -> \nUnder total column -> \nTotal column >= Total Premium\n(Year whereby cash value exceeded the total premium amount)",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "14"
+      },
+      "value": "14",
+      "number": 14,
+      "foundOnPages": [
+        6
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68",
+      "calls": [
+        {
+          "pages": [
+            6
+          ],
+          "thinking": "The instruction asks me to find the year (policy year) where the Surrender Value under the \"Illustrated at 5% investment return\" -> \"Total\" column first exceeds (>=) the Total Premium amount.\n\nTotal Premium = 4,999,992.65\n\nLooking at the \"Illustrated at 5.00% investment return\" -> \"Total ($)\" column:\n\nYear 1: 4,052,497\nYear 2: 4,105,496\nYear 3: 4,158,951\nYear 4: 4,213,032\nYear 5: 4,279,821\nYear 6: 4,338,828\nYear 7: 4,398,645\nYear 8: 4,460,011\nYear 9: 4,522,202\nYear 10: 4,593,243\nYear 11: 4,673,419\nYear 12: 4,799,139\nYear 13: 4,900,138\nYear 14: 5,008,354\nYear 15: 5,124,282\n\nSo the first year where the Total at 5% >= 4,999,992.65 is Year 14 (age 62) with 5,008,354.\n\nWait, let me check Year 13: 4,900,138 < 4,999,992.65\nYear 14: 5,008,354 >= 4,999,992.65\n\nSo the answer is 14.",
+          "startedAt": "2026-09-29T12:39:35.862Z",
+          "seconds": 59,
+          "inputTokens": 4936,
+          "outputTokens": 445,
+          "contextLimit": 32768,
+          "answer": "14",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\nSpecially prepared for\n\n: Mr Customer\n\nDate Generated\n\n: 19 Mar 2026\n\nPlan\n\n: Signature Life\n\nMale\n\nCountry of Residence\n\n: THAILAND\n\nAge Last Birthday\n\n: 48\n\nResidency Code\n\n: A\n\nPremium Frequency\n\n: Single Premium\n\nRisk Classification of Life Insured\n\n: Non-Smoker Standard\n\nCurrency\n\n: USD\n\nRatings\n\n:-\n\nPolicy Illustration\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-Date ($)</td><td colspan=\"5\">SURRENDER VALUE</td></tr><tr><td rowspan=\"2\">Guaranteed ($)</td><td colspan=\"2\">Illustrated at 3.50% investment return</td><td colspan=\"2\">Illustrated at 5.00% investment return</td></tr><tr><td>Non-Guaranteed ($)</td><td>Total ($)</td><td>Non-Guaranteed ($)</td><td>Total ($)</td></tr><tr><td>1/49</td><td>4,999,993</td><td>4,049,994</td><td>1,669</td><td>4,051,663</td><td>2,503</td><td>4,052,497</td></tr><tr><td>2/50</td><td>4,999,993</td><td>4,099,994</td><td>3,663</td><td>4,103,657</td><td>5,502</td><td>4,105,496</td></tr><tr><td>3/51</td><td>4,999,993</td><td>4,149,994</td><td>5,954</td><td>4,155,948</td><td>8,957</td><td>4,158,951</td></tr><tr><td>4/52</td><td>4,999,993</td><td>4,199,994</td><td>8,653</td><td>4,208,647</td><td>13,038</td><td>4,213,032</td></tr><tr><td>5/53</td><td>4,999,993</td><td>4,249,994</td><td>14,894</td><td>4,264,888</td><td>29,827</td><td>4,279,821</td></tr><tr><td>6/54</td><td>4,999,993</td><td>4,299,994</td><td>19,363</td><td>4,319,356</td><td>38,834</td><td>4,338,828</td></tr><tr><td>7/55</td><td>4,999,993</td><td>4,349,994</td><td>24,221</td><td>4,374,214</td><td>48,651</td><td>4,398,645</td></tr><tr><td>8/56</td><td>4,999,993</td><td>4,399,994</td><td>29,834</td><td>4,429,828</td><td>60,018</td><td>4,460,011</td></tr><tr><td>9/57</td><td>4,999,993</td><td>4,449,993</td><td>35,840</td><td>4,485,833</td><td>72,208</td><td>4,522,202</td></tr><tr><td>10/58</td><td>4,999,993</td><td>4,499,993</td><td>44,575</td><td>4,544,568</td><td>93,250</td><td>4,593,243</td></tr><tr><td>11/59</td><td>4,999,993</td><td>4,549,993</td><td>58,909</td><td>4,608,903</td><td>123,426</td><td>4,673,419</td></tr><tr><td>12/60</td><td>4,999,993</td><td>4,599,993</td><td>86,217</td><td>4,686,210</td><td>199,146</td><td>4,799,139</td></tr><tr><td>13/61</td><td>4,999,993</td><td>4,649,993</td><td>108,129</td><td>4,758,123</td><td>250,145</td><td>4,900,138</td></tr><tr><td>14/62</td><td>4,999,993</td><td>4,699,993</td><td>133,089</td><td>4,833,082</td><td>308,361</td><td>5,008,354</td></tr><tr><td>15/63</td><td>4,999,993</td><td>4,749,993</td><td>161,295</td><td>4,911,288</td><td>374,289</td><td>5,124,282</td></tr><tr><td>16/64</td><td>4,999,993</td><td>4,799,993</td><td>192,928</td><td>4,992,921</td><td>448,386</td><td>5,248,379</td></tr><tr><td>17/65</td><td>4,999,993</td><td>4,849,993</td><td>334,446</td><td>5,184,439</td><td>939,479</td><td>5,789,472</td></tr><tr><td>18/66</td><td>4,999,993</td><td>4,899,993</td><td>391,631</td><td>5,291,624</td><td>1,101,826</td><td>6,001,818</td></tr><tr><td>19/67</td><td>4,999,993</td><td>4,949,993</td><td>454,564</td><td>5,404,557</td><td>1,280,877</td><td>6,230,870</td></tr><tr><td>20/68</td><td>4,999,993</td><td>4,999,993</td><td>523,447</td><td>5,523,440</td><td>1,477,281</td><td>6,477,273</td></tr><tr><td>21/69</td><td>4,999,993</td><td>5,049,993</td><td>582,035</td><td>5,632,028</td><td>1,645,202</td><td>6,695,194</td></tr><tr><td>22/70</td><td>4,999,993</td><td>5,100,493</td><td>644,532</td><td>5,745,025</td><td>1,824,718</td><td>6,925,211</td></tr><tr><td>23/71</td><td>4,999,993</td><td>5,151,497</td><td>711,022</td><td>5,862,519</td><td>2,016,121</td><td>7,167,619</td></tr><tr><td>24/72</td><td>4,999,993</td><td>5,203,012</td><td>781,603</td><td>5,984,616</td><td>2,219,753</td><td>7,422,765</td></tr><tr><td>25/73</td><td>4,999,993</td><td>5,255,042</td><td>856,376</td><td>6,111,419</td><td>2,435,952</td><td>7,690,995</td></tr><tr><td>26/74</td><td>4,999,993</td><td>5,307,592</td><td>935,454</td><td>6,243,047</td><td>2,665,105</td><td>7,972,697</td></tr><tr><td>27/75</td><td>4,999,993</td><td>5,360,667</td><td>1,087,984</td><td>6,448,651</td><td>3,176,004</td><td>8,536,671</td></tr><tr><td>28/76</td><td>4,999,993</td><td>5,414,272</td><td>1,181,885</td><td>6,596,157</td><td>3,455,611</td><td>8,869,883</td></tr><tr><td>29/77</td><td>4,999,993</td><td>5,468,417</td><td>1,280,627</td><td>6,749,044</td><td>3,750,287</td><td>9,218,704</td></tr><tr><td>30/78</td><td>4,999,993</td><td>5,523,102</td><td>1,384,273</td><td>6,907,375</td><td>4,060,295</td><td>9,583,397</td></tr><tr><td>31/79</td><td>4,999,993</td><td>5,578,332</td><td>1,492,872</td><td>7,071,203</td><td>4,385,853</td><td>9,964,184</td></tr><tr><td>32/80</td><td>4,999,993</td><td>5,634,117</td><td>1,606,509</td><td>7,240,626</td><td>4,727,286</td><td>10,361,403</td></tr><tr><td>33/81</td><td>4,999,993</td><td>5,690,457</td><td>1,725,261</td><td>7,415,717</td><td>5,084,899</td><td>10,775,355</td></tr><tr><td>34/82</td><td>4,999,993</td><td>5,747,362</td><td>1,849,228</td><td>7,596,590</td><td>5,459,068</td><td>11,206,430</td></tr><tr><td>35/83</td><td>4,999,993</td><td>5,804,836</td><td>1,978,559</td><td>7,783,395</td><td>5,850,311</td><td>11,655,147</td></tr><tr><td>36/84</td><td>4,999,993</td><td>5,862,886</td><td>2,113,440</td><td>7,976,326</td><td>6,259,267</td><td>12,122,154</td></tr><tr><td>37/85</td><td>4,999,993</td><td>5,921,516</td><td>2,254,737</td><td>8,176,254</td><td>6,688,594</td><td>12,610,110</td></tr><tr><td>38/86</td><td>4,999,993</td><td>5,980,731</td><td>2,403,557</td><td>8,384,288</td><td>7,141,675</td><td>13,122,406</td></tr><tr><td>39/87</td><td>4,999,993</td><td>6,040,536</td><td>2,560,554</td><td>8,601,090</td><td>7,620,579</td><td>13,661,115</td></tr><tr><td>40/88</td><td>4,999,993</td><td>6,100,941</td><td>2,725,863</td><td>8,826,804</td><td>8,125,836</td><td>14,226,777</td></tr><tr><td>41/89</td><td>4,999,993</td><td>6,161,951</td><td>2,899,199</td><td>9,061,150</td><td>8,656,728</td><td>14,818,679</td></tr><tr><td>42/90</td><td>4,999,993</td><td>6,223,571</td><td>3,079,899</td><td>9,303,470</td><td>9,211,395</td><td>15,434,966</td></tr><tr><td>43/91</td><td>4,999,993</td><td>6,285,806</td><td>3,267,100</td><td>9,552,905</td><td>9,787,371</td><td>16,073,177</td></tr><tr><td>44/92</td><td>4,999,993</td><td>6,348,666</td><td>3,459,850</td><td>9,808,515</td><td>10,381,910</td><td>16,730,576</td></tr><tr><td>45/93</td><td>4,999,993</td><td>6,412,151</td><td>3,657,248</td><td>10,069,398</td><td>10,992,397</td><td>17,404,548</td></tr><tr><td>46/94</td><td>4,999,993</td><td>6,476,270</td><td>3,858,504</td><td>10,334,775</td><td>11,616,534</td><td>18,092,805</td></tr></table>\n\nMr Customer\n\nDate\n\nPage 4 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n\nInstruction:\nSURRENDER VALUE -> \nIllustrated at 5% investment return -> \nUnder total column -> \nTotal column >= Total Premium\n(Year whereby cash value exceeded the total premium amount)\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    },
+    {
+      "name": "Guaranteed Breakeven (End of Year)",
+      "pages": [
+        6
+      ],
+      "instruction": "Equivalent year where SURRENDER VALUE -> \nGuaranteed column = Total Premium",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "10"
+      },
+      "expected": {
+        "type": "number",
+        "value": "20"
+      },
+      "value": "20",
+      "number": 20,
+      "foundOnPages": [
+        6
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n*Projected Breakeven (End of Year) = 14",
+      "calls": [
+        {
+          "pages": [
+            6
+          ],
+          "thinking": "The instruction asks me to find the equivalent year where the SURRENDER VALUE Guaranteed column equals the Total Premium.\n\nThe Total Premium is 4,999,993 (as shown in the \"Total Premiums Paid To-Date ($)\" column).\n\nI need to find the year where the \"Guaranteed ($)\" column equals 4,999,993.\n\nLooking at the table:\n- Year 1: 4,049,994\n- Year 2: 4,099,994\n- Year 3: 4,149,994\n- Year 4: 4,199,994\n- Year 5: 4,249,994\n- Year 6: 4,299,994\n- Year 7: 4,349,994\n- Year 8: 4,399,994\n- Year 9: 4,449,993\n- Year 10: 4,499,993\n- Year 11: 4,549,993\n- Year 12: 4,599,993\n- Year 13: 4,649,993\n- Year 14: 4,699,993\n- Year 15: 4,749,993\n- Year 16: 4,799,993\n- Year 17: 4,849,993\n- Year 18: 4,899,993\n- Year 19: 4,949,993\n- Year 20: 4,999,993\n\nSo at Year 20 (Age 68), the Guaranteed surrender value = 4,999,993, which equals the Total Premium.\n\nThe answer is 20.",
+          "startedAt": "2026-09-29T12:40:35.187Z",
+          "seconds": 37,
+          "inputTokens": 4929,
+          "outputTokens": 468,
+          "contextLimit": 32768,
+          "answer": "20",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\nSpecially prepared for\n\n: Mr Customer\n\nDate Generated\n\n: 19 Mar 2026\n\nPlan\n\n: Signature Life\n\nMale\n\nCountry of Residence\n\n: THAILAND\n\nAge Last Birthday\n\n: 48\n\nResidency Code\n\n: A\n\nPremium Frequency\n\n: Single Premium\n\nRisk Classification of Life Insured\n\n: Non-Smoker Standard\n\nCurrency\n\n: USD\n\nRatings\n\n:-\n\nPolicy Illustration\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-Date ($)</td><td colspan=\"5\">SURRENDER VALUE</td></tr><tr><td rowspan=\"2\">Guaranteed ($)</td><td colspan=\"2\">Illustrated at 3.50% investment return</td><td colspan=\"2\">Illustrated at 5.00% investment return</td></tr><tr><td>Non-Guaranteed ($)</td><td>Total ($)</td><td>Non-Guaranteed ($)</td><td>Total ($)</td></tr><tr><td>1/49</td><td>4,999,993</td><td>4,049,994</td><td>1,669</td><td>4,051,663</td><td>2,503</td><td>4,052,497</td></tr><tr><td>2/50</td><td>4,999,993</td><td>4,099,994</td><td>3,663</td><td>4,103,657</td><td>5,502</td><td>4,105,496</td></tr><tr><td>3/51</td><td>4,999,993</td><td>4,149,994</td><td>5,954</td><td>4,155,948</td><td>8,957</td><td>4,158,951</td></tr><tr><td>4/52</td><td>4,999,993</td><td>4,199,994</td><td>8,653</td><td>4,208,647</td><td>13,038</td><td>4,213,032</td></tr><tr><td>5/53</td><td>4,999,993</td><td>4,249,994</td><td>14,894</td><td>4,264,888</td><td>29,827</td><td>4,279,821</td></tr><tr><td>6/54</td><td>4,999,993</td><td>4,299,994</td><td>19,363</td><td>4,319,356</td><td>38,834</td><td>4,338,828</td></tr><tr><td>7/55</td><td>4,999,993</td><td>4,349,994</td><td>24,221</td><td>4,374,214</td><td>48,651</td><td>4,398,645</td></tr><tr><td>8/56</td><td>4,999,993</td><td>4,399,994</td><td>29,834</td><td>4,429,828</td><td>60,018</td><td>4,460,011</td></tr><tr><td>9/57</td><td>4,999,993</td><td>4,449,993</td><td>35,840</td><td>4,485,833</td><td>72,208</td><td>4,522,202</td></tr><tr><td>10/58</td><td>4,999,993</td><td>4,499,993</td><td>44,575</td><td>4,544,568</td><td>93,250</td><td>4,593,243</td></tr><tr><td>11/59</td><td>4,999,993</td><td>4,549,993</td><td>58,909</td><td>4,608,903</td><td>123,426</td><td>4,673,419</td></tr><tr><td>12/60</td><td>4,999,993</td><td>4,599,993</td><td>86,217</td><td>4,686,210</td><td>199,146</td><td>4,799,139</td></tr><tr><td>13/61</td><td>4,999,993</td><td>4,649,993</td><td>108,129</td><td>4,758,123</td><td>250,145</td><td>4,900,138</td></tr><tr><td>14/62</td><td>4,999,993</td><td>4,699,993</td><td>133,089</td><td>4,833,082</td><td>308,361</td><td>5,008,354</td></tr><tr><td>15/63</td><td>4,999,993</td><td>4,749,993</td><td>161,295</td><td>4,911,288</td><td>374,289</td><td>5,124,282</td></tr><tr><td>16/64</td><td>4,999,993</td><td>4,799,993</td><td>192,928</td><td>4,992,921</td><td>448,386</td><td>5,248,379</td></tr><tr><td>17/65</td><td>4,999,993</td><td>4,849,993</td><td>334,446</td><td>5,184,439</td><td>939,479</td><td>5,789,472</td></tr><tr><td>18/66</td><td>4,999,993</td><td>4,899,993</td><td>391,631</td><td>5,291,624</td><td>1,101,826</td><td>6,001,818</td></tr><tr><td>19/67</td><td>4,999,993</td><td>4,949,993</td><td>454,564</td><td>5,404,557</td><td>1,280,877</td><td>6,230,870</td></tr><tr><td>20/68</td><td>4,999,993</td><td>4,999,993</td><td>523,447</td><td>5,523,440</td><td>1,477,281</td><td>6,477,273</td></tr><tr><td>21/69</td><td>4,999,993</td><td>5,049,993</td><td>582,035</td><td>5,632,028</td><td>1,645,202</td><td>6,695,194</td></tr><tr><td>22/70</td><td>4,999,993</td><td>5,100,493</td><td>644,532</td><td>5,745,025</td><td>1,824,718</td><td>6,925,211</td></tr><tr><td>23/71</td><td>4,999,993</td><td>5,151,497</td><td>711,022</td><td>5,862,519</td><td>2,016,121</td><td>7,167,619</td></tr><tr><td>24/72</td><td>4,999,993</td><td>5,203,012</td><td>781,603</td><td>5,984,616</td><td>2,219,753</td><td>7,422,765</td></tr><tr><td>25/73</td><td>4,999,993</td><td>5,255,042</td><td>856,376</td><td>6,111,419</td><td>2,435,952</td><td>7,690,995</td></tr><tr><td>26/74</td><td>4,999,993</td><td>5,307,592</td><td>935,454</td><td>6,243,047</td><td>2,665,105</td><td>7,972,697</td></tr><tr><td>27/75</td><td>4,999,993</td><td>5,360,667</td><td>1,087,984</td><td>6,448,651</td><td>3,176,004</td><td>8,536,671</td></tr><tr><td>28/76</td><td>4,999,993</td><td>5,414,272</td><td>1,181,885</td><td>6,596,157</td><td>3,455,611</td><td>8,869,883</td></tr><tr><td>29/77</td><td>4,999,993</td><td>5,468,417</td><td>1,280,627</td><td>6,749,044</td><td>3,750,287</td><td>9,218,704</td></tr><tr><td>30/78</td><td>4,999,993</td><td>5,523,102</td><td>1,384,273</td><td>6,907,375</td><td>4,060,295</td><td>9,583,397</td></tr><tr><td>31/79</td><td>4,999,993</td><td>5,578,332</td><td>1,492,872</td><td>7,071,203</td><td>4,385,853</td><td>9,964,184</td></tr><tr><td>32/80</td><td>4,999,993</td><td>5,634,117</td><td>1,606,509</td><td>7,240,626</td><td>4,727,286</td><td>10,361,403</td></tr><tr><td>33/81</td><td>4,999,993</td><td>5,690,457</td><td>1,725,261</td><td>7,415,717</td><td>5,084,899</td><td>10,775,355</td></tr><tr><td>34/82</td><td>4,999,993</td><td>5,747,362</td><td>1,849,228</td><td>7,596,590</td><td>5,459,068</td><td>11,206,430</td></tr><tr><td>35/83</td><td>4,999,993</td><td>5,804,836</td><td>1,978,559</td><td>7,783,395</td><td>5,850,311</td><td>11,655,147</td></tr><tr><td>36/84</td><td>4,999,993</td><td>5,862,886</td><td>2,113,440</td><td>7,976,326</td><td>6,259,267</td><td>12,122,154</td></tr><tr><td>37/85</td><td>4,999,993</td><td>5,921,516</td><td>2,254,737</td><td>8,176,254</td><td>6,688,594</td><td>12,610,110</td></tr><tr><td>38/86</td><td>4,999,993</td><td>5,980,731</td><td>2,403,557</td><td>8,384,288</td><td>7,141,675</td><td>13,122,406</td></tr><tr><td>39/87</td><td>4,999,993</td><td>6,040,536</td><td>2,560,554</td><td>8,601,090</td><td>7,620,579</td><td>13,661,115</td></tr><tr><td>40/88</td><td>4,999,993</td><td>6,100,941</td><td>2,725,863</td><td>8,826,804</td><td>8,125,836</td><td>14,226,777</td></tr><tr><td>41/89</td><td>4,999,993</td><td>6,161,951</td><td>2,899,199</td><td>9,061,150</td><td>8,656,728</td><td>14,818,679</td></tr><tr><td>42/90</td><td>4,999,993</td><td>6,223,571</td><td>3,079,899</td><td>9,303,470</td><td>9,211,395</td><td>15,434,966</td></tr><tr><td>43/91</td><td>4,999,993</td><td>6,285,806</td><td>3,267,100</td><td>9,552,905</td><td>9,787,371</td><td>16,073,177</td></tr><tr><td>44/92</td><td>4,999,993</td><td>6,348,666</td><td>3,459,850</td><td>9,808,515</td><td>10,381,910</td><td>16,730,576</td></tr><tr><td>45/93</td><td>4,999,993</td><td>6,412,151</td><td>3,657,248</td><td>10,069,398</td><td>10,992,397</td><td>17,404,548</td></tr><tr><td>46/94</td><td>4,999,993</td><td>6,476,270</td><td>3,858,504</td><td>10,334,775</td><td>11,616,534</td><td>18,092,805</td></tr></table>\n\nMr Customer\n\nDate\n\nPage 4 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n*Projected Breakeven (End of Year) = 14\n\nInstruction:\nEquivalent year where SURRENDER VALUE -> \nGuaranteed column = Total Premium\n\nExample of the form of the answer, not the answer:\n10"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 15",
+      "pages": [
+        6
+      ],
+      "instruction": "SURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 15",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567"
+      },
+      "expected": {
+        "type": "number",
+        "value": "5,124,282"
+      },
+      "value": "5,124,282",
+      "number": 5124282,
+      "foundOnPages": [
+        6
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n*Projected Breakeven (End of Year) = 14\nGuaranteed Breakeven (End of Year) = 20",
+      "calls": [
+        {
+          "pages": [
+            6
+          ],
+          "thinking": "The user wants me to find the Surrender Value, Illustrated at 5.00% investment return, Total column, for Year 15.\n\nLooking at the table, I need to find the row for Year 15 (which is 15/63).\n\nThe columns are:\n- End of Policy Year / Age\n- Total Premiums Paid To-Date ($)\n- Surrender Value - Guaranteed ($)\n- Surrender Value - Illustrated at 3.50% - Non-Guaranteed ($)\n- Surrender Value - Illustrated at 3.50% - Total ($)\n- Surrender Value - Illustrated at 5.00% - Non-Guaranteed ($)\n- Surrender Value - Illustrated at 5.00% - Total ($)\n\nFor Year 15 (15/63):\n- Guaranteed: 4,749,993\n- 3.50% Non-Guaranteed: 161,295\n- 3.50% Total: 4,911,288\n- 5.00% Non-Guaranteed: 374,289\n- 5.00% Total: 5,124,282\n\nSo the answer is 5,124,282.",
+          "startedAt": "2026-09-29T12:41:12.580Z",
+          "seconds": 27,
+          "inputTokens": 4962,
+          "outputTokens": 301,
+          "contextLimit": 32768,
+          "answer": "5,124,282",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\nSpecially prepared for\n\n: Mr Customer\n\nDate Generated\n\n: 19 Mar 2026\n\nPlan\n\n: Signature Life\n\nMale\n\nCountry of Residence\n\n: THAILAND\n\nAge Last Birthday\n\n: 48\n\nResidency Code\n\n: A\n\nPremium Frequency\n\n: Single Premium\n\nRisk Classification of Life Insured\n\n: Non-Smoker Standard\n\nCurrency\n\n: USD\n\nRatings\n\n:-\n\nPolicy Illustration\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-Date ($)</td><td colspan=\"5\">SURRENDER VALUE</td></tr><tr><td rowspan=\"2\">Guaranteed ($)</td><td colspan=\"2\">Illustrated at 3.50% investment return</td><td colspan=\"2\">Illustrated at 5.00% investment return</td></tr><tr><td>Non-Guaranteed ($)</td><td>Total ($)</td><td>Non-Guaranteed ($)</td><td>Total ($)</td></tr><tr><td>1/49</td><td>4,999,993</td><td>4,049,994</td><td>1,669</td><td>4,051,663</td><td>2,503</td><td>4,052,497</td></tr><tr><td>2/50</td><td>4,999,993</td><td>4,099,994</td><td>3,663</td><td>4,103,657</td><td>5,502</td><td>4,105,496</td></tr><tr><td>3/51</td><td>4,999,993</td><td>4,149,994</td><td>5,954</td><td>4,155,948</td><td>8,957</td><td>4,158,951</td></tr><tr><td>4/52</td><td>4,999,993</td><td>4,199,994</td><td>8,653</td><td>4,208,647</td><td>13,038</td><td>4,213,032</td></tr><tr><td>5/53</td><td>4,999,993</td><td>4,249,994</td><td>14,894</td><td>4,264,888</td><td>29,827</td><td>4,279,821</td></tr><tr><td>6/54</td><td>4,999,993</td><td>4,299,994</td><td>19,363</td><td>4,319,356</td><td>38,834</td><td>4,338,828</td></tr><tr><td>7/55</td><td>4,999,993</td><td>4,349,994</td><td>24,221</td><td>4,374,214</td><td>48,651</td><td>4,398,645</td></tr><tr><td>8/56</td><td>4,999,993</td><td>4,399,994</td><td>29,834</td><td>4,429,828</td><td>60,018</td><td>4,460,011</td></tr><tr><td>9/57</td><td>4,999,993</td><td>4,449,993</td><td>35,840</td><td>4,485,833</td><td>72,208</td><td>4,522,202</td></tr><tr><td>10/58</td><td>4,999,993</td><td>4,499,993</td><td>44,575</td><td>4,544,568</td><td>93,250</td><td>4,593,243</td></tr><tr><td>11/59</td><td>4,999,993</td><td>4,549,993</td><td>58,909</td><td>4,608,903</td><td>123,426</td><td>4,673,419</td></tr><tr><td>12/60</td><td>4,999,993</td><td>4,599,993</td><td>86,217</td><td>4,686,210</td><td>199,146</td><td>4,799,139</td></tr><tr><td>13/61</td><td>4,999,993</td><td>4,649,993</td><td>108,129</td><td>4,758,123</td><td>250,145</td><td>4,900,138</td></tr><tr><td>14/62</td><td>4,999,993</td><td>4,699,993</td><td>133,089</td><td>4,833,082</td><td>308,361</td><td>5,008,354</td></tr><tr><td>15/63</td><td>4,999,993</td><td>4,749,993</td><td>161,295</td><td>4,911,288</td><td>374,289</td><td>5,124,282</td></tr><tr><td>16/64</td><td>4,999,993</td><td>4,799,993</td><td>192,928</td><td>4,992,921</td><td>448,386</td><td>5,248,379</td></tr><tr><td>17/65</td><td>4,999,993</td><td>4,849,993</td><td>334,446</td><td>5,184,439</td><td>939,479</td><td>5,789,472</td></tr><tr><td>18/66</td><td>4,999,993</td><td>4,899,993</td><td>391,631</td><td>5,291,624</td><td>1,101,826</td><td>6,001,818</td></tr><tr><td>19/67</td><td>4,999,993</td><td>4,949,993</td><td>454,564</td><td>5,404,557</td><td>1,280,877</td><td>6,230,870</td></tr><tr><td>20/68</td><td>4,999,993</td><td>4,999,993</td><td>523,447</td><td>5,523,440</td><td>1,477,281</td><td>6,477,273</td></tr><tr><td>21/69</td><td>4,999,993</td><td>5,049,993</td><td>582,035</td><td>5,632,028</td><td>1,645,202</td><td>6,695,194</td></tr><tr><td>22/70</td><td>4,999,993</td><td>5,100,493</td><td>644,532</td><td>5,745,025</td><td>1,824,718</td><td>6,925,211</td></tr><tr><td>23/71</td><td>4,999,993</td><td>5,151,497</td><td>711,022</td><td>5,862,519</td><td>2,016,121</td><td>7,167,619</td></tr><tr><td>24/72</td><td>4,999,993</td><td>5,203,012</td><td>781,603</td><td>5,984,616</td><td>2,219,753</td><td>7,422,765</td></tr><tr><td>25/73</td><td>4,999,993</td><td>5,255,042</td><td>856,376</td><td>6,111,419</td><td>2,435,952</td><td>7,690,995</td></tr><tr><td>26/74</td><td>4,999,993</td><td>5,307,592</td><td>935,454</td><td>6,243,047</td><td>2,665,105</td><td>7,972,697</td></tr><tr><td>27/75</td><td>4,999,993</td><td>5,360,667</td><td>1,087,984</td><td>6,448,651</td><td>3,176,004</td><td>8,536,671</td></tr><tr><td>28/76</td><td>4,999,993</td><td>5,414,272</td><td>1,181,885</td><td>6,596,157</td><td>3,455,611</td><td>8,869,883</td></tr><tr><td>29/77</td><td>4,999,993</td><td>5,468,417</td><td>1,280,627</td><td>6,749,044</td><td>3,750,287</td><td>9,218,704</td></tr><tr><td>30/78</td><td>4,999,993</td><td>5,523,102</td><td>1,384,273</td><td>6,907,375</td><td>4,060,295</td><td>9,583,397</td></tr><tr><td>31/79</td><td>4,999,993</td><td>5,578,332</td><td>1,492,872</td><td>7,071,203</td><td>4,385,853</td><td>9,964,184</td></tr><tr><td>32/80</td><td>4,999,993</td><td>5,634,117</td><td>1,606,509</td><td>7,240,626</td><td>4,727,286</td><td>10,361,403</td></tr><tr><td>33/81</td><td>4,999,993</td><td>5,690,457</td><td>1,725,261</td><td>7,415,717</td><td>5,084,899</td><td>10,775,355</td></tr><tr><td>34/82</td><td>4,999,993</td><td>5,747,362</td><td>1,849,228</td><td>7,596,590</td><td>5,459,068</td><td>11,206,430</td></tr><tr><td>35/83</td><td>4,999,993</td><td>5,804,836</td><td>1,978,559</td><td>7,783,395</td><td>5,850,311</td><td>11,655,147</td></tr><tr><td>36/84</td><td>4,999,993</td><td>5,862,886</td><td>2,113,440</td><td>7,976,326</td><td>6,259,267</td><td>12,122,154</td></tr><tr><td>37/85</td><td>4,999,993</td><td>5,921,516</td><td>2,254,737</td><td>8,176,254</td><td>6,688,594</td><td>12,610,110</td></tr><tr><td>38/86</td><td>4,999,993</td><td>5,980,731</td><td>2,403,557</td><td>8,384,288</td><td>7,141,675</td><td>13,122,406</td></tr><tr><td>39/87</td><td>4,999,993</td><td>6,040,536</td><td>2,560,554</td><td>8,601,090</td><td>7,620,579</td><td>13,661,115</td></tr><tr><td>40/88</td><td>4,999,993</td><td>6,100,941</td><td>2,725,863</td><td>8,826,804</td><td>8,125,836</td><td>14,226,777</td></tr><tr><td>41/89</td><td>4,999,993</td><td>6,161,951</td><td>2,899,199</td><td>9,061,150</td><td>8,656,728</td><td>14,818,679</td></tr><tr><td>42/90</td><td>4,999,993</td><td>6,223,571</td><td>3,079,899</td><td>9,303,470</td><td>9,211,395</td><td>15,434,966</td></tr><tr><td>43/91</td><td>4,999,993</td><td>6,285,806</td><td>3,267,100</td><td>9,552,905</td><td>9,787,371</td><td>16,073,177</td></tr><tr><td>44/92</td><td>4,999,993</td><td>6,348,666</td><td>3,459,850</td><td>9,808,515</td><td>10,381,910</td><td>16,730,576</td></tr><tr><td>45/93</td><td>4,999,993</td><td>6,412,151</td><td>3,657,248</td><td>10,069,398</td><td>10,992,397</td><td>17,404,548</td></tr><tr><td>46/94</td><td>4,999,993</td><td>6,476,270</td><td>3,858,504</td><td>10,334,775</td><td>11,616,534</td><td>18,092,805</td></tr></table>\n\nMr Customer\n\nDate\n\nPage 4 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n*Projected Breakeven (End of Year) = 14\nGuaranteed Breakeven (End of Year) = 20\n\nInstruction:\nSURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 15\n\nExample of the form of the answer, not the answer:\n1,234,567"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 20",
+      "pages": [
+        6
+      ],
+      "instruction": "SURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 20",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567"
+      },
+      "expected": {
+        "type": "number",
+        "value": "6,477,273"
+      },
+      "value": "6,477,273",
+      "number": 6477273,
+      "foundOnPages": [
+        6
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n*Projected Breakeven (End of Year) = 14\nGuaranteed Breakeven (End of Year) = 20\n*Projected surrender value in year 15 = 5124282",
+      "calls": [
+        {
+          "pages": [
+            6
+          ],
+          "thinking": "The user wants me to find the value at Year 20, in the \"Illustrated at 5.00% investment return\" section, \"Total\" column.\n\nLooking at the table, for row 20/68:\n- End of Policy Year / Age: 20/68\n- Total Premiums Paid To-Date: 4,999,993\n- Guaranteed: 4,999,993\n- Illustrated at 3.50% Non-Guaranteed: 523,447\n- Illustrated at 3.50% Total: 5,523,440\n- Illustrated at 5.00% Non-Guaranteed: 1,477,281\n- Illustrated at 5.00% Total: 6,477,273\n\nSo the value is 6,477,273.",
+          "startedAt": "2026-09-29T12:41:39.518Z",
+          "seconds": 22,
+          "inputTokens": 4981,
+          "outputTokens": 221,
+          "contextLimit": 32768,
+          "answer": "6,477,273",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\nSpecially prepared for\n\n: Mr Customer\n\nDate Generated\n\n: 19 Mar 2026\n\nPlan\n\n: Signature Life\n\nMale\n\nCountry of Residence\n\n: THAILAND\n\nAge Last Birthday\n\n: 48\n\nResidency Code\n\n: A\n\nPremium Frequency\n\n: Single Premium\n\nRisk Classification of Life Insured\n\n: Non-Smoker Standard\n\nCurrency\n\n: USD\n\nRatings\n\n:-\n\nPolicy Illustration\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-Date ($)</td><td colspan=\"5\">SURRENDER VALUE</td></tr><tr><td rowspan=\"2\">Guaranteed ($)</td><td colspan=\"2\">Illustrated at 3.50% investment return</td><td colspan=\"2\">Illustrated at 5.00% investment return</td></tr><tr><td>Non-Guaranteed ($)</td><td>Total ($)</td><td>Non-Guaranteed ($)</td><td>Total ($)</td></tr><tr><td>1/49</td><td>4,999,993</td><td>4,049,994</td><td>1,669</td><td>4,051,663</td><td>2,503</td><td>4,052,497</td></tr><tr><td>2/50</td><td>4,999,993</td><td>4,099,994</td><td>3,663</td><td>4,103,657</td><td>5,502</td><td>4,105,496</td></tr><tr><td>3/51</td><td>4,999,993</td><td>4,149,994</td><td>5,954</td><td>4,155,948</td><td>8,957</td><td>4,158,951</td></tr><tr><td>4/52</td><td>4,999,993</td><td>4,199,994</td><td>8,653</td><td>4,208,647</td><td>13,038</td><td>4,213,032</td></tr><tr><td>5/53</td><td>4,999,993</td><td>4,249,994</td><td>14,894</td><td>4,264,888</td><td>29,827</td><td>4,279,821</td></tr><tr><td>6/54</td><td>4,999,993</td><td>4,299,994</td><td>19,363</td><td>4,319,356</td><td>38,834</td><td>4,338,828</td></tr><tr><td>7/55</td><td>4,999,993</td><td>4,349,994</td><td>24,221</td><td>4,374,214</td><td>48,651</td><td>4,398,645</td></tr><tr><td>8/56</td><td>4,999,993</td><td>4,399,994</td><td>29,834</td><td>4,429,828</td><td>60,018</td><td>4,460,011</td></tr><tr><td>9/57</td><td>4,999,993</td><td>4,449,993</td><td>35,840</td><td>4,485,833</td><td>72,208</td><td>4,522,202</td></tr><tr><td>10/58</td><td>4,999,993</td><td>4,499,993</td><td>44,575</td><td>4,544,568</td><td>93,250</td><td>4,593,243</td></tr><tr><td>11/59</td><td>4,999,993</td><td>4,549,993</td><td>58,909</td><td>4,608,903</td><td>123,426</td><td>4,673,419</td></tr><tr><td>12/60</td><td>4,999,993</td><td>4,599,993</td><td>86,217</td><td>4,686,210</td><td>199,146</td><td>4,799,139</td></tr><tr><td>13/61</td><td>4,999,993</td><td>4,649,993</td><td>108,129</td><td>4,758,123</td><td>250,145</td><td>4,900,138</td></tr><tr><td>14/62</td><td>4,999,993</td><td>4,699,993</td><td>133,089</td><td>4,833,082</td><td>308,361</td><td>5,008,354</td></tr><tr><td>15/63</td><td>4,999,993</td><td>4,749,993</td><td>161,295</td><td>4,911,288</td><td>374,289</td><td>5,124,282</td></tr><tr><td>16/64</td><td>4,999,993</td><td>4,799,993</td><td>192,928</td><td>4,992,921</td><td>448,386</td><td>5,248,379</td></tr><tr><td>17/65</td><td>4,999,993</td><td>4,849,993</td><td>334,446</td><td>5,184,439</td><td>939,479</td><td>5,789,472</td></tr><tr><td>18/66</td><td>4,999,993</td><td>4,899,993</td><td>391,631</td><td>5,291,624</td><td>1,101,826</td><td>6,001,818</td></tr><tr><td>19/67</td><td>4,999,993</td><td>4,949,993</td><td>454,564</td><td>5,404,557</td><td>1,280,877</td><td>6,230,870</td></tr><tr><td>20/68</td><td>4,999,993</td><td>4,999,993</td><td>523,447</td><td>5,523,440</td><td>1,477,281</td><td>6,477,273</td></tr><tr><td>21/69</td><td>4,999,993</td><td>5,049,993</td><td>582,035</td><td>5,632,028</td><td>1,645,202</td><td>6,695,194</td></tr><tr><td>22/70</td><td>4,999,993</td><td>5,100,493</td><td>644,532</td><td>5,745,025</td><td>1,824,718</td><td>6,925,211</td></tr><tr><td>23/71</td><td>4,999,993</td><td>5,151,497</td><td>711,022</td><td>5,862,519</td><td>2,016,121</td><td>7,167,619</td></tr><tr><td>24/72</td><td>4,999,993</td><td>5,203,012</td><td>781,603</td><td>5,984,616</td><td>2,219,753</td><td>7,422,765</td></tr><tr><td>25/73</td><td>4,999,993</td><td>5,255,042</td><td>856,376</td><td>6,111,419</td><td>2,435,952</td><td>7,690,995</td></tr><tr><td>26/74</td><td>4,999,993</td><td>5,307,592</td><td>935,454</td><td>6,243,047</td><td>2,665,105</td><td>7,972,697</td></tr><tr><td>27/75</td><td>4,999,993</td><td>5,360,667</td><td>1,087,984</td><td>6,448,651</td><td>3,176,004</td><td>8,536,671</td></tr><tr><td>28/76</td><td>4,999,993</td><td>5,414,272</td><td>1,181,885</td><td>6,596,157</td><td>3,455,611</td><td>8,869,883</td></tr><tr><td>29/77</td><td>4,999,993</td><td>5,468,417</td><td>1,280,627</td><td>6,749,044</td><td>3,750,287</td><td>9,218,704</td></tr><tr><td>30/78</td><td>4,999,993</td><td>5,523,102</td><td>1,384,273</td><td>6,907,375</td><td>4,060,295</td><td>9,583,397</td></tr><tr><td>31/79</td><td>4,999,993</td><td>5,578,332</td><td>1,492,872</td><td>7,071,203</td><td>4,385,853</td><td>9,964,184</td></tr><tr><td>32/80</td><td>4,999,993</td><td>5,634,117</td><td>1,606,509</td><td>7,240,626</td><td>4,727,286</td><td>10,361,403</td></tr><tr><td>33/81</td><td>4,999,993</td><td>5,690,457</td><td>1,725,261</td><td>7,415,717</td><td>5,084,899</td><td>10,775,355</td></tr><tr><td>34/82</td><td>4,999,993</td><td>5,747,362</td><td>1,849,228</td><td>7,596,590</td><td>5,459,068</td><td>11,206,430</td></tr><tr><td>35/83</td><td>4,999,993</td><td>5,804,836</td><td>1,978,559</td><td>7,783,395</td><td>5,850,311</td><td>11,655,147</td></tr><tr><td>36/84</td><td>4,999,993</td><td>5,862,886</td><td>2,113,440</td><td>7,976,326</td><td>6,259,267</td><td>12,122,154</td></tr><tr><td>37/85</td><td>4,999,993</td><td>5,921,516</td><td>2,254,737</td><td>8,176,254</td><td>6,688,594</td><td>12,610,110</td></tr><tr><td>38/86</td><td>4,999,993</td><td>5,980,731</td><td>2,403,557</td><td>8,384,288</td><td>7,141,675</td><td>13,122,406</td></tr><tr><td>39/87</td><td>4,999,993</td><td>6,040,536</td><td>2,560,554</td><td>8,601,090</td><td>7,620,579</td><td>13,661,115</td></tr><tr><td>40/88</td><td>4,999,993</td><td>6,100,941</td><td>2,725,863</td><td>8,826,804</td><td>8,125,836</td><td>14,226,777</td></tr><tr><td>41/89</td><td>4,999,993</td><td>6,161,951</td><td>2,899,199</td><td>9,061,150</td><td>8,656,728</td><td>14,818,679</td></tr><tr><td>42/90</td><td>4,999,993</td><td>6,223,571</td><td>3,079,899</td><td>9,303,470</td><td>9,211,395</td><td>15,434,966</td></tr><tr><td>43/91</td><td>4,999,993</td><td>6,285,806</td><td>3,267,100</td><td>9,552,905</td><td>9,787,371</td><td>16,073,177</td></tr><tr><td>44/92</td><td>4,999,993</td><td>6,348,666</td><td>3,459,850</td><td>9,808,515</td><td>10,381,910</td><td>16,730,576</td></tr><tr><td>45/93</td><td>4,999,993</td><td>6,412,151</td><td>3,657,248</td><td>10,069,398</td><td>10,992,397</td><td>17,404,548</td></tr><tr><td>46/94</td><td>4,999,993</td><td>6,476,270</td><td>3,858,504</td><td>10,334,775</td><td>11,616,534</td><td>18,092,805</td></tr></table>\n\nMr Customer\n\nDate\n\nPage 4 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n*Projected Breakeven (End of Year) = 14\nGuaranteed Breakeven (End of Year) = 20\n*Projected surrender value in year 15 = 5124282\n\nInstruction:\nSURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 20\n\nExample of the form of the answer, not the answer:\n1,234,567"
+        }
+      ]
+    },
+    {
+      "name": "*Projected surrender value in year 25",
+      "pages": [
+        6
+      ],
+      "instruction": "SURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 25",
+      "kind": "ReadFromPdf",
+      "expecting": {
+        "type": "number",
+        "example": "1,234,567"
+      },
+      "expected": {
+        "type": "number",
+        "value": "7,690,995"
+      },
+      "value": "7,690,995",
+      "number": 7690995,
+      "foundOnPages": [
+        6
+      ],
+      "valuesGiven": "Currency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n*Projected Breakeven (End of Year) = 14\nGuaranteed Breakeven (End of Year) = 20\n*Projected surrender value in year 15 = 5124282\n*Projected surrender value in year 20 = 6477273",
+      "calls": [
+        {
+          "pages": [
+            6
+          ],
+          "thinking": "The user wants me to find the value at Year 25 in the \"Total ($)\" column under \"Illustrated at 5.00% investment return\".\n\nLooking at the table, for row 25/73:\n- Guaranteed: 5,255,042\n- Non-Guaranteed (3.50%): 856,376\n- Total (3.50%): 6,111,419\n- Non-Guaranteed (5.00%): 2,435,952\n- Total (5.00%): 7,690,995\n\nThe value is 7,690,995.",
+          "startedAt": "2026-09-29T12:42:01.789Z",
+          "seconds": 20,
+          "inputTokens": 5000,
+          "outputTokens": 175,
+          "contextLimit": 32768,
+          "answer": "7,690,995",
+          "prompt": "Below is the text of one page of an insurance illustration, then the values that were found before, an instruction, and an example of the form of the answer.\nFind the value that the instruction names on this page.\nAnswer with the value only, in the same form as the example. The example shows the form of the answer. It is not the answer.\nWrite no explanation.\nIf the value is not on this page, answer null. Do not guess.\n\nText of the page:\nManulife\n\nSpecially prepared for\n\n: Mr Customer\n\nDate Generated\n\n: 19 Mar 2026\n\nPlan\n\n: Signature Life\n\nMale\n\nCountry of Residence\n\n: THAILAND\n\nAge Last Birthday\n\n: 48\n\nResidency Code\n\n: A\n\nPremium Frequency\n\n: Single Premium\n\nRisk Classification of Life Insured\n\n: Non-Smoker Standard\n\nCurrency\n\n: USD\n\nRatings\n\n:-\n\nPolicy Illustration\n\n<table border=1><tr><td rowspan=\"3\">End of Policy Year / Age</td><td rowspan=\"3\">Total Premiums Paid To-Date ($)</td><td colspan=\"5\">SURRENDER VALUE</td></tr><tr><td rowspan=\"2\">Guaranteed ($)</td><td colspan=\"2\">Illustrated at 3.50% investment return</td><td colspan=\"2\">Illustrated at 5.00% investment return</td></tr><tr><td>Non-Guaranteed ($)</td><td>Total ($)</td><td>Non-Guaranteed ($)</td><td>Total ($)</td></tr><tr><td>1/49</td><td>4,999,993</td><td>4,049,994</td><td>1,669</td><td>4,051,663</td><td>2,503</td><td>4,052,497</td></tr><tr><td>2/50</td><td>4,999,993</td><td>4,099,994</td><td>3,663</td><td>4,103,657</td><td>5,502</td><td>4,105,496</td></tr><tr><td>3/51</td><td>4,999,993</td><td>4,149,994</td><td>5,954</td><td>4,155,948</td><td>8,957</td><td>4,158,951</td></tr><tr><td>4/52</td><td>4,999,993</td><td>4,199,994</td><td>8,653</td><td>4,208,647</td><td>13,038</td><td>4,213,032</td></tr><tr><td>5/53</td><td>4,999,993</td><td>4,249,994</td><td>14,894</td><td>4,264,888</td><td>29,827</td><td>4,279,821</td></tr><tr><td>6/54</td><td>4,999,993</td><td>4,299,994</td><td>19,363</td><td>4,319,356</td><td>38,834</td><td>4,338,828</td></tr><tr><td>7/55</td><td>4,999,993</td><td>4,349,994</td><td>24,221</td><td>4,374,214</td><td>48,651</td><td>4,398,645</td></tr><tr><td>8/56</td><td>4,999,993</td><td>4,399,994</td><td>29,834</td><td>4,429,828</td><td>60,018</td><td>4,460,011</td></tr><tr><td>9/57</td><td>4,999,993</td><td>4,449,993</td><td>35,840</td><td>4,485,833</td><td>72,208</td><td>4,522,202</td></tr><tr><td>10/58</td><td>4,999,993</td><td>4,499,993</td><td>44,575</td><td>4,544,568</td><td>93,250</td><td>4,593,243</td></tr><tr><td>11/59</td><td>4,999,993</td><td>4,549,993</td><td>58,909</td><td>4,608,903</td><td>123,426</td><td>4,673,419</td></tr><tr><td>12/60</td><td>4,999,993</td><td>4,599,993</td><td>86,217</td><td>4,686,210</td><td>199,146</td><td>4,799,139</td></tr><tr><td>13/61</td><td>4,999,993</td><td>4,649,993</td><td>108,129</td><td>4,758,123</td><td>250,145</td><td>4,900,138</td></tr><tr><td>14/62</td><td>4,999,993</td><td>4,699,993</td><td>133,089</td><td>4,833,082</td><td>308,361</td><td>5,008,354</td></tr><tr><td>15/63</td><td>4,999,993</td><td>4,749,993</td><td>161,295</td><td>4,911,288</td><td>374,289</td><td>5,124,282</td></tr><tr><td>16/64</td><td>4,999,993</td><td>4,799,993</td><td>192,928</td><td>4,992,921</td><td>448,386</td><td>5,248,379</td></tr><tr><td>17/65</td><td>4,999,993</td><td>4,849,993</td><td>334,446</td><td>5,184,439</td><td>939,479</td><td>5,789,472</td></tr><tr><td>18/66</td><td>4,999,993</td><td>4,899,993</td><td>391,631</td><td>5,291,624</td><td>1,101,826</td><td>6,001,818</td></tr><tr><td>19/67</td><td>4,999,993</td><td>4,949,993</td><td>454,564</td><td>5,404,557</td><td>1,280,877</td><td>6,230,870</td></tr><tr><td>20/68</td><td>4,999,993</td><td>4,999,993</td><td>523,447</td><td>5,523,440</td><td>1,477,281</td><td>6,477,273</td></tr><tr><td>21/69</td><td>4,999,993</td><td>5,049,993</td><td>582,035</td><td>5,632,028</td><td>1,645,202</td><td>6,695,194</td></tr><tr><td>22/70</td><td>4,999,993</td><td>5,100,493</td><td>644,532</td><td>5,745,025</td><td>1,824,718</td><td>6,925,211</td></tr><tr><td>23/71</td><td>4,999,993</td><td>5,151,497</td><td>711,022</td><td>5,862,519</td><td>2,016,121</td><td>7,167,619</td></tr><tr><td>24/72</td><td>4,999,993</td><td>5,203,012</td><td>781,603</td><td>5,984,616</td><td>2,219,753</td><td>7,422,765</td></tr><tr><td>25/73</td><td>4,999,993</td><td>5,255,042</td><td>856,376</td><td>6,111,419</td><td>2,435,952</td><td>7,690,995</td></tr><tr><td>26/74</td><td>4,999,993</td><td>5,307,592</td><td>935,454</td><td>6,243,047</td><td>2,665,105</td><td>7,972,697</td></tr><tr><td>27/75</td><td>4,999,993</td><td>5,360,667</td><td>1,087,984</td><td>6,448,651</td><td>3,176,004</td><td>8,536,671</td></tr><tr><td>28/76</td><td>4,999,993</td><td>5,414,272</td><td>1,181,885</td><td>6,596,157</td><td>3,455,611</td><td>8,869,883</td></tr><tr><td>29/77</td><td>4,999,993</td><td>5,468,417</td><td>1,280,627</td><td>6,749,044</td><td>3,750,287</td><td>9,218,704</td></tr><tr><td>30/78</td><td>4,999,993</td><td>5,523,102</td><td>1,384,273</td><td>6,907,375</td><td>4,060,295</td><td>9,583,397</td></tr><tr><td>31/79</td><td>4,999,993</td><td>5,578,332</td><td>1,492,872</td><td>7,071,203</td><td>4,385,853</td><td>9,964,184</td></tr><tr><td>32/80</td><td>4,999,993</td><td>5,634,117</td><td>1,606,509</td><td>7,240,626</td><td>4,727,286</td><td>10,361,403</td></tr><tr><td>33/81</td><td>4,999,993</td><td>5,690,457</td><td>1,725,261</td><td>7,415,717</td><td>5,084,899</td><td>10,775,355</td></tr><tr><td>34/82</td><td>4,999,993</td><td>5,747,362</td><td>1,849,228</td><td>7,596,590</td><td>5,459,068</td><td>11,206,430</td></tr><tr><td>35/83</td><td>4,999,993</td><td>5,804,836</td><td>1,978,559</td><td>7,783,395</td><td>5,850,311</td><td>11,655,147</td></tr><tr><td>36/84</td><td>4,999,993</td><td>5,862,886</td><td>2,113,440</td><td>7,976,326</td><td>6,259,267</td><td>12,122,154</td></tr><tr><td>37/85</td><td>4,999,993</td><td>5,921,516</td><td>2,254,737</td><td>8,176,254</td><td>6,688,594</td><td>12,610,110</td></tr><tr><td>38/86</td><td>4,999,993</td><td>5,980,731</td><td>2,403,557</td><td>8,384,288</td><td>7,141,675</td><td>13,122,406</td></tr><tr><td>39/87</td><td>4,999,993</td><td>6,040,536</td><td>2,560,554</td><td>8,601,090</td><td>7,620,579</td><td>13,661,115</td></tr><tr><td>40/88</td><td>4,999,993</td><td>6,100,941</td><td>2,725,863</td><td>8,826,804</td><td>8,125,836</td><td>14,226,777</td></tr><tr><td>41/89</td><td>4,999,993</td><td>6,161,951</td><td>2,899,199</td><td>9,061,150</td><td>8,656,728</td><td>14,818,679</td></tr><tr><td>42/90</td><td>4,999,993</td><td>6,223,571</td><td>3,079,899</td><td>9,303,470</td><td>9,211,395</td><td>15,434,966</td></tr><tr><td>43/91</td><td>4,999,993</td><td>6,285,806</td><td>3,267,100</td><td>9,552,905</td><td>9,787,371</td><td>16,073,177</td></tr><tr><td>44/92</td><td>4,999,993</td><td>6,348,666</td><td>3,459,850</td><td>9,808,515</td><td>10,381,910</td><td>16,730,576</td></tr><tr><td>45/93</td><td>4,999,993</td><td>6,412,151</td><td>3,657,248</td><td>10,069,398</td><td>10,992,397</td><td>17,404,548</td></tr><tr><td>46/94</td><td>4,999,993</td><td>6,476,270</td><td>3,858,504</td><td>10,334,775</td><td>11,616,534</td><td>18,092,805</td></tr></table>\n\nMr Customer\n\nDate\n\nPage 4 of 9\n\nUOB\n\nDate\n\nAWS / Version 96.3 /P E.&O.E.\n\nValues found before:\nCurrency = US Dollars\nPremium Term = 1\nCover = 18385300\nYearly Premium = 4999992.65\nTotal Premium = 4999992.65\nDay 1 Cash Value = 3999994.12\nMultiples of premium paid = 3.68\n*Projected Breakeven (End of Year) = 14\nGuaranteed Breakeven (End of Year) = 20\n*Projected surrender value in year 15 = 5124282\n*Projected surrender value in year 20 = 6477273\n\nInstruction:\nSURRENDER VALUE -> \nIllustrated at 5.00% investment return ->\nTotal column -> Year 25\n\nExample of the form of the answer, not the answer:\n1,234,567"
+        }
+      ]
+    },
+    {
+      "name": "Guaranteed cover period",
+      "instruction": "99 Years Old",
+      "kind": "HeldByTheFirm"
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+[
+  {
+    "name": "Currency",
+    "pages": [
+      1
+    ],
+    "instruction": "Policy Currency (Extracted from PDF or Admin panel)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "string",
+      "example": "US Dollars"
+    },
+    "expected": {
+      "type": "string",
+      "value": "US Dollars"
+    }
+  },
+  {
+    "name": "Premium Term",
+    "pages": [
+      4
+    ],
+    "instruction": "Premium Term (Years) column",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "1"
+    }
+  },
+  {
+    "name": "Cover",
+    "pages": [
+      4
+    ],
+    "instruction": "Coverage Amount",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "12,345,678.91"
+    },
+    "expected": {
+      "type": "number",
+      "value": "20,000,000.00"
+    }
+  },
+  {
+    "name": "Yearly Premium",
+    "pages": [
+      4
+    ],
+    "instruction": "Premium Amount (Single Pay)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "12,345,678.91"
+    },
+    "expected": {
+      "type": "number",
+      "value": "10,672,432.00"
+    }
+  },
+  {
+    "name": "Total Premium",
+    "instruction": "Yearly Premium * Premium Term",
+    "kind": "WorkedOut",
+    "expecting": {
+      "type": "number",
+      "example": "12,345,678.91"
+    },
+    "expected": {
+      "type": "number",
+      "value": "10,672,432.00"
+    }
+  },
+  {
+    "name": "Day 1 Cash Value",
+    "pages": [
+      7
+    ],
+    "instruction": "Day 1 Cash Value is illustrated to be",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "USD 1,234,567"
+    },
+    "expected": {
+      "type": "number",
+      "value": "USD 8,576,905"
+    }
+  },
+  {
+    "name": "Multiples of premium paid",
+    "instruction": "Cover / Total Premium",
+    "kind": "WorkedOut",
+    "expecting": {
+      "type": "number",
+      "example": "1.23"
+    },
+    "expected": {
+      "type": "number",
+      "value": "1.87"
+    }
+  },
+  {
+    "name": "*Projected Breakeven (End of Year)",
+    "pages": [
+      6
+    ],
+    "instruction": "Supplementary Illustration  ->\nNon-Guaranteed Basis ->\nCash Value ->\nCash Value >= Total Premium \n(Year whereby cash value exceeded the total premium amount)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "20"
+    },
+    "expected": {
+      "type": "number",
+      "value": "10"
+    }
+  },
+  {
+    "name": "Guaranteed Breakeven (End of Year)",
+    "instruction": "NA",
+    "kind": "NotApplicable"
+  },
+  {
+    "name": "*Projected surrender value in year 15",
+    "pages": [
+      6
+    ],
+    "instruction": "Supplementary Illustration  - >\nNon-Guaranteed Basis ->\nCash Value > Year 15",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "12,345,678"
+    },
+    "expected": {
+      "type": "number",
+      "value": "13,229,106"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 20",
+    "pages": [
+      6
+    ],
+    "instruction": "Supplementary Illustration  - >\nNon-Guaranteed Basis ->\nCash Value > Year 20",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "12,345,678"
+    },
+    "expected": {
+      "type": "number",
+      "value": "15,378,710"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 25",
+    "pages": [
+      6
+    ],
+    "instruction": "Supplementary Illustration  - >\nNon-Guaranteed Basis ->\nCash Value > Year 25",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "12,345,678"
+    },
+    "expected": {
+      "type": "number",
+      "value": "17,802,003"
+    }
+  },
+  {
+    "name": "Guaranteed cover period",
+    "pages": [
+      6
+    ],
+    "instruction": "Supplementary Illustration  ->\nGuranteed Basis ->\nThe year whereby it last pay out death benefit.",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "23"
+    }
+  }
+]

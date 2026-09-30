@@ -1,0 +1,193 @@
+[
+  {
+    "name": "Currency",
+    "pages": [
+      1
+    ],
+    "instruction": "Policy Currency  (Extracted from PDF or Admin panel)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "string",
+      "example": "US Dollars"
+    },
+    "expected": {
+      "type": "string",
+      "value": "US Dollars"
+    }
+  },
+  {
+    "name": "Premium Term",
+    "pages": [
+      1
+    ],
+    "instruction": "Premium Payment Term",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "string",
+      "example": "Single Premium"
+    },
+    "expected": {
+      "type": "string",
+      "value": "Single Premium"
+    }
+  },
+  {
+    "name": "Cover",
+    "pages": [
+      5
+    ],
+    "instruction": "Sum Assured",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "12,345,678"
+    },
+    "expected": {
+      "type": "number",
+      "value": "10,000,000"
+    }
+  },
+  {
+    "name": "Yearly Premium",
+    "pages": [
+      5
+    ],
+    "instruction": "Total Single Premium (Single Pay)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "US$123,456.78"
+    },
+    "expected": {
+      "type": "number",
+      "value": "US$708,740.00"
+    }
+  },
+  {
+    "name": "Total Premium",
+    "instruction": "Yearly Premium * Premium Term. Premium Term \"Single Premium\" means 1, anything else means 0.",
+    "kind": "WorkedOut",
+    "expecting": {
+      "type": "number",
+      "example": "123,456.78"
+    },
+    "expected": {
+      "type": "number",
+      "value": "708,740.00"
+    }
+  },
+  {
+    "name": "Day 1 Cash Value",
+    "pages": [
+      10
+    ],
+    "instruction": "Day 1 Surrender Value based on Illustration B is",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "US$123,456"
+    },
+    "expected": {
+      "type": "number",
+      "value": "US$547,716"
+    }
+  },
+  {
+    "name": "Multiples of premium paid",
+    "instruction": "Cover / Total Premium",
+    "kind": "WorkedOut",
+    "expecting": {
+      "type": "number",
+      "example": "12.34"
+    },
+    "expected": {
+      "type": "number",
+      "value": "14.11"
+    }
+  },
+  {
+    "name": "*Projected Breakeven (End of Year)",
+    "pages": [
+      8
+    ],
+    "instruction": "Main Illustration\nIllustration B -> Illustrated values at Current Crediting Rate* for\nFixed Account of 4.10% p.a., Current Assumed\nCrediting Rate for Index Account of 6.60% p.a. and\ncurrent charges -> Surrender Value >= Total Premium \n(Year whereby cash value exceeded the total premium amount)",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "12"
+    }
+  },
+  {
+    "name": "Guaranteed Breakeven (End of Year)",
+    "instruction": "NA",
+    "kind": "NotApplicable"
+  },
+  {
+    "name": "*Projected surrender value in year 15",
+    "pages": [
+      8
+    ],
+    "instruction": "Main Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 15",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "123,456"
+    },
+    "expected": {
+      "type": "number",
+      "value": "852,789"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 20",
+    "pages": [
+      8
+    ],
+    "instruction": "Main Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 20",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "1,234,567"
+    },
+    "expected": {
+      "type": "number",
+      "value": "1,148,592"
+    }
+  },
+  {
+    "name": "*Projected surrender value in year 25",
+    "pages": [
+      8
+    ],
+    "instruction": "Main Policy Illustration - ILLUSTRATION B \nILLUSTRATION B -> Surrender Value column -> Year 25",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "1,234,567"
+    },
+    "expected": {
+      "type": "number",
+      "value": "1,512,652"
+    }
+  },
+  {
+    "name": "Guaranteed cover period",
+    "pages": [
+      8
+    ],
+    "instruction": "Main Illustration \nIllustration A -> Illustrated values at the Guaranteed Minimum\nCrediting Rate* [2.00% p.a. for Fixed Account\nand 0.00% p.a. for Index Account] and\nmaximum charges -> The year whereby it last pay out death benefit.",
+    "kind": "ReadFromPdf",
+    "expecting": {
+      "type": "number",
+      "example": "10"
+    },
+    "expected": {
+      "type": "number",
+      "value": "26"
+    }
+  }
+]
