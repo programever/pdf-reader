@@ -1,7 +1,6 @@
 # Lumimory illustration test
 
-A test project by Iker and Beta. It is not part of the client's code. It lives outside the client repo
-(`lumimory/current`) and uses nothing from it.
+A test project on its own. It is not part of the Lumimory code base and uses nothing from it.
 
 ## 1. The goal
 
@@ -48,7 +47,7 @@ dataset/
 Rules for a test case:
 
 - The folders are named `S1`, `S2`, ... with no gap.
-- `input.pdf` is an exact copy of the file from the client. It is never edited.
+- `input.pdf` is an exact copy of the original illustration file. It is never edited.
 - `input.pdf` and `template.json` belong together: the instructions were written for the product of this PDF.
 - Every figure in `template.json` has an instruction. A PDF whose template has a figure without an instruction is
   not used.
@@ -514,12 +513,7 @@ every run. The page has these parts:
 Run `npm install` one time in this folder. The terminal must use Node 24 (`nvm use` reads `.nvmrc`). This project
 uses plain npm. With npm, everything that a command gets must stand after ` -- ` when it holds an option with dashes.
 
-**The tmux session.** `mux start pdf-reader` opens a tmux session named `pdf-reader` in this folder, with Node 24
-and four windows: `nvim` (the editor), `cli` (for the commands), `ollama` and `mlx`. The two server windows do not
-start their server by themselves: the start command is put into the history of the shell, so the up arrow and Enter
-start it. The session is described in `~/Workspace/dotfiles/tmuxinator/pdf-reader.yml`.
-
-Every step is a command that Iker can run again himself. Each one is a line in `package.json`. No command starts a
+Every step is a command that anyone can run again. Each one is a line in `package.json`. No command starts a
 server by itself: the servers have their own start and stop commands, so it is always clear what is running.
 
 **The servers.** A model runs inside a server program, a runner.
@@ -627,13 +621,13 @@ in the setting.
 - The full setting, with all its values, is copied into every file that it made. So a result tells the full truth
   by itself.
 
-**No test files.** This project holds no test files. When Beta must check a piece of code, it writes a throw-away
-check, runs it, and deletes it.
+**No test files.** This project holds no test files. To check a piece of code, write a throw-away check, run it, and
+delete it.
 
 ## 6. What is on this Mac for this project
 
 **Everything that is installed or downloaded for this project gets a row in this table before it is installed or
-downloaded.** Iker reads the row and says yes first. This is true for every program and for every model file.
+downloaded.** The row is agreed first. This is true for every program and for every model file.
 
 | What | Where | Why | How to remove |
 |---|---|---|---|
@@ -650,7 +644,7 @@ rules for TypeScript do not support TypeScript 7 yet.
 
 ## 7. Rules for this folder
 
-- It is a git repo on this Mac only. Nothing is pushed. Commits are made only when Iker asks.
+- It is a git repo on one machine only. Nothing is pushed.
 - Model files, the test data, page pictures and results are never committed. `models/`, `models-hf/` and every
   `dataset*/` folder are ignored by git.
 - No page, picture or text is sent to any cloud service.
